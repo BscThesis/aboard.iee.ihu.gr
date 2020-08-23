@@ -1,3 +1,5 @@
+<p align="center"><img src="http://aboard.iee.ihu.gr/images/logo.png"></p>
+
 ## About this project
 
 This project is my thesis for the Department of Information and Electronic Engineering at International Hellenic University.
