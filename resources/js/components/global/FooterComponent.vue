@@ -19,7 +19,7 @@
             <a href="/documentation">API Docs</a>
           </p>
           <p class="level-item is-size-7">
-            <a href="https://github.com/nickcn/announcements" target="_blank">Github</a>
+            <a href="https://github.com/nickcn/aboard.iee.ihu.gr" target="_blank">Github</a>
           </p>
           <p class="level-item">
             <a href="/feed" target="_blank">
@@ -80,9 +80,9 @@
 
 <script>
 export default {
-  data: function() {
+  data: function () {
     return {
-      modalOpen: false
+      modalOpen: false,
     };
   },
   methods: {
@@ -94,8 +94,8 @@ export default {
         document.getElementsByTagName("html")[0].classList.remove("is-clipped");
         this.modalOpen = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
