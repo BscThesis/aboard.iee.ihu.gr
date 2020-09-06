@@ -17,7 +17,7 @@ class TagsTableSeeder extends Seeder
 
         $tags = json_decode($data, true);
 
-        foreach($tags as $item) {
+        foreach ($tags as $item) {
             Tag::create([
                 'title' => $item['title'],
                 'parent_id' => $item['parent_id'],
@@ -29,7 +29,7 @@ class TagsTableSeeder extends Seeder
 
         $tags = json_decode($data, true);
 
-        foreach($tags as $item) {
+        foreach ($tags as $item) {
             Tag::create([
                 'title' => $item['title'],
                 'parent_id' => $item['parent_id'],
@@ -38,4 +38,3 @@ class TagsTableSeeder extends Seeder
         }
     }
 }
-
