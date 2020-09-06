@@ -75,25 +75,25 @@ import { toast } from "bulma-toast";
 import { bus } from "../../app";
 
 export default {
-  data: function() {
+  data: function () {
     return {
       // single tag for insert/edit
       tag: {
         id: "",
         title: "",
         is_public: false,
-        parent_id: null
+        parent_id: null,
       },
       modalActive: false,
       edit: false,
       // errors
       errors: [],
       // all tags
-      tags: {}
+      tags: {},
     };
   },
-  mounted: function() {
-    bus.$on("openCreateEditModal", data => {
+  mounted: function () {
+    bus.$on("openCreateEditModal", (data) => {
       document.getElementsByTagName("html")[0].classList.add("is-clipped");
       this.errors = [];
       if (data.edit == true) {
@@ -104,7 +104,7 @@ export default {
           id: "",
           title: "",
           is_public: false,
-          parent_id: null
+          parent_id: null,
         };
         this.edit = false;
       }
@@ -117,15 +117,15 @@ export default {
       let vm = this;
       axios
         .get("/api/tags/" + vm.id)
-        .then(function(response) {
+        .then(function (response) {
           vm.tag = response.data.data;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           toast({
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" }
+            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
@@ -144,9 +144,9 @@ export default {
             .post("/api/tags", {
               title: this.tag.title,
               parent_id: this.tag.parent_id,
-              is_public: this.tag.is_public
+              is_public: this.tag.is_public,
             })
-            .then(function(response) {
+            .then(function (response) {
               bus.$emit("objectCreated", true);
               vm.modalActive = false;
               document
@@ -156,15 +156,15 @@ export default {
                 message: "Αποθηκεύτηκε επιτυχώς",
                 type: "is-success",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" }
+                animate: { in: "fadeIn", out: "fadeOut" },
               });
             })
-            .catch(function(error) {
+            .catch(function (error) {
               toast({
                 message: "Συνέβη κάποιο σφάλμα",
                 type: "is-danger",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" }
+                animate: { in: "fadeIn", out: "fadeOut" },
               });
               console.log(error.response.data);
             });
@@ -173,9 +173,9 @@ export default {
             .put("/api/tags/" + vm.tag.id, {
               title: this.tag.title,
               parent_id: this.tag.parent_id,
-              is_public: this.tag.is_public
+              is_public: this.tag.is_public,
             })
-            .then(function(response) {
+            .then(function (response) {
               bus.$emit("objectCreated", true);
               vm.modalActive = false;
               document
@@ -185,28 +185,28 @@ export default {
                 message: "Αποθηκεύτηκε επιτυχώς",
                 type: "is-success",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" }
+                animate: { in: "fadeIn", out: "fadeOut" },
               });
             })
-            .catch(function(error) {
+            .catch(function (error) {
               toast({
                 message: "Συνέβη κάποιο σφάλμα",
                 type: "is-danger",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" }
+                animate: { in: "fadeIn", out: "fadeOut" },
               });
               console.log(error);
             });
         }
       }
     },
-    closeModal: function() {
+    closeModal: function () {
       let vm = this;
       vm.modalActive = false;
       document.getElementsByTagName("html")[0].classList.remove("is-clipped");
       document.getElementsByTagName("html")[0].classList.remove("is-clipped");
-    }
-  }
+    },
+  },
 };
 </script>
 

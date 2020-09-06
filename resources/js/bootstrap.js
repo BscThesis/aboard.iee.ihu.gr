@@ -24,7 +24,8 @@ axios.interceptors.request.use(function (config) {
 window.axios.interceptors.response.use(
     function (response) {
         return response;
-    }, function (error) {
+    },
+    function (error) {
         return error.response;
     }
 );
