@@ -303,13 +303,13 @@ export default {
   props: {
     id: {
       type: Number,
-      required: false
-    }
+      required: false,
+    },
   },
   components: {
-    flatPickr
+    flatPickr,
   },
-  data: function() {
+  data: function () {
     return {
       loading: true,
       // Single announcement
@@ -327,7 +327,7 @@ export default {
         has_eng: false,
         eng_title: null,
         eng_body: null,
-        attachments: []
+        attachments: [],
       },
       // Admin add as other author
       is_admin: false,
@@ -349,15 +349,15 @@ export default {
         minuteIncrement: 1,
         time_24hr: true,
         // minDate: new Date().fp_incr(1),
-        dateFormat: "Y-m-d H:i"
+        dateFormat: "Y-m-d H:i",
       },
       // errors
       errors: [],
       // announcement has public tag
-      has_public: false
+      has_public: false,
     };
   },
-  created: function() {
+  created: function () {
     this.getAllTags();
     bus.$on("authCheckFinished", () => {
       if (localStorage.getItem("user_info")) {
@@ -369,7 +369,7 @@ export default {
       }
     });
   },
-  mounted: function() {
+  mounted: function () {
     if (this.id) {
       this.getSingle();
     } else {
@@ -377,61 +377,61 @@ export default {
     }
   },
   methods: {
-    getAuthors: function() {
+    getAuthors: function () {
       let vm = this;
       axios
         .get("/api/auth/authors")
-        .then(function(response) {
+        .then(function (response) {
           vm.authors = response.data;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           toast({
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" }
+            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
     },
-    getSingle: function() {
+    getSingle: function () {
       let vm = this;
       axios
         .get("/api/announcements/" + vm.id)
-        .then(function(response) {
+        .then(function (response) {
           vm.announcement = response.data.data;
           vm.tagObjectsToArray();
           vm.loading = false;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           vm.loading = false;
           toast({
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" }
+            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
     },
-    getAllTags: function() {
+    getAllTags: function () {
       let vm = this;
       axios
         .get("/api/tags")
-        .then(function(response) {
+        .then(function (response) {
           vm.tags = response.data.data;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           toast({
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" }
+            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
     },
-    addAnnouncement: function() {
+    addAnnouncement: function () {
       let vm = this;
       vm.errors = [];
       this.btnLoading = true;
@@ -442,13 +442,13 @@ export default {
 
       // Add files first
       if (vm.announcement.attachments.length > 0) {
-        let old_attachments = vm.announcement.attachments.filter(function(
+        let old_attachments = vm.announcement.attachments.filter(function (
           attachment
         ) {
           return attachment.id;
         });
 
-        let new_attachments = vm.announcement.attachments.filter(function(
+        let new_attachments = vm.announcement.attachments.filter(function (
           attachment
         ) {
           return !attachment.id;
@@ -567,26 +567,26 @@ export default {
         axios
           .post(url, formData, {
             headers: {
-              "Content-Type": "multipart/form-data"
-            }
+              "Content-Type": "multipart/form-data",
+            },
           })
-          .then(function(response) {
+          .then(function (response) {
             vm.btnLoading = false;
             toast({
               message: "Προστέθηκε επιτυχώς",
               type: "is-success",
               position: "bottom-right",
-              animate: { in: "fadeIn", out: "fadeOut" }
+              animate: { in: "fadeIn", out: "fadeOut" },
             });
             window.location.replace("/announcements/" + response.data.data.id);
           })
-          .catch(function(error) {
+          .catch(function (error) {
             vm.btnLoading = false;
             toast({
               message: "Συνέβη κάποιο σφάλμα",
               type: "is-danger",
               position: "bottom-right",
-              animate: { in: "fadeIn", out: "fadeOut" }
+              animate: { in: "fadeIn", out: "fadeOut" },
             });
             console.log(error.response.data);
           });
@@ -594,41 +594,41 @@ export default {
         vm.btnLoading = false;
       }
     },
-    onFileChanged: function(event) {
+    onFileChanged: function (event) {
       let vm = this;
       if (!vm.announcement.attachments.includes(event.target.files[0])) {
         vm.announcement.attachments.push(event.target.files[0]);
       }
       vm.singleFile = null;
     },
-    removeFromFileUpload: function(index) {
+    removeFromFileUpload: function (index) {
       let vm = this;
       vm.$delete(vm.announcement.attachments, index);
     },
-    tagObjectsToArray: function() {
+    tagObjectsToArray: function () {
       // This function converts the tag objects array returned by the api
       // to a number only array expected by the api on put
       let vm = this;
       let tagArray = [];
 
       if (vm.announcement.tags.length > 0) {
-        vm.announcement.tags.forEach(element => {
+        vm.announcement.tags.forEach((element) => {
           tagArray.push(element.id);
         });
       }
       vm.announcement.tags = tagArray;
-    }
+    },
   },
   computed: {
-    selectedTags: function() {
+    selectedTags: function () {
       let selected = new Set();
       let vm = this;
       let parent;
       vm.has_public = false;
 
       if (vm.tags.length > 0) {
-        vm.announcement.tags.forEach(element => {
-          var tag = vm.tags.find(function(obj) {
+        vm.announcement.tags.forEach((element) => {
+          var tag = vm.tags.find(function (obj) {
             return obj.id === element || obj.id === element.id;
           });
 
@@ -640,7 +640,7 @@ export default {
           }
 
           while (parent != null) {
-            var tag = vm.tags.find(function(obj) {
+            var tag = vm.tags.find(function (obj) {
               return obj.id === parent;
             });
 
@@ -658,12 +658,12 @@ export default {
 
       return selected;
     },
-    allTags: function() {
+    allTags: function () {
       let vm = this;
-      return vm.tags.filter(function(el) {
+      return vm.tags.filter(function (el) {
         return el.parent_id != null;
       });
-    }
-  }
+    },
+  },
 };
 </script>
