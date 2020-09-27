@@ -19,7 +19,11 @@
             <a href="/documentation">API Docs</a>
           </p>
           <p class="level-item is-size-7">
-            <a href="https://github.com/nickcn/aboard.iee.ihu.gr" target="_blank">Github</a>
+            <a
+              href="https://github.com/nickcn/aboard.iee.ihu.gr"
+              target="_blank"
+              >Github</a
+            >
           </p>
           <p class="level-item">
             <a href="/feed" target="_blank">
@@ -32,7 +36,7 @@
       </nav>
     </div>
     <!-- Modal start -->
-    <div class="modal" v-bind:class="{ 'is-active': modalOpen}">
+    <div class="modal" v-bind:class="{ 'is-active': modalOpen }">
       <div class="modal-background" @click="bodyClass(false)"></div>
       <div class="modal-content">
         <div class="box">
@@ -40,7 +44,8 @@
             <div class="column is-full">
               <div class="notification is-link">
                 <p class="has-text-justified">
-                  Για παρατηρήσεις/σχόλια και τεχνικά θέματα σχετικά με το Apps και οποιαδήποτε υπηρεσία παρέχεται σε αυτό επικοινωνήστε στο:
+                  Για παρατηρήσεις/σχόλια και τεχνικά θέματα σχετικά με το Apps
+                  και οποιαδήποτε υπηρεσία παρέχεται σε αυτό επικοινωνήστε στο:
                   <code>noc [at] it.teithe.gr</code>
                 </p>
               </div>
@@ -48,23 +53,29 @@
             <div class="column is-full">
               <div class="notification is-info">
                 <p class="has-text-justified">
-                  Για θέματα που αφορούν τους βαθμούς και τα μαθήματα, παρακαλώ επικοινωνήστε με τον αντίστοιχο καθηγητή και με την γραμματεία στο:
+                  Για θέματα που αφορούν τους βαθμούς και τα μαθήματα, παρακαλώ
+                  επικοινωνήστε με τον αντίστοιχο καθηγητή και με την γραμματεία
+                  στο:
                   <code>info [at] it.teithe.gr</code>
                 </p>
                 <p class="help is-italic">
-                  Για την έυρεση στοιχείων επικοινωνίας καθηγητή, χρησιμοποιήστε την
+                  Για την έυρεση στοιχείων επικοινωνίας καθηγητή, χρησιμοποιήστε
+                  την
                   <a
                     href="https://apps.it.teithe.gr/search"
                     target="_blank"
                     rel="noopener noreferrer"
-                  >Υπηρεσία Καταλόγου</a>
+                    >Υπηρεσία Καταλόγου</a
+                  >
                 </p>
               </div>
             </div>
             <div class="column is-full">
               <div class="notification is-primary">
                 <p class="has-text-justified">
-                  Για θέματα σχετικά με τις δηλώσεις μαθημάτων και τις υπηρεσίες που παρέχονται από το ίδρυμα (pithia, webmail, moodle κ.λ) επικοινωνήστε στο:
+                  Για θέματα σχετικά με τις δηλώσεις μαθημάτων και τις υπηρεσίες
+                  που παρέχονται από το ίδρυμα (pithia, webmail, moodle κ.λ)
+                  επικοινωνήστε στο:
                   <code>noc [at] it.teithe.gr</code>
                 </p>
               </div>
@@ -72,7 +83,11 @@
           </div>
         </div>
       </div>
-      <button class="modal-close is-large" aria-label="close" @click="bodyClass(false)"></button>
+      <button
+        class="modal-close is-large"
+        aria-label="close"
+        @click="bodyClass(false)"
+      ></button>
     </div>
     <!-- Modal end -->
   </footer>
