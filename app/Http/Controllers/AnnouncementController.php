@@ -28,7 +28,7 @@ class AnnouncementController extends Controller
 
         $this->middleware('api.id.check')->only('update', 'show', 'searchByTag', 'destroy');
 
-        $this->middleware('api.tag.check')->only('show', 'searchByTag');
+        $this->middleware('api.tag.check')->only('searchByTag');
 
         $this->middleware('api.announcement.check')->only('show', 'update');
     }
@@ -40,12 +40,12 @@ class AnnouncementController extends Controller
      */
     public function index(Request $request)
     {
-	$local_ip = $request->session()->get('local_ip', 0);
+        $local_ip = $request->session()->get('local_ip', 0);
 
         if ($local_ip == 1 or Auth::guard('api')->check()) {
             $announcements = Announcement::orderBy('updated_at', 'desc')->paginate(10);
         } else {
-            $announcements = Announcement::whereHas('tags', function(Builder $query) {
+            $announcements = Announcement::whereHas('tags', function (Builder $query) {
                 $query->where('is_public', '=', 1);
             })->orderBy('updated_at', 'desc')->paginate(10);
         }
@@ -103,7 +103,7 @@ class AnnouncementController extends Controller
 
                 // Array of files
                 if ($request->hasfile('attachments')) {
-                    foreach ($request->file('attachments') as $order=>$attachment) {
+                    foreach ($request->file('attachments') as $order => $attachment) {
                         $attach = new Attachment;
                         $attach->announcement_id = $announcement->id;
                         $attach->filename = $attachment->getClientOriginalName();
@@ -124,7 +124,7 @@ class AnnouncementController extends Controller
             // Return the attachment
             return new AnnouncementResource($announcement);
         } else {
-            return response()->json(['message' =>'Unauthenticated'], 401);
+            return response()->json(['message' => 'Unauthenticated'], 401);
         }
     }
 
@@ -197,14 +197,14 @@ class AnnouncementController extends Controller
                 // Compare $existing_attachment_ids and $old_announcements
                 // and delete the ones that are not present in $old_announcements
                 $deleted_announcement_ids = $existing_attachment_ids
-                ->diff($old_announcements)
-                ->each(function ($value, $key) use ($announcement) {
-                    Attachment::where('id', $value)->delete();
-                });
+                    ->diff($old_announcements)
+                    ->each(function ($value, $key) use ($announcement) {
+                        Attachment::where('id', $value)->delete();
+                    });
 
                 // Insert new attachments
                 if ($request->input('attachments')) {
-                    foreach ($request->file('attachments') as $order=>$attachment) {
+                    foreach ($request->file('attachments') as $order => $attachment) {
                         $announcement->attachments()->create([
                             'announcement_id'  => $announcement->id,
                             'filename'         => $attachment->getClientOriginalName(),
@@ -219,7 +219,7 @@ class AnnouncementController extends Controller
             // Return the attachment
             return new AnnouncementResource($announcement);
         } else {
-            return response()->json(['message' =>'Unauthenticated'], 401);
+            return response()->json(['message' => 'Unauthenticated'], 401);
         }
     }
 
@@ -241,7 +241,7 @@ class AnnouncementController extends Controller
                 return AnnouncementResource::collection($announcements);
             }
         } else {
-            return response()->json(['message' =>'Unauthenticated'], 401);
+            return response()->json(['message' => 'Unauthenticated'], 401);
         }
     }
 
@@ -249,13 +249,13 @@ class AnnouncementController extends Controller
      * Display events.
      *
      * @return \Illuminate\Http\Response
-    */
+     */
     public function events()
     {
         $events = Announcement::select('id', 'title', 'event_location', 'gmaps', 'event_start_time', 'event_end_time')
-        ->orderBy('updated_at', 'desc')
-        ->where('is_event', 1)
-        ->paginate(12);
+            ->orderBy('updated_at', 'desc')
+            ->where('is_event', 1)
+            ->paginate(12);
 
         return $events;
     }
@@ -264,22 +264,22 @@ class AnnouncementController extends Controller
      * Display pinned announcements.
      *
      * @return array
-    */
+     */
     public function pinned(Request $request)
     {
         $local_ip = $request->session()->get('local_ip', 0);
 
         if ($local_ip == 1 or Auth::guard('api')->check()) {
-            $pinned = Announcement::where([['is_pinned', '=', 1], ['pinned_until', '>=', (string)date("Y-m-d H:i",time())]])
-            ->whereNull('deleted_at')
-            ->orderBy('updated_at', 'desc')->get(['id', 'title']);
+            $pinned = Announcement::where([['is_pinned', '=', 1], ['pinned_until', '>=', (string)date("Y-m-d H:i", time())]])
+                ->whereNull('deleted_at')
+                ->orderBy('updated_at', 'desc')->get(['id', 'title']);
         } else {
-            $pinned = Announcement::whereHas('tags', function(Builder $query) {
+            $pinned = Announcement::whereHas('tags', function (Builder $query) {
                 $query->where('is_public', '=', 1);
             })
-            ->where([['is_pinned', '=', 1], ['pinned_until', '>=', (string)date("Y-m-d H:i",time())]])
-            ->whereNull('deleted_at')
-            ->orderBy('updated_at', 'desc')->get(['id', 'title']);
+                ->where([['is_pinned', '=', 1], ['pinned_until', '>=', (string)date("Y-m-d H:i", time())]])
+                ->whereNull('deleted_at')
+                ->orderBy('updated_at', 'desc')->get(['id', 'title']);
         }
 
         return $pinned;
@@ -289,7 +289,7 @@ class AnnouncementController extends Controller
      * Search based on given tag.
      *
      * @return \Illuminate\Http\Response
-    */
+     */
     public function searchByTag($id, Request $request)
     {
         $local_ip = $request->session()->get('local_ip', 0);
@@ -298,14 +298,14 @@ class AnnouncementController extends Controller
             $results = Announcement::whereHas('tags', function (Builder $query) use ($id) {
                 $query->where('id', '=', $id);
             })
-            ->orderBy('updated_at', 'desc')->paginate(10);
+                ->orderBy('updated_at', 'desc')->paginate(10);
         } else {
             $results = Announcement::whereHas('tags', function (Builder $query) use ($id) {
                 $query->where('id', '=', $id);
             })->whereHas('tags', function (Builder $query) {
                 $query->where('is_public', '=', 1);
             })
-            ->orderBy('updated_at', 'desc')->paginate(10);
+                ->orderBy('updated_at', 'desc')->paginate(10);
         }
 
         return AnnouncementResource::collection($results);
@@ -315,20 +315,20 @@ class AnnouncementController extends Controller
      * Search based on given tag.
      *
      * @return \Illuminate\Http\Response
-    */
+     */
     public function searchByAuthor($id, Request $request)
     {
         $local_ip = $request->session()->get('local_ip', 0);
 
         if ($local_ip == 1  or Auth::guard('api')->check()) {
             $results = Announcement::where('user_id', $id)
-            ->orderBy('updated_at', 'desc')->paginate(10);
+                ->orderBy('updated_at', 'desc')->paginate(10);
         } else {
             $results = Announcement::where('user_id', $id)
-            ->whereHas('tags', function (Builder $query) {
-                $query->where('is_public', '=', 1);
-            })
-            ->orderBy('updated_at', 'desc')->paginate(10);
+                ->whereHas('tags', function (Builder $query) {
+                    $query->where('is_public', '=', 1);
+                })
+                ->orderBy('updated_at', 'desc')->paginate(10);
         }
 
         return AnnouncementResource::collection($results);
@@ -338,7 +338,7 @@ class AnnouncementController extends Controller
      * Search based custom input.
      *
      * @return \Illuminate\Http\Response
-    */
+     */
     public function customSearch(Request $request)
     {
         $local_ip = $request->session()->get('local_ip', 0);
@@ -349,15 +349,15 @@ class AnnouncementController extends Controller
             $results = Announcement::whereHas('tags', function (Builder $query) {
                 $query->where('is_public', '=', 1);
             })
-            ->orderBy('updated_at', 'desc');
+                ->orderBy('updated_at', 'desc');
         }
 
         $params = json_decode($request->input("q"));
 
         $results = $results->where(function ($query) use ($params) {
             foreach ($params as $param) {
-                $query->orWhere('title', 'LIKE', '%'.$param.'%')
-                ->orWhere('eng_title', 'LIKE', '%'.$param.'%');
+                $query->orWhere('title', 'LIKE', '%' . $param . '%')
+                    ->orWhere('eng_title', 'LIKE', '%' . $param . '%');
             }
         });
 
@@ -369,10 +369,9 @@ class AnnouncementController extends Controller
      * FSS feed.
      *
      * @return \Illuminate\Http\Response
-    */
+     */
     public function rss(Request $request, Announcement $announcement)
     {
         return show($announcement);
     }
 }
-
