@@ -14,7 +14,7 @@ class AddIndexOnTagsTitle extends Migration
     public function up()
     {
         Schema::table('tags', function (Blueprint $table) {
-            //
+            $table->unique('title');
         });
     }
 
@@ -26,7 +26,7 @@ class AddIndexOnTagsTitle extends Migration
     public function down()
     {
         Schema::table('tags', function (Blueprint $table) {
-            //
+            $table->dropIndex(['title']);
         });
     }
 }
