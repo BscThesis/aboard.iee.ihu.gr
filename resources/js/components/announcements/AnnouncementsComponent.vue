@@ -9,7 +9,7 @@
     <!-- Search/Pinned Box -->
     <search-component></search-component>
 
-    <!-- Pagination -->
+    <!-- Pagination 1 -->
     <pagination-component></pagination-component>
 
     <!-- Announcements -->
@@ -23,6 +23,9 @@
         v-bind:key="announcement.id"
         v-bind:announcement="announcement"
       ></single-announcement-component>
+
+      <!-- Pagination 2 -->
+      <pagination-component></pagination-component>
     </div>
   </div>
 </template>
@@ -32,17 +35,17 @@ import { bus } from "../../app";
 import { toast } from "bulma-toast";
 
 export default {
-  data: function() {
+  data: function () {
     return {
-      announcements: {}
+      announcements: {},
     };
   },
-  mounted: function() {
+  mounted: function () {
     this.getAllAnnouncements();
-    bus.$on("next", data => {
+    bus.$on("next", (data) => {
       this.getAllAnnouncements(data);
     });
-    bus.$on("prev", data => {
+    bus.$on("prev", (data) => {
       this.getAllAnnouncements(data);
     });
   },
@@ -52,26 +55,26 @@ export default {
       page_url = page_url;
       axios
         .get(page_url)
-        .then(function(response) {
+        .then(function (response) {
           vm.announcements = response.data.data;
           let paginate = {
             links: response.data.links,
-            meta: response.data.meta
+            meta: response.data.meta,
           };
           bus.$emit("paginationObject", paginate);
           bus.$emit("loadingFinished", true);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           bus.$emit("loadingFinished", true);
           toast({
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" }
+            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
-    }
-  }
+    },
+  },
 };
 </script>
