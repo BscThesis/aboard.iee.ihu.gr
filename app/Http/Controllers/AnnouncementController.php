@@ -112,7 +112,7 @@ class AnnouncementController extends Controller
                         $attach->mime_type = $attachment->getMimeType();
                         if (!$attach->save()) {
                             $announcement->delete();
-                            return $response()->json(['Message' => 'Error on insert'], 400);
+                            return response()->json(['Message' => 'Error on insert'], 400);
                         }
                     }
                 }
