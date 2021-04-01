@@ -13,7 +13,7 @@
     <pagination-component></pagination-component>
 
     <!-- Announcements -->
-    <div class="block">
+    <div class="block is-clipped">
       <!-- Loader -->
       <loader-component></loader-component>
 
