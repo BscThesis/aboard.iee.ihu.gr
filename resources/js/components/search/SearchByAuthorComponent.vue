@@ -2,7 +2,11 @@
   <div class="block">
     <div class="block">
       <!-- Breadcrumb -->
-      <breadcrumb-component v-if="author.name" v-bind:title="author.name" v-bind:author="true"></breadcrumb-component>
+      <breadcrumb-component
+        v-if="author.name"
+        v-bind:title="author.name"
+        v-bind:author="true"
+      ></breadcrumb-component>
 
       <!-- Search results title -->
       <page-title title="Αποτελέσματα αναζήτησης"></page-title>
@@ -11,7 +15,7 @@
       <pagination-component></pagination-component>
 
       <!-- Announcements -->
-      <div class="block">
+      <div class="block is-clipped">
         <!-- Loader -->
         <loader-component></loader-component>
 
@@ -34,24 +38,24 @@ export default {
   props: {
     id: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
-  data: function() {
+  data: function () {
     return {
       author: {
         id: "",
-        name: ""
+        name: "",
       },
-      announcements: {}
+      announcements: {},
     };
   },
-  created: function() {
+  created: function () {
     this.getResults();
-    bus.$on("next", data => {
+    bus.$on("next", (data) => {
       this.getResults(data);
     });
-    bus.$on("prev", data => {
+    bus.$on("prev", (data) => {
       this.getResults(data);
     });
   },
@@ -62,13 +66,13 @@ export default {
 
       axios
         .get(page_url)
-        .then(function(response) {
+        .then(function (response) {
           if (response.data.data.length > 0) {
             vm.announcements = response.data.data;
             vm.author = response.data.data[0].author;
             let paginate = {
               links: response.data.links,
-              meta: response.data.meta
+              meta: response.data.meta,
             };
             bus.$emit("paginationObject", paginate);
           } else {
@@ -76,23 +80,23 @@ export default {
               message: "Δε βρέθηκε",
               type: "is-danger",
               position: "bottom-right",
-              animate: { in: "fadeIn", out: "fadeOut" }
+              animate: { in: "fadeIn", out: "fadeOut" },
             });
           }
 
           bus.$emit("loadingFinished", true);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           bus.$emit("loadingFinished", true);
           toast({
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" }
+            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
-    }
-  }
+    },
+  },
 };
 </script>
