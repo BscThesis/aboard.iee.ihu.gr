@@ -11,7 +11,7 @@
       <!-- Search results title -->
       <page-title title="Αποτελέσματα αναζήτησης"></page-title>
 
-      <!-- Pagination -->
+      <!-- Pagination 1 -->
       <pagination-component></pagination-component>
 
       <!-- Announcements -->
@@ -25,6 +25,9 @@
           v-bind:key="announcement.id"
           v-bind:announcement="announcement"
         ></single-announcement-component>
+
+        <!-- Pagination 2 -->
+        <pagination-component></pagination-component>
       </div>
     </div>
   </div>

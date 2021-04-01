@@ -14,7 +14,7 @@
       <!-- Pagination -->
       <pagination-component></pagination-component>
 
-      <!-- Announcements -->
+      <!-- Announcements 1 -->
       <div class="block is-clipped">
         <!-- Loader -->
         <loader-component></loader-component>
@@ -25,6 +25,9 @@
           v-bind:key="announcement.id"
           v-bind:announcement="announcement"
         ></single-announcement-component>
+
+        <!-- Pagination 2 -->
+        <pagination-component></pagination-component>
       </div>
     </div>
   </div>
