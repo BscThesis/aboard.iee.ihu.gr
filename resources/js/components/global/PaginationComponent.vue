@@ -59,22 +59,12 @@ export default {
     nextPage: function () {
       if (this.pagination.next_page !== null) {
         this.loadingNext = true;
-        document.getElementsByClassName["pagination-next"].forEach(
-          (element) => {
-            element.disabled = true;
-          }
-        );
         bus.$emit("next", this.pagination.next_page);
       }
     },
     prevPage: function () {
       if (this.pagination.prev_page !== null) {
         this.loadingPrev = true;
-        document.getElementsByClassName["pagination-previous"].forEach(
-          (element) => {
-            element.disabled = true;
-          }
-        );
         bus.$emit("prev", this.pagination.prev_page);
       }
     },
