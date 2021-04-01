@@ -12,18 +12,18 @@
 import { bus } from "../../app";
 
 export default {
-  data: function() {
+  data: function () {
     return {
-      loading: true
+      loading: true,
     };
   },
-  created: function() {
-    bus.$on("loadingFinished", data => {
+  created: function () {
+    bus.$on("loadingFinished", (data) => {
       if (data) {
         this.loading = false;
       }
     });
-  }
+  },
 };
 </script>
 
