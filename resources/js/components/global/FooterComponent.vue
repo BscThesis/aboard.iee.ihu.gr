@@ -20,7 +20,7 @@
           </p>
           <p class="level-item is-size-7">
             <a
-              href="https://github.com/nickcn/aboard.iee.ihu.gr"
+              href="https://github.com/BscThesis/aboard.iee.ihu.gr"
               target="_blank"
               >Github</a
             >
