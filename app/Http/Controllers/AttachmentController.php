@@ -41,12 +41,16 @@ class AttachmentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Attachment  $attachment
-     * @return \Illuminate\Http\Response
+     * @param   $at_id
+     * @param   $an_id
+     * @return  \Illuminate\Http\Response
      */
-    public function show(Attachment $attachment)
+    public function show($an_id, $at_id)
     {
-        //
+        return response()->json([
+            'announcement_id' => $an_id,
+            'attachment_id' => $at_id
+        ]);
     }
 
     /**
