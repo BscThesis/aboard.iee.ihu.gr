@@ -14,7 +14,7 @@ class AddDefefaultValueOnParentId extends Migration
     public function up()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->default(1);
+            $table->bigInteger('parent_id')->default(1)->change();
         });
     }
 

@@ -14,7 +14,7 @@ class AddIndexOnTagsTitle extends Migration
     public function up()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->unique('title');
+            $table->unique('title')->change();
         });
     }
 
