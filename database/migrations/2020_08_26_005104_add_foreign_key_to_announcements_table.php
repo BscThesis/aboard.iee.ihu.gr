@@ -15,7 +15,7 @@ class AddForeignKeyToAnnouncementsTable extends Migration
     {
         Schema::table('attachments', function (Blueprint $table) {
             $table->integer('announcement_id')->unsigned()->change();
-            $table->foreign('announcement_id')->references('id')->on('announcements')->change();
+            $table->foreign('announcement_id')->references('id')->on('announcements')->onDelete('cascade')->change();
         });
     }
 
