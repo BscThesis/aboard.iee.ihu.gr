@@ -15,7 +15,7 @@ class AddAttachmentsFkToAnnouncementsTable extends Migration
     {
         Schema::table('attachments', function (Blueprint $table) {
             $table->bigInteger('announcement_id')->unsigned()->change();
-            $table->foreign('announcement_id')->references('id')->on('announcements')->onDelete('cascade')->change();
+            $table->foreign('announcement_id')->references('id')->on('announcements')->onDelete('cascade')->onUpdate('cascade')->change();
         });
     }
 
@@ -27,6 +27,7 @@ class AddAttachmentsFkToAnnouncementsTable extends Migration
     public function down()
     {
         Schema::table('attachments', function (Blueprint $table) {
+            $table->integer('announcement_id')->unsigned()->change();
             $table->dropForeign('attachments_announcement_id_foreign');
         });
     }
