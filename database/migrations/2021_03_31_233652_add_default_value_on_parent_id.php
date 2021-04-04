@@ -13,9 +13,9 @@ class AddDefaultValueOnParentId extends Migration
      */
     public function up()
     {
-        // Schema::table('tags', function (Blueprint $table) {
-        //     $table->dropForeign('tags_parent_id_foreign');
-        // });
+        Schema::table('tags', function (Blueprint $table) {
+            $table->dropForeign('tags_parent_id_foreign');
+        });
 
         Schema::table('tags', function (Blueprint $table) {
             $table->bigInteger('parent_id')->unsigned()->default(1)->change();
