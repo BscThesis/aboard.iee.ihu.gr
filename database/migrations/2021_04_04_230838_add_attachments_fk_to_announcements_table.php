@@ -28,6 +28,9 @@ class AddAttachmentsFkToAnnouncementsTable extends Migration
     {
         Schema::table('attachments', function (Blueprint $table) {
             $table->dropForeign('attachments_announcement_id_foreign');
+        });
+
+        Schema::table('attachments', function (Blueprint $table) {
             $table->integer('announcement_id')->unsigned()->change();
         });
     }
