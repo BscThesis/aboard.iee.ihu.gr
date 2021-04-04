@@ -22,7 +22,7 @@ class AddDefaultValueOnParentId extends Migration
         });
 
         Schema::table('tags', function (Blueprint $table) {
-            $table->foreign('parent_id')->references('id')->on('tags')->onUpdate('cascade')->onDelete('cascade')->change();
+            $table->foreign('parent_id')->references('id')->on('tags')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
