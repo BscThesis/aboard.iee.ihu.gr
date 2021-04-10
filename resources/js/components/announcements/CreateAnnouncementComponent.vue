@@ -613,6 +613,7 @@ export default {
     } else {
       this.loading = false;
     }
+    console.log(JSON.stringify(tagsAsTree, null, " "));
   },
   methods: {
     getAuthors: function () {
@@ -901,6 +902,32 @@ export default {
       return vm.tags.filter(function (el) {
         return el.parent_id != null;
       });
+    },
+    tagsAsTree: function () {
+      var ID_KEY = "id";
+      var PARENT_KEY = "parent_id";
+      var CHILDREN_KEY = "children";
+
+      let vm = this;
+
+      var tree = [],
+        childrenOf = {};
+      var item, id, parentId;
+
+      for (var i = 0, length = vm.tags.length; i < length; i++) {
+        item = vm.tags[i];
+        id = item[ID_KEY];
+        parentId = item[PARENT_KEY] || 0;
+        childrenOf[id] = childrenOf[id] || [];
+        item[CHILDREN_KEY] = childrenOf[id];
+        if (parentId != 0) {
+          childrenOf[parentId] = childrenOf[parentId] || [];
+          childrenOf[parentId].push(item);
+        } else {
+          tree.push(item);
+        }
+      }
+      return tree;
     },
   },
 };
