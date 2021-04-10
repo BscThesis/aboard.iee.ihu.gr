@@ -204,7 +204,7 @@
                   </div>
                   <div class="column is-narrow">
                     <span class="icon is-clickable">
-                      <i class="fas fa-check-square"></i>
+                      <i class="far fa-check-square"></i>
                     </span>
                   </div>
                   <div class="column is-narrow">
@@ -222,7 +222,7 @@
                   </div>
                   <div class="column is-narrow">
                     <span class="icon is-clickable">
-                      <i class="fas fa-check-square"></i>
+                      <i class="far fa-check-square"></i>
                     </span>
                   </div>
                   <div class="column is-narrow">
@@ -240,7 +240,7 @@
                   </div>
                   <div class="column is-narrow">
                     <span class="icon is-clickable">
-                      <i class="fas fa-square"></i>
+                      <i class="far fa-square"></i>
                     </span>
                   </div>
                   <div class="column is-narrow">
@@ -258,7 +258,7 @@
                   </div>
                   <div class="column is-narrow">
                     <span class="icon is-clickable">
-                      <i class="fas fa-square"></i>
+                      <i class="far fa-square"></i>
                     </span>
                   </div>
                   <div class="column is-narrow">
@@ -276,7 +276,7 @@
                   </div>
                   <div class="column is-narrow">
                     <span class="icon is-clickable">
-                      <i class="fas fa-square"></i>
+                      <i class="far fa-square"></i>
                     </span>
                   </div>
                   <div class="column is-narrow">
@@ -294,7 +294,7 @@
                   </div>
                   <div class="column is-narrow">
                     <span class="icon is-clickable">
-                      <i class="fas fa-check-square"></i>
+                      <i class="far fa-check-square"></i>
                     </span>
                   </div>
                   <div class="column is-narrow">
@@ -312,7 +312,7 @@
                   </div>
                   <div class="column is-narrow">
                     <span class="icon is-clickable">
-                      <i class="fas fa-check-square"></i>
+                      <i class="far fa-check-square"></i>
                     </span>
                   </div>
                   <div class="column is-narrow">
@@ -330,7 +330,7 @@
                   </div>
                   <div class="column is-narrow">
                     <span class="icon is-clickable">
-                      <i class="fas fa-square"></i>
+                      <i class="far fa-square"></i>
                     </span>
                   </div>
                   <div class="column is-narrow">
