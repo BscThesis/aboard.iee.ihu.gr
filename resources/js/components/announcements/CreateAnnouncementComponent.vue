@@ -8,7 +8,9 @@
     <div class="block" v-if="!loading">
       <!-- Title -->
       <div class="field">
-        <label class="label is-capitalized is-unselectable">Τίτλος ανακοίνωσης</label>
+        <label class="label is-capitalized is-unselectable"
+          >Τίτλος ανακοίνωσης</label
+        >
         <div class="control has-icons-left">
           <input
             class="input"
@@ -25,7 +27,9 @@
 
       <!-- Body -->
       <div class="field">
-        <label class="label is-capitalized is-unselectable">Κείμενο ανακοίνωσης</label>
+        <label class="label is-capitalized is-unselectable"
+          >Κείμενο ανακοίνωσης</label
+        >
         <editor-component v-model="announcement.body"></editor-component>
       </div>
 
@@ -33,7 +37,8 @@
       <div class="field">
         <div class="control">
           <label class="checkbox">
-            <input type="checkbox" v-model="announcement.has_eng" /> Προσθήκη ανακοίνωσης στα αγγλικά
+            <input type="checkbox" v-model="announcement.has_eng" /> Προσθήκη
+            ανακοίνωσης στα αγγλικά
           </label>
         </div>
       </div>
@@ -41,7 +46,9 @@
       <div class="field" v-if="announcement.has_eng" id="english-info">
         <!-- Title -->
         <div class="field">
-          <label class="label is-capitalized is-unselectable">Τίτλος ανακοίνωσης στα αγγλικά</label>
+          <label class="label is-capitalized is-unselectable"
+            >Τίτλος ανακοίνωσης στα αγγλικά</label
+          >
           <div class="control has-icons-left">
             <input
               class="input"
@@ -58,7 +65,9 @@
 
         <!-- Body -->
         <div class="field">
-          <label class="label is-capitalized is-unselectable">Κείμενο ανακοίνωσης στα αγγλικά</label>
+          <label class="label is-capitalized is-unselectable"
+            >Κείμενο ανακοίνωσης στα αγγλικά</label
+          >
           <editor-component v-model="announcement.eng_body"></editor-component>
         </div>
       </div>
@@ -70,20 +79,27 @@
             <div class="column">
               <div class="control">
                 <label class="checkbox">
-                  <input type="checkbox" v-model="other_user" /> Ανέβασμα ως άλλος χρήστης (Admin only)
+                  <input type="checkbox" v-model="other_user" /> Ανέβασμα ως
+                  άλλος χρήστης (Admin only)
                 </label>
               </div>
             </div>
             <div class="column" v-bind:class="{ 'is-hidden': !other_user }">
               <div class="field" v-if="other_user">
-                <label class="label is-capitalized is-unselectable">Συντάκτες</label>
+                <label class="label is-capitalized is-unselectable"
+                  >Συντάκτες</label
+                >
                 <div
                   class="dropdown"
                   @click="author_open = !author_open"
                   v-bind:class="{ 'is-active': author_open }"
                 >
                   <div class="dropdown-trigger">
-                    <button class="button" aria-haspopup="true" aria-controls="tag-dropdown">
+                    <button
+                      class="button"
+                      aria-haspopup="true"
+                      aria-controls="tag-dropdown"
+                    >
                       <span v-if="!selected_author">Authors</span>
                       <span
                         v-if="selected_author"
@@ -93,7 +109,9 @@
                       >
                         <i class="fas fa-times"></i>
                       </span>
-                      <span v-if="selected_author">{{ selected_author.name }}</span>
+                      <span v-if="selected_author">{{
+                        selected_author.name
+                      }}</span>
                       <span class="icon is-small">
                         <i class="fas fa-angle-down" aria-hidden="true"></i>
                       </span>
@@ -106,7 +124,8 @@
                         v-for="author in authors"
                         v-bind:key="author.id"
                         @click="selected_author = author"
-                      >{{ author.name }}</a>
+                        >{{ author.name }}</a
+                      >
                     </div>
                   </div>
                 </div>
@@ -121,15 +140,23 @@
         <div class="columns">
           <!-- Tag selector -->
           <div class="column">
-            <label class="label is-capitalized is-unselectable">Επιλογή ετικετών</label>
-            <div
+            <label class="label is-capitalized is-unselectable"
+              >Επιλογή ετικετών</label
+            >
+            <!-- <div
               class="dropdown"
               @click="dropAct = !dropAct"
               v-bind:class="{ 'is-active': dropAct }"
             >
               <div class="dropdown-trigger">
-                <button class="button" aria-haspopup="true" aria-controls="tag-dropdown">
-                  <span>Έχουν επιλεγεί: ( {{ announcement.tags.length }} )</span>
+                <button
+                  class="button"
+                  aria-haspopup="true"
+                  aria-controls="tag-dropdown"
+                >
+                  <span
+                    >Έχουν επιλεγεί: ( {{ announcement.tags.length }} )</span
+                  >
                   <span class="icon is-small">
                     <i class="fas fa-angle-down" aria-hidden="true"></i>
                   </span>
@@ -137,25 +164,195 @@
               </div>
               <div class="dropdown-menu" id="tag-dropdown" role="menu">
                 <div class="dropdown-content dropdown-content-fixed">
-                  <div class="dropdown-item" v-for="tag in allTags" v-bind:key="tag.id">
+                  <div
+                    class="dropdown-item"
+                    v-for="tag in allTags"
+                    v-bind:key="tag.id"
+                  >
                     <label class="checkbox">
-                      <input type="checkbox" v-bind:value="tag.id" v-model="announcement.tags" />
+                      <input
+                        type="checkbox"
+                        v-bind:value="tag.id"
+                        v-model="announcement.tags"
+                      />
                       {{ tag.title }}
                     </label>
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
+            <nav class="panel is-shadowless">
+              <div class="panel-block">
+                <p class="control has-icons-left">
+                  <input
+                    class="input is-small"
+                    type="text"
+                    placeholder="Search"
+                  />
+                  <span class="icon is-left">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                  </span>
+                </p>
+              </div>
+              <!--  -->
+              <div class="panel-block tags-panel-block">
+                <div class="columns is-mobile">
+                  <div class="column is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="fas fa-caret-down"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="far fa-check-square"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="is-unselectable">1o etos</span>
+                  </div>
+                </div>
+              </div>
+              <!--  -->
+              <div class="panel-block tags-panel-block">
+                <div class="columns is-mobile">
+                  <div class="column is-offset-1 is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="fas fa-caret-down"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="far fa-check-square"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="is-unselectable">2o etos</span>
+                  </div>
+                </div>
+              </div>
+              <!--  -->
+              <div class="panel-block tags-panel-block">
+                <div class="columns is-mobile">
+                  <div class="column is-offset-2 is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="fas fa-caret-right"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="far fa-square"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="is-unselectable">3o etos</span>
+                  </div>
+                </div>
+              </div>
+              <!--  -->
+              <div class="panel-block tags-panel-block">
+                <div class="columns is-mobile">
+                  <div class="column is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="fas fa-caret-right"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="far fa-square"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="is-unselectable">4o etos</span>
+                  </div>
+                </div>
+              </div>
+              <!--  -->
+              <div class="panel-block tags-panel-block">
+                <div class="columns is-mobile">
+                  <div class="column is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="fas fa-caret-right"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="far fa-square"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="is-unselectable">5o etos</span>
+                  </div>
+                </div>
+              </div>
+              <!--  -->
+              <div class="panel-block tags-panel-block">
+                <div class="columns is-mobile">
+                  <div class="column is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="fas fa-caret-down"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="far fa-check-square"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="is-unselectable">1o etos</span>
+                  </div>
+                </div>
+              </div>
+              <!--  -->
+              <div class="panel-block tags-panel-block">
+                <div class="columns is-mobile">
+                  <div class="column is-offset-1 is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="fas fa-caret-down"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="far fa-check-square"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="is-unselectable">2o etos</span>
+                  </div>
+                </div>
+              </div>
+              <!--  -->
+              <div class="panel-block tags-panel-block">
+                <div class="columns is-mobile">
+                  <div class="column is-offset-2 is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="fas fa-caret-right"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="icon is-clickable">
+                      <i class="far fa-square"></i>
+                    </span>
+                  </div>
+                  <div class="column is-narrow">
+                    <span class="is-unselectable">3o etos</span>
+                  </div>
+                </div>
+              </div>
+              <!--  -->
+            </nav>
           </div>
           <!-- Tag view (parent child) -->
           <div class="column">
-            <label class="label is-capitalized is-unselectable">Επιλεγμένες ετικέτες (auto-inserted)</label>
+            <label class="label is-capitalized is-unselectable"
+              >Επιλεγμένες ετικέτες (auto-inserted)</label
+            >
             <div class="tags">
               <span
                 class="tag is-rounded is-dark is-unselectable"
                 v-for="tag in selectedTags"
                 v-bind:key="tag"
-              >{{ tag }}</span>
+                >{{ tag }}</span
+              >
             </div>
           </div>
         </div>
@@ -167,15 +364,24 @@
           <div class="column">
             <div class="control">
               <label class="checkbox">
-                <input type="checkbox" v-model="announcement.is_pinned" /> Προσθήκη ανακοίνωσης στις σημαντικές
+                <input type="checkbox" v-model="announcement.is_pinned" />
+                Προσθήκη ανακοίνωσης στις σημαντικές
               </label>
             </div>
           </div>
-          <div class="column" v-bind:class="{ 'is-hidden': !announcement.is_pinned }">
+          <div
+            class="column"
+            v-bind:class="{ 'is-hidden': !announcement.is_pinned }"
+          >
             <div class="field" id="pinned-until">
               <div class="field">
-                <label class="label is-capitalized is-unselectable">Εμφάνιση μέχρι</label>
-                <flat-pickr v-model="announcement.pinned_until" :config="config"></flat-pickr>
+                <label class="label is-capitalized is-unselectable"
+                  >Εμφάνιση μέχρι</label
+                >
+                <flat-pickr
+                  v-model="announcement.pinned_until"
+                  :config="config"
+                ></flat-pickr>
               </div>
             </div>
           </div>
@@ -187,10 +393,17 @@
         <div class="columns">
           <!-- File input -->
           <div class="column">
-            <label class="label is-capitalized is-unselectable">Ανέβασμα αρχείων</label>
+            <label class="label is-capitalized is-unselectable"
+              >Ανέβασμα αρχείων</label
+            >
             <div class="file">
               <label class="file-label">
-                <input class="file-input" type="file" name="file" @change="onFileChanged($event)" />
+                <input
+                  class="file-input"
+                  type="file"
+                  name="file"
+                  @change="onFileChanged($event)"
+                />
                 <span class="file-cta has-background-white">
                   <span class="file-icon">
                     <i class="fas fa-upload"></i>
@@ -203,7 +416,9 @@
 
           <!-- File list -->
           <div class="column">
-            <label class="label is-capitalized is-unselectable">Λίστα αρχείων</label>
+            <label class="label is-capitalized is-unselectable"
+              >Λίστα αρχείων</label
+            >
             <div class="field is-grouped is-grouped-multiline">
               <div
                 class="control"
@@ -211,9 +426,14 @@
                 v-bind:key="index"
               >
                 <div class="tags has-addons">
-                  <a v-if="item.filename" class="tag is-info is-light">{{ item.filename }}</a>
+                  <a v-if="item.filename" class="tag is-info is-light">{{
+                    item.filename
+                  }}</a>
                   <a v-else class="tag is-info is-light">{{ item.name }}</a>
-                  <a class="tag is-delete" v-on:click="removeFromFileUpload(index)"></a>
+                  <a
+                    class="tag is-delete"
+                    v-on:click="removeFromFileUpload(index)"
+                  ></a>
                 </div>
               </div>
             </div>
@@ -225,7 +445,8 @@
       <div class="field">
         <div class="control">
           <label class="checkbox">
-            <input type="checkbox" v-model="announcement.is_event" /> Προσθήκη εκδήλωσης
+            <input type="checkbox" v-model="announcement.is_event" /> Προσθήκη
+            εκδήλωσης
           </label>
         </div>
       </div>
@@ -233,7 +454,9 @@
       <!-- Event information -->
       <div class="field" id="event-related-info" v-if="announcement.is_event">
         <div class="field">
-          <label class="label is-capitalized is-unselectable">Τοποθεσία εκδήλωσης</label>
+          <label class="label is-capitalized is-unselectable"
+            >Τοποθεσία εκδήλωσης</label
+          >
           <div class="control has-icons-left">
             <input
               class="input"
@@ -250,7 +473,8 @@
           <!-- Google Maps -->
           <div class="control">
             <label class="checkbox">
-              <input type="checkbox" v-model="announcement.gmaps" /> Προσθήκη link στο Google Maps
+              <input type="checkbox" v-model="announcement.gmaps" /> Προσθήκη
+              link στο Google Maps
             </label>
           </div>
         </div>
@@ -258,12 +482,22 @@
         <div class="field">
           <div class="columns">
             <div class="column">
-              <label class="label is-capitalized is-unselectable">Έναρξη εκδήλωσης</label>
-              <flat-pickr v-model="announcement.event_start_time" :config="config"></flat-pickr>
+              <label class="label is-capitalized is-unselectable"
+                >Έναρξη εκδήλωσης</label
+              >
+              <flat-pickr
+                v-model="announcement.event_start_time"
+                :config="config"
+              ></flat-pickr>
             </div>
             <div class="column">
-              <label class="label is-capitalized is-unselectable">Λήξη εκδήλωσης</label>
-              <flat-pickr v-model="announcement.event_end_time" :config="config"></flat-pickr>
+              <label class="label is-capitalized is-unselectable"
+                >Λήξη εκδήλωσης</label
+              >
+              <flat-pickr
+                v-model="announcement.event_end_time"
+                :config="config"
+              ></flat-pickr>
             </div>
           </div>
         </div>
@@ -282,13 +516,17 @@
         <a
           class="button is-link is-capitalized"
           @click="addAnnouncement()"
-          v-bind:class="{'is-loading': btnLoading}"
+          v-bind:class="{ 'is-loading': btnLoading }"
           v-bind:disabled="btnLoading"
-        >Αποθήκευση</a>
+          >Αποθήκευση</a
+        >
       </div>
 
       <!-- Display errors -->
-      <errors-component v-if="errors.length" :errors="errors"></errors-component>
+      <errors-component
+        v-if="errors.length"
+        :errors="errors"
+      ></errors-component>
     </div>
   </div>
 </template>
@@ -303,13 +541,13 @@ export default {
   props: {
     id: {
       type: Number,
-      required: false
-    }
+      required: false,
+    },
   },
   components: {
-    flatPickr
+    flatPickr,
   },
-  data: function() {
+  data: function () {
     return {
       loading: true,
       // Single announcement
@@ -327,7 +565,7 @@ export default {
         has_eng: false,
         eng_title: null,
         eng_body: null,
-        attachments: []
+        attachments: [],
       },
       // Admin add as other author
       is_admin: false,
@@ -349,15 +587,15 @@ export default {
         minuteIncrement: 1,
         time_24hr: true,
         // minDate: new Date().fp_incr(1),
-        dateFormat: "Y-m-d H:i"
+        dateFormat: "Y-m-d H:i",
       },
       // errors
       errors: [],
       // announcement has public tag
-      has_public: false
+      has_public: false,
     };
   },
-  created: function() {
+  created: function () {
     this.getAllTags();
     bus.$on("authCheckFinished", () => {
       if (localStorage.getItem("user_info")) {
@@ -369,7 +607,7 @@ export default {
       }
     });
   },
-  mounted: function() {
+  mounted: function () {
     if (this.id) {
       this.getSingle();
     } else {
@@ -377,61 +615,61 @@ export default {
     }
   },
   methods: {
-    getAuthors: function() {
+    getAuthors: function () {
       let vm = this;
       axios
         .get("/api/auth/authors")
-        .then(function(response) {
+        .then(function (response) {
           vm.authors = response.data;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           toast({
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" }
+            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
     },
-    getSingle: function() {
+    getSingle: function () {
       let vm = this;
       axios
         .get("/api/announcements/" + vm.id)
-        .then(function(response) {
+        .then(function (response) {
           vm.announcement = response.data.data;
           vm.tagObjectsToArray();
           vm.loading = false;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           vm.loading = false;
           toast({
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" }
+            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
     },
-    getAllTags: function() {
+    getAllTags: function () {
       let vm = this;
       axios
         .get("/api/tags")
-        .then(function(response) {
+        .then(function (response) {
           vm.tags = response.data.data;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           toast({
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" }
+            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
     },
-    addAnnouncement: function() {
+    addAnnouncement: function () {
       let vm = this;
       vm.errors = [];
       this.btnLoading = true;
@@ -442,13 +680,13 @@ export default {
 
       // Add files first
       if (vm.announcement.attachments.length > 0) {
-        let old_attachments = vm.announcement.attachments.filter(function(
+        let old_attachments = vm.announcement.attachments.filter(function (
           attachment
         ) {
           return attachment.id;
         });
 
-        let new_attachments = vm.announcement.attachments.filter(function(
+        let new_attachments = vm.announcement.attachments.filter(function (
           attachment
         ) {
           return !attachment.id;
@@ -567,26 +805,26 @@ export default {
         axios
           .post(url, formData, {
             headers: {
-              "Content-Type": "multipart/form-data"
-            }
+              "Content-Type": "multipart/form-data",
+            },
           })
-          .then(function(response) {
+          .then(function (response) {
             vm.btnLoading = false;
             toast({
               message: "Προστέθηκε επιτυχώς",
               type: "is-success",
               position: "bottom-right",
-              animate: { in: "fadeIn", out: "fadeOut" }
+              animate: { in: "fadeIn", out: "fadeOut" },
             });
             window.location.replace("/announcements/" + response.data.data.id);
           })
-          .catch(function(error) {
+          .catch(function (error) {
             vm.btnLoading = false;
             toast({
               message: "Συνέβη κάποιο σφάλμα",
               type: "is-danger",
               position: "bottom-right",
-              animate: { in: "fadeIn", out: "fadeOut" }
+              animate: { in: "fadeIn", out: "fadeOut" },
             });
             console.log(error.response.data);
           });
@@ -594,41 +832,41 @@ export default {
         vm.btnLoading = false;
       }
     },
-    onFileChanged: function(event) {
+    onFileChanged: function (event) {
       let vm = this;
       if (!vm.announcement.attachments.includes(event.target.files[0])) {
         vm.announcement.attachments.push(event.target.files[0]);
       }
       vm.singleFile = null;
     },
-    removeFromFileUpload: function(index) {
+    removeFromFileUpload: function (index) {
       let vm = this;
       vm.$delete(vm.announcement.attachments, index);
     },
-    tagObjectsToArray: function() {
+    tagObjectsToArray: function () {
       // This function converts the tag objects array returned by the api
       // to a number only array expected by the api on put
       let vm = this;
       let tagArray = [];
 
       if (vm.announcement.tags.length > 0) {
-        vm.announcement.tags.forEach(element => {
+        vm.announcement.tags.forEach((element) => {
           tagArray.push(element.id);
         });
       }
       vm.announcement.tags = tagArray;
-    }
+    },
   },
   computed: {
-    selectedTags: function() {
+    selectedTags: function () {
       let selected = new Set();
       let vm = this;
       let parent;
       vm.has_public = false;
 
       if (vm.tags.length > 0) {
-        vm.announcement.tags.forEach(element => {
-          var tag = vm.tags.find(function(obj) {
+        vm.announcement.tags.forEach((element) => {
+          var tag = vm.tags.find(function (obj) {
             return obj.id === element || obj.id === element.id;
           });
 
@@ -640,7 +878,7 @@ export default {
           }
 
           while (parent != null) {
-            var tag = vm.tags.find(function(obj) {
+            var tag = vm.tags.find(function (obj) {
               return obj.id === parent;
             });
 
@@ -658,12 +896,12 @@ export default {
 
       return selected;
     },
-    allTags: function() {
+    allTags: function () {
       let vm = this;
-      return vm.tags.filter(function(el) {
+      return vm.tags.filter(function (el) {
         return el.parent_id != null;
       });
-    }
-  }
+    },
+  },
 };
 </script>
