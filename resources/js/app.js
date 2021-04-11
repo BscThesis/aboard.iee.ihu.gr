@@ -46,10 +46,22 @@ Vue.component(
     require("./components/announcements/TagsTreeComponent.vue").default
 );
 
-// Tags component
+// Node component
 Vue.component(
     "node-tree",
     require("./components/announcements/NodeTreeComponent.vue").default
+);
+
+// Tags caret component
+Vue.component(
+    "tag-caret",
+    require("./components/announcements/TagCaretComponent.vue").default
+);
+
+// Tags tree component
+Vue.component(
+    "tag-click",
+    require("./components/announcements/TagClickComponent.vue").default
 );
 
 // Attachments component
