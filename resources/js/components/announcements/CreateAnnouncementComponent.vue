@@ -613,7 +613,6 @@ export default {
     } else {
       this.loading = false;
     }
-    console.log(JSON.stringify(tagsAsTree, null, " "));
   },
   methods: {
     getAuthors: function () {
@@ -669,6 +668,7 @@ export default {
           });
           console.log(error);
         });
+      console.log(JSON.stringify(tagsAsTree, null, " "));
     },
     addAnnouncement: function () {
       let vm = this;
