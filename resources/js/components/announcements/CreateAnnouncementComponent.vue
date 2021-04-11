@@ -182,7 +182,7 @@
                 </div>
               </div>
             </div> -->
-            <tags-tree></tags-tree>
+            <tags-tree :treeData="tagsAsTree"></tags-tree>
           </div>
           <!-- Tag view (parent child) -->
           <div class="column">
