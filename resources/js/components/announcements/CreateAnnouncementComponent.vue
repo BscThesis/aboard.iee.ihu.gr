@@ -27,9 +27,9 @@
 
       <!-- Body -->
       <div class="field">
-        <label class="label is-capitalized is-unselectable"
-          >Κείμενο ανακοίνωσης</label
-        >
+        <label class="label is-capitalized is-unselectable">
+          Κείμενο ανακοίνωσης
+        </label>
         <editor-component v-model="announcement.body"></editor-component>
       </div>
 
@@ -37,8 +37,8 @@
       <div class="field">
         <div class="control">
           <label class="checkbox">
-            <input type="checkbox" v-model="announcement.has_eng" /> Προσθήκη
-            ανακοίνωσης στα αγγλικά
+            <input type="checkbox" v-model="announcement.has_eng" />
+            Προσθήκη ανακοίνωσης στα αγγλικά
           </label>
         </div>
       </div>
@@ -46,9 +46,9 @@
       <div class="field" v-if="announcement.has_eng" id="english-info">
         <!-- Title -->
         <div class="field">
-          <label class="label is-capitalized is-unselectable"
-            >Τίτλος ανακοίνωσης στα αγγλικά</label
-          >
+          <label class="label is-capitalized is-unselectable">
+            Τίτλος ανακοίνωσης στα αγγλικά
+          </label>
           <div class="control has-icons-left">
             <input
               class="input"
@@ -65,9 +65,9 @@
 
         <!-- Body -->
         <div class="field">
-          <label class="label is-capitalized is-unselectable"
-            >Κείμενο ανακοίνωσης στα αγγλικά</label
-          >
+          <label class="label is-capitalized is-unselectable">
+            Κείμενο ανακοίνωσης στα αγγλικά
+          </label>
           <editor-component v-model="announcement.eng_body"></editor-component>
         </div>
       </div>
@@ -79,16 +79,16 @@
             <div class="column">
               <div class="control">
                 <label class="checkbox">
-                  <input type="checkbox" v-model="other_user" /> Ανέβασμα ως
-                  άλλος χρήστης (Admin only)
+                  <input type="checkbox" v-model="other_user" />
+                  Ανέβασμα ως άλλος χρήστης (Admin only)
                 </label>
               </div>
             </div>
             <div class="column" v-bind:class="{ 'is-hidden': !other_user }">
               <div class="field" v-if="other_user">
-                <label class="label is-capitalized is-unselectable"
-                  >Συντάκτες</label
-                >
+                <label class="label is-capitalized is-unselectable">
+                  Συντάκτες
+                </label>
                 <div
                   class="dropdown"
                   @click="author_open = !author_open"
@@ -109,9 +109,9 @@
                       >
                         <i class="fas fa-times"></i>
                       </span>
-                      <span v-if="selected_author">{{
-                        selected_author.name
-                      }}</span>
+                      <span v-if="selected_author">
+                        {{ selected_author.name }}
+                      </span>
                       <span class="icon is-small">
                         <i class="fas fa-angle-down" aria-hidden="true"></i>
                       </span>
@@ -124,8 +124,9 @@
                         v-for="author in authors"
                         v-bind:key="author.id"
                         @click="selected_author = author"
-                        >{{ author.name }}</a
                       >
+                        {{ author.name }}
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -140,9 +141,9 @@
         <div class="columns">
           <!-- Tag selector -->
           <div class="column">
-            <label class="label is-capitalized is-unselectable"
-              >Επιλογή ετικετών</label
-            >
+            <label class="label is-capitalized is-unselectable">
+              Επιλογή ετικετών
+            </label>
             <!-- <div
               class="dropdown"
               @click="dropAct = !dropAct"
@@ -343,16 +344,17 @@
           </div>
           <!-- Tag view (parent child) -->
           <div class="column">
-            <label class="label is-capitalized is-unselectable"
-              >Επιλεγμένες ετικέτες (auto-inserted)</label
-            >
+            <label class="label is-capitalized is-unselectable">
+              Επιλεγμένες ετικέτες (auto-inserted)
+            </label>
             <div class="tags">
               <span
                 class="tag is-rounded is-dark is-unselectable"
                 v-for="tag in selectedTags"
                 v-bind:key="tag"
-                >{{ tag }}</span
               >
+                {{ tag }}
+              </span>
             </div>
           </div>
         </div>
@@ -375,9 +377,9 @@
           >
             <div class="field" id="pinned-until">
               <div class="field">
-                <label class="label is-capitalized is-unselectable"
-                  >Εμφάνιση μέχρι</label
-                >
+                <label class="label is-capitalized is-unselectable">
+                  Εμφάνιση μέχρι
+                </label>
                 <flat-pickr
                   v-model="announcement.pinned_until"
                   :config="config"
@@ -393,9 +395,9 @@
         <div class="columns">
           <!-- File input -->
           <div class="column">
-            <label class="label is-capitalized is-unselectable"
-              >Ανέβασμα αρχείων</label
-            >
+            <label class="label is-capitalized is-unselectable">
+              Ανέβασμα αρχείων
+            </label>
             <div class="file">
               <label class="file-label">
                 <input
@@ -454,9 +456,9 @@
       <!-- Event information -->
       <div class="field" id="event-related-info" v-if="announcement.is_event">
         <div class="field">
-          <label class="label is-capitalized is-unselectable"
-            >Τοποθεσία εκδήλωσης</label
-          >
+          <label class="label is-capitalized is-unselectable">
+            Τοποθεσία εκδήλωσης
+          </label>
           <div class="control has-icons-left">
             <input
               class="input"
@@ -473,8 +475,8 @@
           <!-- Google Maps -->
           <div class="control">
             <label class="checkbox">
-              <input type="checkbox" v-model="announcement.gmaps" /> Προσθήκη
-              link στο Google Maps
+              <input type="checkbox" v-model="announcement.gmaps" />
+              Προσθήκη link στο Google Maps
             </label>
           </div>
         </div>
@@ -482,18 +484,19 @@
         <div class="field">
           <div class="columns">
             <div class="column">
-              <label class="label is-capitalized is-unselectable"
-                >Έναρξη εκδήλωσης</label
-              >
+              <label class="label is-capitalized is-unselectable">
+                Έναρξη εκδήλωσης
+              </label>
               <flat-pickr
                 v-model="announcement.event_start_time"
                 :config="config"
-              ></flat-pickr>
+              >
+              </flat-pickr>
             </div>
             <div class="column">
-              <label class="label is-capitalized is-unselectable"
-                >Λήξη εκδήλωσης</label
-              >
+              <label class="label is-capitalized is-unselectable">
+                Λήξη εκδήλωσης
+              </label>
               <flat-pickr
                 v-model="announcement.event_end_time"
                 :config="config"
@@ -527,10 +530,8 @@
       </div>
 
       <!-- Display errors -->
-      <errors-component
-        v-if="errors.length"
-        :errors="errors"
-      ></errors-component>
+      <errors-component v-if="errors.length" :errors="errors">
+      </errors-component>
     </div>
   </div>
 </template>
