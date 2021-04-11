@@ -20,12 +20,14 @@
       <div class="columns is-mobile">
         <div class="column is-offset-0 is-narrow">
           <span class="icon is-clickable">
-            <i class="fas fa-caret-down"></i>
+            <i v-if="open" class="fas fa-caret-down"></i>
+            <i v-else class="fas fa-caret-right"></i>
           </span>
         </div>
         <div class="column is-narrow">
           <span class="icon is-clickable">
-            <i class="far fa-check-square"></i>
+            <i v-if="clicked" class="far fa-check-square"></i>
+            <i v-else class="far fa-square"></i>
           </span>
         </div>
         <div class="column is-narrow">
@@ -34,7 +36,7 @@
       </div>
     </div>
     <!--  -->
-    <div class="panel-block tags-panel-block">
+    <!-- <div class="panel-block tags-panel-block">
       <div class="columns is-mobile">
         <div class="column is-offset-1 is-narrow">
           <span class="icon is-clickable">
@@ -51,7 +53,7 @@
         </div>
       </div>
     </div>
-    <!--  -->
+
     <div class="panel-block tags-panel-block">
       <div class="columns is-mobile">
         <div class="column is-offset-2 is-narrow">
@@ -69,7 +71,7 @@
         </div>
       </div>
     </div>
-    <!--  -->
+
     <div class="panel-block tags-panel-block">
       <div class="columns is-mobile">
         <div class="column is-offset-0 is-narrow">
@@ -86,7 +88,8 @@
           <span class="is-unselectable">4o etos</span>
         </div>
       </div>
-    </div>
+    </div> -->
+    <!--  -->
   </nav>
 </template>
 
@@ -101,6 +104,8 @@ export default {
   data: function () {
     return {
       searchTerm: "",
+      open: false,
+      clicked: false,
     };
   },
 };
