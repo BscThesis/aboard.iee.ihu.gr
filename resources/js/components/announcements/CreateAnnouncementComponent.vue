@@ -518,8 +518,12 @@
           @click="addAnnouncement()"
           v-bind:class="{ 'is-loading': btnLoading }"
           v-bind:disabled="btnLoading"
-          >Αποθήκευση</a
         >
+          Αποθήκευση
+        </a>
+        <a class="button is-link is-capitalized" @click="showTagsAsTree()">
+          showTagsAsTree
+        </a>
       </div>
 
       <!-- Display errors -->
@@ -615,6 +619,10 @@ export default {
     }
   },
   methods: {
+    tagsAsTree: function () {
+      let vm = this;
+      console.log(JSON.stringify(vm.tagsAsTree, null, " "));
+    },
     getAuthors: function () {
       let vm = this;
       axios
@@ -668,7 +676,6 @@ export default {
           });
           console.log(error);
         });
-      console.log(JSON.stringify(tagsAsTree, null, " "));
     },
     addAnnouncement: function () {
       let vm = this;
