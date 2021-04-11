@@ -4,9 +4,9 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+require("./bootstrap");
 
-window.Vue = require('vue');
+window.Vue = require("vue");
 
 /**
  * The following block of code may be used to automatically register your
@@ -38,6 +38,18 @@ Vue.component(
 Vue.component(
     "tags",
     require("./components/announcements/TagsComponent.vue").default
+);
+
+// Tags tree component
+Vue.component(
+    "tags-tree",
+    require("./components/announcements/TagsTreeComponent.vue").default
+);
+
+// Tags component
+Vue.component(
+    "node-tree",
+    require("./components/announcements/NodeTreeComponent.vue").default
 );
 
 // Attachments component
@@ -292,5 +304,5 @@ Vue.component(
 export const bus = new Vue();
 
 const app = new Vue({
-    el: '#app',
+    el: "#app",
 });
