@@ -6,6 +6,7 @@
 </template>
 
 <script>
+// TODO - add value on click
 export default {
   data: function () {
     return {

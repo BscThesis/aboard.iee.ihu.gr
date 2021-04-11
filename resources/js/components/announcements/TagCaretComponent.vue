@@ -6,6 +6,7 @@
 </template>
 
 <script>
+// TODO - add childs on click
 export default {
   data: function () {
     return {

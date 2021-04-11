@@ -142,7 +142,7 @@
           <!-- Tag selector -->
           <div class="column">
             <label class="label is-capitalized is-unselectable">
-              Επιλογή ετικετών
+              Επιλογή ετικετών (Work in progress)
             </label>
             <!-- <div
               class="dropdown"
