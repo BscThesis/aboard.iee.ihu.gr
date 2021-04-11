@@ -1,5 +1,6 @@
 <template>
   <nav class="panel is-shadowless">
+    <!-- Search START -->
     <div class="panel-block">
       <p class="control has-icons-left">
         <input
@@ -13,10 +14,11 @@
         </span>
       </p>
     </div>
-    <!--  -->
+    <!-- Search END -->
+
     <div class="panel-block tags-panel-block">
       <div class="columns is-mobile">
-        <div class="column is-narrow">
+        <div class="column is-offset-0 is-narrow">
           <span class="icon is-clickable">
             <i class="fas fa-caret-down"></i>
           </span>
@@ -70,7 +72,7 @@
     <!--  -->
     <div class="panel-block tags-panel-block">
       <div class="columns is-mobile">
-        <div class="column is-narrow">
+        <div class="column is-offset-0 is-narrow">
           <span class="icon is-clickable">
             <i class="fas fa-caret-right"></i>
           </span>
