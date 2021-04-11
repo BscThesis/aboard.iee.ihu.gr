@@ -619,7 +619,7 @@ export default {
     }
   },
   methods: {
-    tagsAsTree: function () {
+    showTagsAsTree: function () {
       let vm = this;
       console.log(JSON.stringify(vm.tagsAsTree, null, " "));
     },
