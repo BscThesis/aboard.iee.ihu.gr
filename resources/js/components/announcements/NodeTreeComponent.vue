@@ -1,9 +1,11 @@
 <template>
-  <p class="is-size-5">{{ node.title }}</p>
+  <div>
+    <p class="is-size-5">{{ node.title }}</p>
 
-  <ul v-if="node.children && node.children.length">
-    <node v-for="child in node.children" :node="child"></node>
-  </ul>
+    <ul v-if="node.children && node.children.length">
+      <node v-for="child in node.children" :node="child"></node>
+    </ul>
+  </div>
 </template>
 
 <script>
