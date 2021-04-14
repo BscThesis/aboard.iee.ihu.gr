@@ -12,7 +12,7 @@
 export default {
   name: "node",
   props: {
-    node: Object,
+    node: Array,
   },
 };
 </script>
