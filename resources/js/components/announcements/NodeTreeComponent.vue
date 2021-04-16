@@ -1,16 +1,15 @@
 <template>
-  <div v-if="node.children && node.children.length" class="ml-20">
-    <div v-if="node.title" class="panel-block tags-panel-block">
-      <div class="columns is-mobile">
-        <div class="column is-narrow" v-bind:class="classObject">
-          <tag-caret></tag-caret>
-        </div>
-        <div class="column is-narrow">
-          <tag-click></tag-click>
-        </div>
-        <div class="column is-narrow">
-          <span class="is-unselectable">{{ node.title }}</span>
-        </div>
+  <!-- <div v-if="node.children && node.children.length" class="ml-20"> -->
+  <div v-if="node.title" class="panel-block tags-panel-block">
+    <div class="columns is-mobile">
+      <div class="column is-narrow" v-bind:class="classObject">
+        <tag-caret></tag-caret>
+      </div>
+      <div class="column is-narrow">
+        <tag-click></tag-click>
+      </div>
+      <div class="column is-narrow">
+        <span class="is-unselectable">{{ node.title }}</span>
       </div>
     </div>
 
@@ -22,8 +21,9 @@
       :key="node.id + index"
     >
     </node>
-    <!-- </ul> -->
   </div>
+  <!-- </ul> -->
+  <!-- </div> -->
 </template>
 
 <script>
