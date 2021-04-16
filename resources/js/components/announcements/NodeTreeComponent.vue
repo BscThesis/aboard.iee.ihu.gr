@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="node.children && node.children.length">
     <div v-if="node.title" class="panel-block tags-panel-block ml-20">
       <div class="columns is-mobile">
         <div class="column is-narrow" v-bind:class="classObject">
@@ -14,14 +14,15 @@
       </div>
     </div>
 
-    <ul v-if="node.children && node.children.length">
-      <node
-        v-for="(child, index) in node.children"
-        :node="child"
-        :offset="index"
-        :key="node.id + index"
-      ></node>
-    </ul>
+    <!-- <ul v-if="node.children && node.children.length"> -->
+    <node
+      v-for="(child, index) in node.children"
+      :node="child"
+      :offset="index"
+      :key="node.id + index"
+    >
+    </node>
+    <!-- </ul> -->
   </div>
 </template>
 
