@@ -16,22 +16,6 @@
     </div> -->
     <!-- Search END -->
 
-    <!-- template start -->
-    <!-- <div class="panel-block tags-panel-block">
-      <div class="columns is-mobile">
-        <div class="column is-offset-0 is-narrow">
-          <tag-caret></tag-caret>
-        </div>
-        <div class="column is-narrow">
-          <tag-click></tag-click>
-        </div>
-        <div class="column is-narrow">
-          <span class="is-unselectable">1o etos</span>
-        </div>
-      </div>
-    </div> -->
-    <!-- template end -->
-
     <node-tree :node="treeData"></node-tree>
   </nav>
 </template>
