@@ -757,6 +757,7 @@ export default {
       var ID_KEY = "id";
       var PARENT_KEY = "parent_id";
       var CHILDREN_KEY = "children";
+      var DEPTH = "depth";
 
       let vm = this;
 
@@ -770,13 +771,14 @@ export default {
         parentId = item[PARENT_KEY] || 0;
         childrenOf[id] = childrenOf[id] || [];
         item[CHILDREN_KEY] = childrenOf[id];
+        item[DEPTH] = item[DEPTH] || 0;
         if (parentId != 0) {
           childrenOf[parentId] = childrenOf[parentId] || [];
+          item[DEPTH] += 1;
           childrenOf[parentId].push(item);
         } else {
           tree.push(item);
         }
-        console.log(i);
       }
       return tree[0];
     },
