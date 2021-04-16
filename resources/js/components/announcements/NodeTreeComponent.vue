@@ -37,7 +37,7 @@ export default {
       required: true,
     },
     offset: {
-      type: Integer,
+      type: Number,
       required: false,
       default: 0,
     },
