@@ -780,6 +780,7 @@ export default {
           tree.push(item);
         }
       }
+      console.log(tree[0]);
       return tree[0];
     },
   },
