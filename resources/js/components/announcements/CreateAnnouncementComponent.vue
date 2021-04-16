@@ -760,7 +760,7 @@ export default {
 
       let vm = this;
 
-      var tree = [],
+      var tree = {},
         childrenOf = {};
       var item, id, parentId;
 
@@ -774,11 +774,12 @@ export default {
           childrenOf[parentId] = childrenOf[parentId] || [];
           childrenOf[parentId].push(item);
         } else {
-          tree.push(item);
+          // tree.push(item);
+          tree[index] = item;
         }
       }
-      console.log(tree[0]);
-      return tree[0];
+      console.log(tree);
+      return tree;
     },
   },
 };
