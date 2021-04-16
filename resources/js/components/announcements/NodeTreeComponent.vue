@@ -1,11 +1,8 @@
 <template>
   <div>
-    <div
-      v-if="node.title && node.children.length"
-      class="panel-block tags-panel-block"
-    >
+    <div v-if="node.title" class="panel-block tags-panel-block ml-20">
       <div class="columns is-mobile">
-        <div class="column is-offset-0 is-narrow" v-bind:class="classObject">
+        <div class="column is-narrow" v-bind:class="classObject">
           <tag-caret></tag-caret>
         </div>
         <div class="column is-narrow">
@@ -53,5 +50,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.ml-20 {
+  max-height: 20rem;
+  overflow-y: auto;
+}
 </style>
