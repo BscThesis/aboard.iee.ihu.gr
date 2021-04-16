@@ -5,7 +5,7 @@
       class="panel-block tags-panel-block"
     >
       <div class="columns is-mobile">
-        <div class="column is-offset-0 is-narrow">
+        <div class="column is-offset-0 is-narrow" v-bind:class="classObject">
           <tag-caret></tag-caret>
         </div>
         <div class="column is-narrow">
@@ -21,6 +21,7 @@
       <node
         v-for="(child, index) in node.children"
         :node="child"
+        :offset="index"
         :key="node.id + index"
       ></node>
     </ul>
@@ -31,7 +32,23 @@
 export default {
   name: "node",
   props: {
-    node: Object,
+    node: {
+      type: Object,
+      required: true,
+    },
+    offset: {
+      type: Integer,
+      required: false,
+      default: 0,
+    },
+  },
+  computed: {
+    classObject: function () {
+      var cl = "is-offset-" + this.offset;
+      return {
+        cl,
+      };
+    },
   },
 };
 </script>
