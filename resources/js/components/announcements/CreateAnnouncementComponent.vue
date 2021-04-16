@@ -777,7 +777,7 @@ export default {
           tree.push(item);
         }
       }
-      console.log(tree[0][children]);
+      console.log(tree[0]["children"]);
       return tree;
     },
   },
