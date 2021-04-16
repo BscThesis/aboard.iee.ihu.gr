@@ -32,7 +32,7 @@
     </div> -->
     <!-- template end -->
 
-    <node-tree :node="treeData"></node-tree>
+    <node-tree :node="treeData.children"></node-tree>
   </nav>
 </template>
 
