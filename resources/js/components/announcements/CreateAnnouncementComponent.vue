@@ -778,7 +778,7 @@ export default {
         }
       }
       console.log(tree);
-      return tree;
+      return tree[0];
     },
   },
 };
