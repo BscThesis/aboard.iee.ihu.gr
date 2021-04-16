@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="panel-block tags-panel-block">
+    <div v-if="node.title" class="panel-block tags-panel-block">
       <div class="columns is-mobile">
         <div class="column is-offset-0 is-narrow">
           <tag-caret></tag-caret>
