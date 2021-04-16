@@ -760,7 +760,7 @@ export default {
 
       let vm = this;
 
-      var tree = {},
+      var tree = [],
         childrenOf = {};
       var item, id, parentId;
 
