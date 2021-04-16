@@ -18,7 +18,11 @@
     </div>
 
     <ul v-if="node.children && node.children.length">
-      <node v-for="child in node.children" :node="child" :key="node.id"></node>
+      <node
+        v-for="(child, index) in node.children"
+        :node="child"
+        :key="node.id + index"
+      ></node>
     </ul>
   </div>
 </template>
