@@ -1,7 +1,7 @@
 <template>
   <nav class="panel is-shadowless">
     <!-- Search START -->
-    <div class="panel-block">
+    <!-- <div class="panel-block">
       <p class="control has-icons-left">
         <input
           class="input is-small"
@@ -13,7 +13,7 @@
           <i class="fas fa-search" aria-hidden="true"></i>
         </span>
       </p>
-    </div>
+    </div> -->
     <!-- Search END -->
 
     <!-- template start -->
