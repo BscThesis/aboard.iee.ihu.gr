@@ -774,8 +774,7 @@ export default {
           childrenOf[parentId] = childrenOf[parentId] || [];
           childrenOf[parentId].push(item);
         } else {
-          // tree.push(item);
-          tree[i] = item;
+          tree.push(item);
         }
       }
       console.log(tree);
