@@ -1,6 +1,6 @@
 <template>
-  <div v-if="node.children && node.children.length">
-    <div v-if="node.title" class="panel-block tags-panel-block ml-20">
+  <div v-if="node.children && node.children.length" class="ml-20">
+    <div v-if="node.title" class="panel-block tags-panel-block">
       <div class="columns is-mobile">
         <div class="column is-narrow" v-bind:class="classObject">
           <tag-caret></tag-caret>
