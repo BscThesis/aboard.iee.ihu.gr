@@ -182,7 +182,7 @@
                 </div>
               </div>
             </div> -->
-            <tags-tree :treeData="tagsAsTree[0][children]"></tags-tree>
+            <tags-tree :treeData="tagsAsTree"></tags-tree>
           </div>
           <!-- Tag view (parent child) -->
           <div class="column">
@@ -777,6 +777,7 @@ export default {
           tree.push(item);
         }
       }
+      console.log(tree);
       return tree;
     },
   },
