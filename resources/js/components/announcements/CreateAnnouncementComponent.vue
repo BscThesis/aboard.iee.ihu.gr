@@ -182,10 +182,7 @@
                 </div>
               </div>
             </div> -->
-            <tags-tree
-              v-if="tagsAsTree.length"
-              :treeData="tagsAsTree"
-            ></tags-tree>
+            <tags-tree v-if="tagsAsTree" :treeData="tagsAsTree"></tags-tree>
           </div>
           <!-- Tag view (parent child) -->
           <div class="column">
@@ -780,6 +777,7 @@ export default {
           tree.push(item);
         }
       }
+      console.log(tree.length);
       return tree[0];
     },
   },
