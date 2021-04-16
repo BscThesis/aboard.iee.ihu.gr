@@ -43,6 +43,7 @@ export default {
   computed: {
     classObject: function () {
       var cl = "is-offset-" + this.offset;
+      console.log(cl);
       return {
         cl,
       };
