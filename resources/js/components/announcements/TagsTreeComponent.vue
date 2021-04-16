@@ -40,7 +40,7 @@
 export default {
   props: {
     treeData: {
-      type: Array,
+      type: Object,
       required: true,
     },
   },
