@@ -185,7 +185,7 @@
             <!-- <tags-tree v-if="tagsAsTree" :treeData="tagsAsTree"></tags-tree> -->
 
             <!-- start -->
-            <nav class="panel">
+            <nav class="panel" style="max-length: 20rem; overflow-y: auto">
               <div class="panel-block">
                 <p class="control has-icons-left has-icons-right">
                   <input
@@ -211,7 +211,7 @@
                   <input
                     type="checkbox"
                     v-bind:value="tag.id"
-                    v-model="selectedTags"
+                    v-model="announcement.tags"
                   />
                   {{ tag.title }}
                 </label>
