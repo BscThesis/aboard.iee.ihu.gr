@@ -19,6 +19,7 @@ class User extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'name_eng' => $this->name_eng,
             'email' => $this->email,
             'uid' => $this->uid,
             'is_admin' => $this->is_admin,
@@ -28,5 +29,4 @@ class User extends JsonResource
             'last_login_at' => $this->last_login_at,
         ];
     }
-    
 }

@@ -108,7 +108,8 @@ class User extends Authenticatable
                 \Log::info($info);
 
                 // Get the results we need
-                $cn = Str::title($info['0']['cn']['0']);
+                $name_gr = Str::title($info['0']['displayName;lang-el']['0']);
+                $name_eng = Str::title($info['0']['displayName']['0']);
                 $group = $info['0']['edupersonaffiliation']['0'];
                 $is_author = false;
                 if ($group === "staff") {
@@ -125,7 +126,8 @@ class User extends Authenticatable
         if ($user === null) {
             $user = User::create(
                 [
-                    'name' => $cn,
+                    'name' => $name_gr,
+                    'name_eng' => $name_eng,
                     'email' => $email,
                     'uid' => $username,
                     'is_author' => $is_author
@@ -134,7 +136,8 @@ class User extends Authenticatable
         } else {
             $user = User::where('uid', $username)->update(
                 [
-                    'name' => $cn,
+                    'name' => $name_gr,
+                    'name_eng' => $name_eng,
                     'email' => $email,
                     'uid' => $username,
                     'is_author' => $is_author
