@@ -79,11 +79,11 @@ class User extends Authenticatable
         ldap_set_option($ds, LDAP_OPT_REFERRALS, 0);
         ldap_set_option($ds, LDAP_OPT_NETWORK_TIMEOUT, 10);
 
-        if(isset($username)) {
+        if (isset($username)) {
             $bind = 0;
             foreach ($ldapconfig['usersdn'] as $value) {
                 // Build user to bind
-                $dn = "uid=" . $username . "," . $value . "," .$ldapconfig['basedn'];
+                $dn = "uid=" . $username . "," . $value . "," . $ldapconfig['basedn'];
                 if (!$bind) {
                     // Try to bind to LDAP server
                     $bind = @ldap_bind($ds, $dn, $password);
@@ -96,7 +96,7 @@ class User extends Authenticatable
 
             try {
                 // Search based on this attribute
-                $filter = "(". config('services.ldap.filter_attribute') ."=$username)";
+                $filter = "(" . config('services.ldap.filter_attribute') . "=$username)";
 
                 // Get only these attributes
                 $attr = explode(',', config('services.ldap.search_attributes'));
@@ -104,6 +104,8 @@ class User extends Authenticatable
                 // Perform the search and get results
                 $sr = ldap_search($ds, $ldapconfig['basedn'], $filter, $attr);
                 $info = ldap_get_entries($ds, $sr);
+
+                \Log::info($info);
 
                 // Get the results we need
                 $cn = Str::title($info['0']['cn']['0']);
@@ -130,8 +132,8 @@ class User extends Authenticatable
                 ]
             );
         } else {
-            $user = User::where('uid', $username)->
-            update([
+            $user = User::where('uid', $username)->update(
+                [
                     'name' => $cn,
                     'email' => $email,
                     'uid' => $username,
@@ -140,13 +142,13 @@ class User extends Authenticatable
             );
         }
         $user = User::where('uid', $username)->first();
-        
+
         // Set attributes for Laravel
         $attributes = [
             'id' => $user->id
         ];
 
-        return new static ($attributes);
+        return new static($attributes);
     }
 
     /**
