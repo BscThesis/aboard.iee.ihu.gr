@@ -800,3 +800,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.tags-list {
+  max-height: 20rem;
+  overflow: auto;
+}
+.panel-block {
+  padding: 12px 10px;
+}
+</style>
