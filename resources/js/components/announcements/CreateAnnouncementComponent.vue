@@ -144,44 +144,7 @@
             <label class="label is-capitalized is-unselectable">
               Επιλογή ετικετών (Work in progress)
             </label>
-            <!-- <div
-              class="dropdown"
-              @click="dropAct = !dropAct"
-              v-bind:class="{ 'is-active': dropAct }"
-            >
-              <div class="dropdown-trigger">
-                <button
-                  class="button"
-                  aria-haspopup="true"
-                  aria-controls="tag-dropdown"
-                >
-                  <span
-                    >Έχουν επιλεγεί: ( {{ announcement.tags.length }} )</span
-                  >
-                  <span class="icon is-small">
-                    <i class="fas fa-angle-down" aria-hidden="true"></i>
-                  </span>
-                </button>
-              </div>
-              <div class="dropdown-menu" id="tag-dropdown" role="menu">
-                <div class="dropdown-content dropdown-content-fixed">
-                  <div
-                    class="dropdown-item"
-                    v-for="tag in allTags"
-                    v-bind:key="tag.id"
-                  >
-                    <label class="checkbox">
-                      <input
-                        type="checkbox"
-                        v-bind:value="tag.id"
-                        v-model="announcement.tags"
-                      />
-                      {{ tag.title }}
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div> -->
+
             <!-- <tags-tree v-if="tagsAsTree" :treeData="tagsAsTree"></tags-tree> -->
 
             <!-- start -->
