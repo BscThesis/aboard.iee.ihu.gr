@@ -148,7 +148,7 @@
             <!-- <tags-tree v-if="tagsAsTree" :treeData="tagsAsTree"></tags-tree> -->
 
             <!-- start -->
-            <nav class="panel" style="max-height: 20rem; overflow-y: auto">
+            <nav class="panel">
               <div class="panel-block">
                 <p class="control has-icons-left has-icons-right">
                   <input
