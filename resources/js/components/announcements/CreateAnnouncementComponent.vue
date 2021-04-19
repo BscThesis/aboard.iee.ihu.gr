@@ -475,6 +475,7 @@ export default {
       errors: [],
       // announcement has public tag
       has_public: false,
+      search: "",
     };
   },
   created: function () {
