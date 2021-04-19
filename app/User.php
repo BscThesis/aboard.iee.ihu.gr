@@ -105,8 +105,6 @@ class User extends Authenticatable
                 $sr = ldap_search($ds, $ldapconfig['basedn'], $filter, $attr);
                 $info = ldap_get_entries($ds, $sr);
 
-                \Log::info($info);
-
                 // Get the results we need
                 $name_gr = Str::upper($info['0']['cn;lang-el']['0']);
                 $name_eng = Str::upper($info['0']['cn']['0']);
