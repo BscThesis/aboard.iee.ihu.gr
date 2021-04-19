@@ -108,8 +108,8 @@ class User extends Authenticatable
                 \Log::info($info);
 
                 // Get the results we need
-                $name_gr = Str::title($info['0']['displayName;lang-el']['0']);
-                $name_eng = Str::title($info['0']['displayName']['0']);
+                $name_gr = Str::title($info['0']['cn;lang-el']['0']);
+                $name_eng = Str::title($info['0']['cn']['0']);
                 $group = $info['0']['edupersonaffiliation']['0'];
                 $is_author = false;
                 if ($group === "staff") {
