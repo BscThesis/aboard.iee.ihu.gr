@@ -364,9 +364,6 @@
         >
           Αποθήκευση
         </a>
-        <a class="button is-link is-capitalized" @click="showTagsAsTree()">
-          showTagsAsTree
-        </a>
       </div>
 
       <!-- Display errors -->
