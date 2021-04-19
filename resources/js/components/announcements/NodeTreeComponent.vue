@@ -1,7 +1,7 @@
 <template>
-  <div v-if="node.children && node.children.length" class="ml-20">
+  <div>
     <div v-if="node.title" class="panel-block tags-panel-block">
-      <div class="columns is-mobile">
+      <!-- <div class="columns is-mobile">
         <div class="column is-narrow" v-bind:class="classObject">
           <tag-caret></tag-caret>
         </div>
@@ -11,9 +11,10 @@
         <div class="column is-narrow">
           <span class="is-unselectable">{{ node.title }}</span>
         </div>
-      </div>
+      </div> -->
+      <li>{{ node.title }}</li>
 
-      <!-- <ul v-if="node.children && node.children.length"> -->
+      <ul v-if="node.children && node.children.length">
       <node
         v-for="(child, index) in node.children"
         :node="child"
@@ -22,7 +23,7 @@
       >
       </node>
     </div>
-    <!-- </ul> -->
+    </ul>
   </div>
 </template>
 
