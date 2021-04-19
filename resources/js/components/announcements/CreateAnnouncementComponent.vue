@@ -182,7 +182,42 @@
                 </div>
               </div>
             </div> -->
-            <tags-tree v-if="tagsAsTree" :treeData="tagsAsTree"></tags-tree>
+            <!-- <tags-tree v-if="tagsAsTree" :treeData="tagsAsTree"></tags-tree> -->
+
+            <!-- start -->
+            <nav class="panel">
+              <div class="panel-block">
+                <p class="control has-icons-left has-icons-right">
+                  <input
+                    class="input is-small"
+                    type="text"
+                    placeholder="Αναζήτηση..."
+                    v-model="search"
+                  />
+                  <span class="icon is-left">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                  </span>
+                  <span v-show="search" class="icon is-small is-right">
+                    <a class="delete" @click="search = ''"></a>
+                  </span>
+                </p>
+              </div>
+              <div class="tags-list">
+                <label
+                  v-for="tag in filteredTags"
+                  v-bind:key="tag.id"
+                  class="panel-block"
+                >
+                  <input
+                    type="checkbox"
+                    v-bind:value="tag.id"
+                    v-model="selectedTags"
+                  />
+                  {{ tag.title }}
+                </label>
+              </div>
+            </nav>
+            <!-- end -->
           </div>
           <!-- Tag view (parent child) -->
           <div class="column">
@@ -746,6 +781,21 @@ export default {
       }
 
       return selected;
+    },
+    filteredTags: function () {
+      let vm = this;
+      if (vm.search == "") {
+        return vm.tags.filter(function (el) {
+          return el.parent_id != null;
+        });
+      } else {
+        return vm.tags.filter(function (el) {
+          return (
+            el.title.toLowerCase().includes(vm.search.toLowerCase()) &&
+            el.parent_id != null
+          );
+        });
+      }
     },
     allTags: function () {
       let vm = this;
