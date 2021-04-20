@@ -49,10 +49,17 @@ class AttachmentController extends Controller
     public function show($an_id, $at_id)
     {
         if (Announcement::findOrFail($an_id)->hasAttachment($at_id)) {
-            return response()->json([
-                'announcement_id' => $an_id,
-                'attachment_id' => $at_id
-            ]);
+            // return response()->json([
+            //     'announcement_id' => $an_id,
+            //     'attachment_id' => $at_id
+            // ]);
+            $attachment = Attachment::findOrFail($at_id);
+            return response($attachment->content)
+                ->withHeaders([
+                    'Content-Disposition' => '"attachment; filename="' . $attachment->filename . '"',
+                    'Content-Type' => $attachment->mime_type,
+                    'Content-Length' => $attachment->filesize,
+                ]);
         } else {
             return response()->json([
                 'status' => "not_found",
