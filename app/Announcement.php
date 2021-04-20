@@ -67,6 +67,6 @@ class Announcement extends Model implements Feedable
      */
     public function hasAttachment($attachment_id)
     {
-        return $this->attachments()->where('attachment_id', $attachment_id)->exists();
+        return $this->attachments()->where('id', $attachment_id)->exists();
     }
 }
