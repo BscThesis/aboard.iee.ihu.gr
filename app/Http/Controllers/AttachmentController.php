@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Attachment;
+use App\Announcement;
 use Illuminate\Http\Request;
 
 class AttachmentController extends Controller
@@ -47,10 +48,16 @@ class AttachmentController extends Controller
      */
     public function show($an_id, $at_id)
     {
-        return response()->json([
-            'announcement_id' => $an_id,
-            'attachment_id' => $at_id
-        ]);
+        if (Announcement::findOrFail($an_id)->hasAttachment($at_id)) {
+            return response()->json([
+                'announcement_id' => $an_id,
+                'attachment_id' => $at_id
+            ]);
+        } else {
+            return response()->json([
+                'status' => "not_found",
+            ]);
+        }
     }
 
     /**
