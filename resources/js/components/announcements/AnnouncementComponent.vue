@@ -45,7 +45,6 @@
           <attachments
             v-if="announcement.attachments"
             v-bind:attachments="announcement.attachments"
-            v-bind:announcement_id="announcement.id"
           ></attachments>
 
           <last-update

@@ -21,7 +21,7 @@
             class="tag is-info is-light"
             v-for="attachment in attachments"
             v-bind:key="attachment.id"
-            v-bind:href="'/api/announcements/' + an_id '/attachments/' + at_id"
+            v-bind:href="`/api/announcements/${attachment.announcement_id}/attachments/${attachment.id}`"
           >
             {{ attachment.filename }}
           </a>
@@ -37,18 +37,6 @@ export default {
     attachments: {
       type: Array,
       required: true,
-    },
-    announcement_id: {
-      type: Number,
-      required: true,
-    },
-  },
-  computed: {
-    at_id: function () {
-      return attachment.id.toString();
-    },
-    an_id: function () {
-      return announcement_id.toString();
     },
   },
 };
