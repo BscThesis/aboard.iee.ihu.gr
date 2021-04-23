@@ -57,6 +57,7 @@ class AttachmentController extends Controller
                     // 'Content-Disposition' => "attachment; filename=" . $attachment->filename,
                     'Content-Type' => $attachment->mime_type,
                     'Content-Length' => $attachment->filesize,
+
                 ]);
         } else {
             return response()->json([
