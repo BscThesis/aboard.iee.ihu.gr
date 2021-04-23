@@ -39,7 +39,7 @@ export default {
       required: true,
     },
     announcement_id: {
-      type: Number,
+      type: String,
       required: true,
     },
   },
