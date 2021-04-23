@@ -22,6 +22,7 @@
             v-for="attachment in attachments"
             v-bind:key="attachment.id"
             v-bind:href="`/api/announcements/${attachment.announcement_id}/attachments/${attachment.id}`"
+            target="_blank"
           >
             {{ attachment.filename }}
           </a>
