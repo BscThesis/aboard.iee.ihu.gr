@@ -21,7 +21,7 @@
             class="tag is-info is-light"
             v-for="attachment in attachments"
             v-bind:key="attachment.id"
-            v-bind:href="'/api/announcements/'+ announcement_id '/attachments/' + attachment.id"
+            v-bind:href='"/api/announcements/" + announcement_id "/attachments/" + attachment.id'
           >
             {{ attachment.filename }}
           </a>
