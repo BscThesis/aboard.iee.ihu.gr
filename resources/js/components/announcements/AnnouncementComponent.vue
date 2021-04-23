@@ -45,6 +45,7 @@
           <attachments
             v-if="announcement.attachments"
             v-bind:attachments="announcement.attachments"
+            v-bind:announcement_id="announcement.id"
           ></attachments>
 
           <last-update
@@ -56,7 +57,10 @@
       </section>
 
       <!-- Buttons -->
-      <announcement-buttons-component v-if="announcement" v-bind:announcement="announcement"></announcement-buttons-component>
+      <announcement-buttons-component
+        v-if="announcement"
+        v-bind:announcement="announcement"
+      ></announcement-buttons-component>
     </div>
     <loader-component v-else></loader-component>
   </div>
@@ -70,41 +74,41 @@ export default {
   props: {
     id: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
-  data: function() {
+  data: function () {
     return {
       announcement: {},
-      displayEnglish: false
+      displayEnglish: false,
     };
   },
-  created: function() {
+  created: function () {
     this.getSingle();
-    bus.$on("objectRemoved", data => {
+    bus.$on("objectRemoved", (data) => {
       if (data) {
         window.location.replace("/announcements");
       }
     });
   },
   methods: {
-    getSingle: function() {
+    getSingle: function () {
       let vm = this;
       axios
         .get("/api/announcements/" + vm.id)
-        .then(function(response) {
+        .then(function (response) {
           vm.announcement = response.data.data;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           toast({
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" }
+            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
-    }
-  }
+    },
+  },
 };
 </script>
