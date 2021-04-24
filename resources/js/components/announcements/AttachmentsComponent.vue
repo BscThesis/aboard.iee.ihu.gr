@@ -19,8 +19,9 @@
             >
               <a
                 class="tag is-info is-light"
-                v-bind:href="`/announcements/${attachment.announcement_id}/attachments/${attachment.id}`"
+                v-bind:href="`/announcements/${attachment.announcement_id}/attachments/${attachment.id}?action=download`"
                 target="_blank"
+                title="Download"
               >
                 {{ attachment.filename }}
               </a>
@@ -29,7 +30,7 @@
                 v-bind:href="`/announcements/${attachment.announcement_id}/attachments/${attachment.id}`"
                 target="_blank"
                 v-if="attachment.filename.endsWith('.pdf')"
-                title="Θέαση"
+                title="View"
               >
                 <span class="icon"> <i class="far fa-eye"></i> </span>
               </a>

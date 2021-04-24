@@ -51,19 +51,19 @@ class AttachmentController extends Controller
         // TODO MOVE LOGIC TO MIDDLEWARE
         // TODO ADD CHECK FOR LOCAL IP OR PUBLIC
 
-        $foobar = $request->input('action');
-        return response()->json([
-            'status' => $foobar,
-        ]);
-
         if (Announcement::findOrFail($an_id)->hasAttachment($at_id)) {
             $attachment = Attachment::findOrFail($at_id);
-            return response($attachment->content)
-                ->withHeaders([
-                    'Content-Disposition' => "attachment; filename=" . $attachment->filename,
-                    'Content-Type' => $attachment->mime_type,
-                    'Content-Length' => $attachment->filesize,
-                ]);
+
+            $headers = [
+                'Content-Type' => $attachment->mime_type,
+                'Content-Length' => $attachment->filesize,
+            ];
+
+            if ($request->input('action') == 'download') {
+                $headers['Content-Disposition'] = "attachment; filename=" . $attachment->filename;
+            }
+
+            return response($attachment->content)->withHeaders($headers);
         } else {
             return response()->json([
                 'status' => "not_found",
