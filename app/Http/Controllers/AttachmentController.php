@@ -46,10 +46,16 @@ class AttachmentController extends Controller
      * @param   $an_id
      * @return  \Illuminate\Http\Response
      */
-    public function show($an_id, $at_id)
+    public function show($an_id, $at_id, Request $request)
     {
         // TODO MOVE LOGIC TO MIDDLEWARE
         // TODO ADD CHECK FOR LOCAL IP OR PUBLIC
+
+        $foobar = $request->input('action');
+        return response()->json([
+            'status' => $foobar,
+        ]);
+
         if (Announcement::findOrFail($an_id)->hasAttachment($at_id)) {
             $attachment = Attachment::findOrFail($at_id);
             return response($attachment->content)
