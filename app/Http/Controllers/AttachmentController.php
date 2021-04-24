@@ -51,7 +51,12 @@ class AttachmentController extends Controller
         // TODO MOVE LOGIC TO MIDDLEWARE
         // TODO ADD CHECK FOR LOCAL IP OR PUBLIC
 
-        if (Announcement::findOrFail($an_id)->hasAttachment($at_id)) {
+        $announcement = Announcement::findOrFail($an_id);
+        if (!$announcement->hasPublicTags()) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        if ($announcement->hasAttachment($at_id)) {
             $attachment = Attachment::findOrFail($at_id);
 
             $headers = [
