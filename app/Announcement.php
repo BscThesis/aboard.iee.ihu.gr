@@ -71,8 +71,9 @@ class Announcement extends Model implements Feedable
      */
     public function hasPublicTags()
     {
-        return $this->whereHas('tags', function (Builder $query) {
-            $query->where('is_public', '=', 1);
-        });
+        // return $this->whereHas('tags', function (Builder $query) {
+        //     $query->where('is_public', '=', 1);
+        // });
+        return $this->tags()->exists();
     }
 }
