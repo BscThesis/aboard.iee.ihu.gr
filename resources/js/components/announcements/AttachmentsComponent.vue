@@ -25,7 +25,7 @@
                 {{ attachment.filename }}
               </a>
               <a
-                class="tag is-dark"
+                class="tag is-link is-light"
                 v-bind:href="`/announcements/${attachment.announcement_id}/attachments/${attachment.id}`"
                 target="_blank"
                 v-if="attachment.filename.endsWith('.pdf')"
