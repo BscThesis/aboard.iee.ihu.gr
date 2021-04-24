@@ -5,10 +5,10 @@
         <span class="has-text-weight-bold">Συνημμένα:</span>
       </div>
       <div class="column">
-        <div
+        <!-- <div
           class="tags"
           v-bind:class="{ 'has-addons': attachment.filename.endsWith('.pdf') }"
-        ></div>
+        ></div> -->
 
         <div class="field is-grouped is-grouped-multiline">
           <div
@@ -26,8 +26,9 @@
                 class="tag is-info is-light"
                 v-bind:href="`/announcements/${attachment.announcement_id}/attachments/${attachment.id}`"
                 target="_blank"
-                >{{ attachment.filename }}</a
               >
+                {{ attachment.filename }}
+              </a>
               <a
                 class="tag is-dark"
                 v-bind:href="`/announcements/${attachment.announcement_id}/attachments/${attachment.id}`"
@@ -39,6 +40,7 @@
             </div>
           </div>
         </div>
+        
       </div>
     </div>
   </div>
