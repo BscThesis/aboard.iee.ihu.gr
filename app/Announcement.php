@@ -40,13 +40,9 @@ class Announcement extends Model implements Feedable
     {
         return Announcement::whereHas('tags', function (Builder $query) {
             $query->where('is_public', '=', 1);
-        })
-            ->where(function (Builder $query) {
-                $query->orWhere('created_at', '>=', Carbon::today()->subDays(env("FEED_DAYS", "7")))
-                    ->orWhere('is_pinned', 1);
-            })
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        })->where(function (Builder $query) {
+            $query->orWhere('created_at', '>=', Carbon::today()->subDays(env("FEED_DAYS", "7")))->orWhere('is_pinned', 1);
+        })->orderBy('updated_at', 'desc')->get();
     }
 
     public function getLinkAttribute()
@@ -68,5 +64,15 @@ class Announcement extends Model implements Feedable
     public function hasAttachment($attachment_id)
     {
         return $this->attachments()->where('id', $attachment_id)->exists();
+    }
+
+    /**
+     * Check if announcement has public tags.
+     */
+    public function hasPublicTags()
+    {
+        return $this->whereHas('tags', function (Builder $query) {
+            $query->where('is_public', '=', 1);
+        });
     }
 }
