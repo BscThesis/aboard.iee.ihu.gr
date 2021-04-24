@@ -33,6 +33,8 @@ Route::get('/announcements/{id}/edit', function ($id) {
     return view('pages.edit-announcement')->with('id', $id);
 })->middleware('auth', 'web.id.check', 'is.the.author', 'web.announcement.check')->name('announcement.edit');
 
+Route::get('/announcements/{an_id}/attachments/{at_id}', 'AttachmentController@show');
+
 Route::get('/events', function () {
     return view('pages.events');
 });
@@ -64,8 +66,6 @@ Route::get('/login', function () {
 Route::get('/user/preferences', function () {
     return view('user.preferences');
 })->middleware('auth')->name('preferences');
-
-Route::get('/announcements/{an_id}/attachments/{at_id}', 'AttachmentController@show');
 
 Route::prefix('errors')->group(function () {
     Route::get('400', function () {
