@@ -5,16 +5,39 @@
         <span class="has-text-weight-bold">Συνημμένα:</span>
       </div>
       <div class="column">
-        <div class="tags">
-          <a
-            class="tag is-info is-light"
+        <div
+          class="tags"
+          v-bind:class="{ 'has-addons': attachment.filename.endsWith('.pdf') }"
+        ></div>
+
+        <div class="field is-grouped is-grouped-multiline">
+          <div
+            class="control"
             v-for="attachment in attachments"
             v-bind:key="attachment.id"
-            v-bind:href="`/api/announcements/${attachment.announcement_id}/attachments/${attachment.id}`"
-            target="_blank"
           >
-            {{ attachment.filename }}
-          </a>
+            <div
+              class="tags"
+              v-bind:class="{
+                'has-addons': attachment.filename.endsWith('.pdf'),
+              }"
+            >
+              <a
+                class="tag is-info is-light"
+                v-bind:href="`/announcements/${attachment.announcement_id}/attachments/${attachment.id}`"
+                target="_blank"
+                >{{ attachment.filename }}</a
+              >
+              <a
+                class="tag is-dark"
+                v-bind:href="`/announcements/${attachment.announcement_id}/attachments/${attachment.id}`"
+                target="_blank"
+                v-if="attachment.filename.endsWith('.pdf')"
+              >
+                <span class="icon"> <i class="far fa-eye"></i> </span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
