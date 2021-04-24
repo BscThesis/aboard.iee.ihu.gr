@@ -65,16 +65,36 @@ Route::get('/user/preferences', function () {
     return view('user.preferences');
 })->middleware('auth')->name('preferences');
 
+Route::get('/announcements/{an_id}/attachments/{at_id}', 'AttachmentController@show');
+
 Route::prefix('errors')->group(function () {
-    Route::get('400', function () { abort(400); });
-    Route::get('401', function () { abort(401); });
-    Route::get('403', function () { abort(403); });
-    Route::get('404', function () { abort(404); });
-    Route::get('419', function () { abort(419); });
-    Route::get('429', function () { abort(429); });
-    Route::get('500', function () { abort(500); });
-    Route::get('503', function () { abort(503); });
-    Route::any('{any}', function () { abort(400); });
+    Route::get('400', function () {
+        abort(400);
+    });
+    Route::get('401', function () {
+        abort(401);
+    });
+    Route::get('403', function () {
+        abort(403);
+    });
+    Route::get('404', function () {
+        abort(404);
+    });
+    Route::get('419', function () {
+        abort(419);
+    });
+    Route::get('429', function () {
+        abort(429);
+    });
+    Route::get('500', function () {
+        abort(500);
+    });
+    Route::get('503', function () {
+        abort(503);
+    });
+    Route::any('{any}', function () {
+        abort(400);
+    });
 });
 
 Route::get('/announcements/{announcement}', 'AnnouncementController@show')->name('announcements.rss');
