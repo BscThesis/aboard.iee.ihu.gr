@@ -5,11 +5,6 @@
         <span class="has-text-weight-bold">Συνημμένα:</span>
       </div>
       <div class="column">
-        <!-- <div
-          class="tags"
-          v-bind:class="{ 'has-addons': attachment.filename.endsWith('.pdf') }"
-        ></div> -->
-
         <div class="field is-grouped is-grouped-multiline">
           <div
             class="control"
@@ -34,13 +29,13 @@
                 v-bind:href="`/announcements/${attachment.announcement_id}/attachments/${attachment.id}`"
                 target="_blank"
                 v-if="attachment.filename.endsWith('.pdf')"
+                title="Θέαση"
               >
                 <span class="icon"> <i class="far fa-eye"></i> </span>
               </a>
             </div>
           </div>
         </div>
-        
       </div>
     </div>
   </div>
