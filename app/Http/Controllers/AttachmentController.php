@@ -52,6 +52,9 @@ class AttachmentController extends Controller
         // TODO ADD CHECK FOR LOCAL IP OR PUBLIC
 
         $announcement = Announcement::findOrFail($an_id);
+
+        return response()->json(['message' => $announcement->hasPublicTags()]);
+
         if (!$announcement->hasPublicTags()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
