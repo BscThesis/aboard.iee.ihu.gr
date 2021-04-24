@@ -54,7 +54,7 @@ class AttachmentController extends Controller
             $attachment = Attachment::findOrFail($at_id);
             return response($attachment->content)
                 ->withHeaders([
-                    // 'Content-Disposition' => "attachment; filename=" . $attachment->filename,
+                    'Content-Disposition' => "attachment; filename=" . $attachment->filename,
                     'Content-Type' => $attachment->mime_type,
                     'Content-Length' => $attachment->filesize,
                 ]);
