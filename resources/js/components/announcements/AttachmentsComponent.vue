@@ -23,23 +23,16 @@
                 target="_blank"
               >
                 {{ attachment.filename }}
-                <span
-                  v-if="attachment.filename.endsWith('.pdf')"
-                  title="Θέαση"
-                  class="icon"
-                >
-                  <i class="far fa-eye"></i>
-                </span>
               </a>
-              <!-- <a
-                class="tag is-info is-light"
+              <a
+                class="tag"
                 v-bind:href="`/announcements/${attachment.announcement_id}/attachments/${attachment.id}`"
                 target="_blank"
                 v-if="attachment.filename.endsWith('.pdf')"
                 title="Θέαση"
               >
                 <span class="icon"> <i class="far fa-eye"></i> </span>
-              </a> -->
+              </a>
             </div>
           </div>
         </div>
