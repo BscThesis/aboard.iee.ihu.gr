@@ -71,6 +71,6 @@ class Announcement extends Model implements Feedable
      */
     public function hasPublicTags()
     {
-        return $this->tags()->get('is_public');
+        return $this->tags()->get(['is_public']);
     }
 }
