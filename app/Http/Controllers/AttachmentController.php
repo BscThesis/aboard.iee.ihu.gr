@@ -57,7 +57,7 @@ class AttachmentController extends Controller
         // if (!$announcement->hasPublicTags() || Auth::guard('api')->check()) {
         return response()->json([
             'tags' => $announcement->hasPublicTags(),
-            'auth' => auth('api')->user()
+            'auth' => Auth::check()
         ]);
         // }
 
