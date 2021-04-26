@@ -54,12 +54,9 @@ class AttachmentController extends Controller
 
         $announcement = Announcement::findOrFail($an_id);
 
-        // if (!$announcement->hasPublicTags() || Auth::guard('api')->check()) {
-        return response()->json([
-            'tags' => $announcement->hasPublicTags(),
-            'auth' => Auth::check()
-        ]);
-        // }
+        if (!$announcement->hasPublicTags() || Auth::check()) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
 
         if ($announcement->hasAttachment($at_id)) {
             $attachment = Attachment::findOrFail($at_id);
