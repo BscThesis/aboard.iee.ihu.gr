@@ -49,12 +49,10 @@ class AttachmentController extends Controller
      */
     public function show($an_id, $at_id, Request $request)
     {
-        // TODO MOVE LOGIC TO MIDDLEWARE
-        // TODO ADD CHECK FOR LOCAL IP
-
         $announcement = Announcement::findOrFail($an_id);
+        $local_ip = $request->session()->get('local_ip', 0);
 
-        if (!($announcement->hasPublicTags() || Auth::check() || Auth::guard('api')->check())) {
+        if (!($announcement->hasPublicTags() || Auth::check() || Auth::guard('api')->check()) || $local_ip == 0) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
 
