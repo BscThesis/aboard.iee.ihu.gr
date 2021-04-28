@@ -45,13 +45,13 @@ class ApiCheckAnnIdAttId
             ], 422);
         }
 
-        // if (($announcement->hasPublicTags() && $local_ip == 0) || Auth::guard('api')->check()) {
-        //     return $next($request);
-        // } else if (!$announcement->hasPublicTags() && $local_ip == 0) {
-        //     return response()->json([
-        //         'error' => 'Unauthorized'
-        //     ], 401);
-        // }
+        if (($announcement->hasPublicTags() && $local_ip == 0) || Auth::guard('api')->check() || Auth::check()) {
+            return $next($request);
+        } else if (!$announcement->hasPublicTags() && $local_ip == 0) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        }
 
         return $next($request);
     }

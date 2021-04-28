@@ -31,11 +31,11 @@ class AttachmentController extends Controller
         $announcement = Announcement::findOrFail($an_id);
         $local_ip = $request->session()->get('local_ip', 0);
 
-        if (!($announcement->hasPublicTags() || Auth::check() || Auth::guard('api')->check()) || $local_ip == 0) {
-            return response()->json([
-                'message' => 'Unauthenticated'
-            ], 401);
-        }
+        // if (!($announcement->hasPublicTags() || Auth::check() || Auth::guard('api')->check()) || $local_ip == 0) {
+        //     return response()->json([
+        //         'message' => 'Unauthenticated'
+        //     ], 401);
+        // }
 
         if ($announcement->hasAttachment($at_id)) {
             $attachment = Attachment::findOrFail($at_id);
