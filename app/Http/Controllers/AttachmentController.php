@@ -32,7 +32,9 @@ class AttachmentController extends Controller
         $local_ip = $request->session()->get('local_ip', 0);
 
         if (!($announcement->hasPublicTags() || Auth::check() || Auth::guard('api')->check()) || $local_ip == 0) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
+            return response()->json([
+                'message' => 'Unauthenticated'
+            ], 401);
         }
 
         if ($announcement->hasAttachment($at_id)) {
