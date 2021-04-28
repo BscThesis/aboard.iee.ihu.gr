@@ -10,34 +10,13 @@ use Illuminate\Support\Facades\Auth;
 class AttachmentController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Instantiate a new controller instance.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function index()
+    public function __construct()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        $this->middleware('announcement.attachment.check')->only('show');
     }
 
     /**
@@ -74,39 +53,5 @@ class AttachmentController extends Controller
                 'status' => "not_found",
             ]);
         }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Attachment  $attachment
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Attachment $attachment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Attachment  $attachment
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Attachment $attachment)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Attachment  $attachment
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Attachment $attachment)
-    {
-        //
     }
 }
