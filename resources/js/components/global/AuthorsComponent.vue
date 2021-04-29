@@ -3,10 +3,17 @@
     <!-- Page Title -->
     <page-title title="Συντάκτες"></page-title>
 
+    <!-- Loader -->
+    <loader-component></loader-component>
+
     <!-- Content -->
     <div class="block">
       <div class="columns is-multiline is-vcentered">
-        <div class="column is-one-third" v-for="author in authors" v-bind:key="author.id">
+        <div
+          class="column is-one-third"
+          v-for="author in authors"
+          v-bind:key="author.id"
+        >
           <div class="box" @click="searchByAuthor(author.id)">
             <div class="columns is-mobile is-vcentered">
               <div class="column is-10">
@@ -26,37 +33,42 @@
 </template>
 
 <script>
+import { bus } from "../../app";
+import { toast } from "bulma-toast";
+
 export default {
-  data: function() {
+  data: function () {
     return {
-      authors: []
+      authors: [],
     };
   },
-  created: function() {
+  created: function () {
     this.getAuthors();
   },
   methods: {
-    getAuthors: function() {
+    getAuthors: function () {
       let vm = this;
       axios
         .get("/api/auth/authors")
-        .then(function(response) {
+        .then(function (response) {
           vm.authors = response.data;
+          bus.$emit("loadingFinished", true);
         })
-        .catch(function(error) {
+        .catch(function (error) {
+          bus.$emit("loadingFinished", true);
           toast({
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" }
+            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
     },
-    searchByAuthor: function(id) {
+    searchByAuthor: function (id) {
       window.location.href = "/search/author/" + id;
-    }
-  }
+    },
+  },
 };
 </script>
 
