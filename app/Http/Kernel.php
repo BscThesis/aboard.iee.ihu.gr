@@ -75,7 +75,8 @@ class Kernel extends HttpKernel
         'api.tag.check' => \App\Http\Middleware\ApiCheckTag::class,
         'is.author' => \App\Http\Middleware\UserIsAuthor::class,
         'is.the.author' => \App\Http\Middleware\UserIsTheAuthor::class,
-        'announcement.attachment.check' => \App\Http\Middleware\ApiCheckAnnIdAttId::class
+        'announcement.attachment.check' => \App\Http\Middleware\ApiCheckAnnIdAttId::class,
+        'api.announcement.attachment.check' => \App\Http\Middleware\ApiCheckAnIdAtId::class,
     ];
 
 

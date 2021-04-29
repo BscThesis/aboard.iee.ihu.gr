@@ -17,6 +17,7 @@ class AttachmentController extends Controller
     public function __construct()
     {
         $this->middleware('announcement.attachment.check')->only('show');
+        $this->middleware('api.announcement.attachment.check')->only('show');
     }
 
     /**
