@@ -106,8 +106,8 @@ class User extends Authenticatable
                 $info = ldap_get_entries($ds, $sr);
 
                 // Get the results we need
-                $name_gr = Str::upper($info['0']['cn;lang-el']['0']);
-                $name_eng = Str::upper($info['0']['cn']['0']);
+                $name_gr = Str::ascii($info['0']['cn;lang-el']['0']);
+                $name_eng = Str::ascii($info['0']['cn']['0']);
                 $group = $info['0']['edupersonaffiliation']['0'];
                 $is_author = false;
                 if ($group === "staff") {
