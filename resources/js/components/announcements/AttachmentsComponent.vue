@@ -5,14 +5,37 @@
         <span class="has-text-weight-bold">Συνημμένα:</span>
       </div>
       <div class="column">
-        <div class="tags">
-          <a
-            class="tag is-info is-light"
+        <div class="field is-grouped is-grouped-multiline">
+          <div
+            class="control"
             v-for="attachment in attachments"
             v-bind:key="attachment.id"
-            v-bind:href="'data:' + attachment.mime_type + ';base64,' + attachment.content"
-            v-bind:download="attachment.filename"
-          >{{ attachment.filename }}</a>
+          >
+            <div
+              class="tags"
+              v-bind:class="{
+                'has-addons': attachment.filename.endsWith('.pdf'),
+              }"
+            >
+              <a
+                class="tag is-info is-light"
+                v-bind:href="`/announcements/${attachment.announcement_id}/attachments/${attachment.id}?action=download`"
+                target="_blank"
+                title="Download"
+              >
+                {{ attachment.filename }}
+              </a>
+              <a
+                class="tag"
+                v-bind:href="`/announcements/${attachment.announcement_id}/attachments/${attachment.id}`"
+                target="_blank"
+                v-if="attachment.filename.endsWith('.pdf')"
+                title="View"
+              >
+                <span class="icon"> <i class="far fa-eye"></i> </span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -24,8 +47,8 @@ export default {
   props: {
     attachments: {
       type: Array,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 };
 </script>

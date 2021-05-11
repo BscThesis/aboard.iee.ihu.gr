@@ -38,6 +38,12 @@ Route::get('/search/author/{id}', 'AnnouncementController@searchByAuthor');
 Route::get('/search', 'AnnouncementController@customSearch');
 
 //----------------------------------------
+//          Attachments Routes
+//----------------------------------------
+
+Route::get('/announcements/{an_id}/attachments/{at_id}', 'AttachmentController@show');
+
+//----------------------------------------
 //          Tags Routes
 //----------------------------------------
 

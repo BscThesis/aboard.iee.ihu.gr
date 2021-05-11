@@ -52,7 +52,10 @@
             ></full-announcement-body>
 
             <!-- Tags -->
-            <tags v-if="announcement.tags" v-bind:tags="announcement.tags"></tags>
+            <tags
+              v-if="announcement.tags"
+              v-bind:tags="announcement.tags"
+            ></tags>
 
             <!-- Attachments -->
             <attachments
@@ -77,15 +80,15 @@ export default {
   props: {
     announcement: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       displayEnglish: false,
-      open: false
+      open: false,
     };
-  }
+  },
 };
 </script>
 
