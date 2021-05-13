@@ -37,8 +37,8 @@ class Kernel extends HttpKernel
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
-	        // \Illuminate\Session\Middleware\StartSession::class,
-	        // \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            // \Illuminate\Session\Middleware\StartSession::class,
+            // \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
         ],
@@ -75,6 +75,8 @@ class Kernel extends HttpKernel
         'api.tag.check' => \App\Http\Middleware\ApiCheckTag::class,
         'is.author' => \App\Http\Middleware\UserIsAuthor::class,
         'is.the.author' => \App\Http\Middleware\UserIsTheAuthor::class,
+        'announcement.attachment.check' => \App\Http\Middleware\ApiCheckAnnIdAttId::class,
+        'api.announcement.attachment.check' => \App\Http\Middleware\ApiCheckAnIdAtId::class,
     ];
 
 

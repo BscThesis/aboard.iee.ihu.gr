@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class CheckIdApi
+class ApiCheckAnIdAtId
 {
     /**
      * Handle an incoming request.
@@ -15,8 +15,9 @@ class CheckIdApi
      */
     public function handle($request, Closure $next)
     {
-        $id = $request->route('id');
-        if (!ctype_digit($id)) {
+        $an_id = $request->route('an_id');
+        $at_id = $request->route('at_id');
+        if (!ctype_digit($an_id) || !ctype_digit($at_id)) {
             return response()->json([
                 'error' => 'Bad request'
             ], 400);
