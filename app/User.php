@@ -107,7 +107,7 @@ class User extends Authenticatable
 
                 // Get the results we need
                 $name_gr = Str::upper($info['0']['cn;lang-el']['0']);
-                $name_eng = Str::upper($info['0']['cn']['0']);
+                $name_eng = Str::upper($info['0']['cn']['0']) || Str::ascii($info['0']['cn;lang-el']['0']);
                 $group = $info['0']['edupersonaffiliation']['0'];
                 $is_author = false;
                 if ($group === "staff") {
