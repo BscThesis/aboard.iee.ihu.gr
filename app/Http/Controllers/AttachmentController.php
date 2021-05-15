@@ -18,6 +18,7 @@ class AttachmentController extends Controller
     {
         $this->middleware('announcement.attachment.check')->only('show');
         $this->middleware('api.announcement.attachment.check')->only('show');
+        $this->middleware('android.app')->only('show');
     }
 
     /**

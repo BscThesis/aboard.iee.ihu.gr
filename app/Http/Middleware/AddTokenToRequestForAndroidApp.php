@@ -15,6 +15,9 @@ class AddTokenToRequestForAndroidApp
      */
     public function handle($request, Closure $next)
     {
+        if ($request->exists('access_token')) {
+            $request->headers->set('Authorization', 'Bearer ' . $request->input('access_token'), true);
+        }
         return $next($request);
     }
 }
