@@ -18,14 +18,16 @@
         <textarea
           class="textarea"
           placeholder="Κείμενο"
-          v-model="issue.title"
+          v-model="issue.text"
         ></textarea>
       </div>
     </div>
 
     <div class="field">
       <div class="control">
-        <button class="button is-link">Υποβολή</button>
+        <button class="button is-link" v-on:click="submitAnIssue()">
+          Υποβολή
+        </button>
       </div>
     </div>
   </div>
@@ -37,6 +39,12 @@ export default {
     return {
       issue: {},
     };
+  },
+  methods: {
+    submitAnIssue: function () {
+      let vm = this;
+      console.log(vm.issue);
+    },
   },
 };
 </script>
