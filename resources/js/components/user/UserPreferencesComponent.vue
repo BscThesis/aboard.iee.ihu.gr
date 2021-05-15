@@ -36,7 +36,7 @@
 <script>
 import UserActivityTableComponent from "./UserActivityTableComponent.vue";
 import UserSubscribeToBoardsComponent from "./UserSubscribeToBoardsComponent.vue";
-import UserSubscribeToBoardsComponent from "./UserReportAnIssueComponent.vue";
+import UserReportAnIssueComponent from "./UserReportAnIssueComponent.vue";
 
 export default {
   components: {
