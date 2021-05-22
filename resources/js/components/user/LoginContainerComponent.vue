@@ -101,7 +101,6 @@ export default {
           })
           .then(function (response) {
             if (response.status == 200) {
-              console.log("response: " + JSON.stringify(response.data));
               toast({
                 message: "Συνδεθήκατε επιτυχώς",
                 type: "is-success",
@@ -123,7 +122,7 @@ export default {
                   delete axios.defaults.headers.common["Authorization"];
                   window.location.href = "/login";
                 });
-              // window.location.replace("/");
+              window.location.replace("/");
             } else {
               toast({
                 message: response.statusText,

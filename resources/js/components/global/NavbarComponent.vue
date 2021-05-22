@@ -29,7 +29,11 @@
       </a>
     </div>
 
-    <div id="defaultNavbar" class="navbar-menu" v-bind:class="{ 'is-active': showMobileMenu }">
+    <div
+      id="defaultNavbar"
+      class="navbar-menu"
+      v-bind:class="{ 'is-active': showMobileMenu }"
+    >
       <div class="navbar-start">
         <span class="navbar-divider is-hidden-touch"></span>
         <a class="navbar-item" href="/">Αρχική</a>
@@ -38,9 +42,13 @@
       </div>
 
       <div class="navbar-end">
-        <user-activity-component v-if="userAuthenticated"></user-activity-component>
+        <user-activity-component
+          v-if="userAuthenticated"
+        ></user-activity-component>
         <span class="navbar-divider" v-if="userAuthenticated"></span>
-        <user-dropdown-component v-if="userAuthenticated"></user-dropdown-component>
+        <user-dropdown-component
+          v-if="userAuthenticated"
+        ></user-dropdown-component>
         <div v-if="!userAuthenticated" class="navbar-item">
           <a class="button is-dark" href="/login">
             <span class="is-size-6">Είσοδος</span>
@@ -56,18 +64,11 @@ import userMixin from "../mixins/userMixin";
 
 export default {
   mixins: [userMixin],
-  data: function() {
+  data: function () {
     return {
-      showMobileMenu: false
+      showMobileMenu: false,
     };
   },
-  methods: {
-    getUser: function() {
-      if (userAuthenticated) {
-        console.log("authed");
-      }
-    }
-  }
 };
 </script>
 

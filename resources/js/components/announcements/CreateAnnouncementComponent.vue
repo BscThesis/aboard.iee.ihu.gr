@@ -458,10 +458,6 @@ export default {
     }
   },
   methods: {
-    showTagsAsTree: function () {
-      let vm = this;
-      console.log(JSON.stringify(vm.tagsAsTree, null, " "));
-    },
     getAuthors: function () {
       let vm = this;
       axios
@@ -791,7 +787,6 @@ export default {
           tree.push(item);
         }
       }
-      console.log(tree[0]);
       return tree[0];
     },
   },
