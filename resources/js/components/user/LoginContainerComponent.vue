@@ -14,7 +14,12 @@
               <div class="field">
                 <label class="label">Όνομα χρήστη</label>
                 <div class="control has-icons-left">
-                  <input class="input" required type="input" v-model="input.username" />
+                  <input
+                    class="input"
+                    required
+                    type="input"
+                    v-model="input.username"
+                  />
                   <span class="icon is-small is-left">
                     <i class="fas fa-user"></i>
                   </span>
@@ -25,7 +30,12 @@
               <div class="field">
                 <label class="label">Κωδικός</label>
                 <div class="control has-icons-left">
-                  <input class="input" required type="password" v-model="input.password" />
+                  <input
+                    class="input"
+                    required
+                    type="password"
+                    v-model="input.password"
+                  />
                   <span class="icon is-small is-left">
                     <i class="fas fa-lock"></i>
                   </span>
@@ -39,7 +49,10 @@
               </div>
 
               <!-- Display errors -->
-              <errors-component v-if="errors.length" :errors="errors"></errors-component>
+              <errors-component
+                v-if="errors.length"
+                :errors="errors"
+              ></errors-component>
             </form>
           </div>
         </div>
@@ -53,22 +66,22 @@ import { toast } from "bulma-toast";
 import { bus } from "../../app";
 
 export default {
-  data: function() {
+  data: function () {
     return {
       input: {
         username: "",
-        password: ""
+        password: "",
       },
-      errors: []
+      errors: [],
     };
   },
-  beforeCreate: function() {
+  beforeCreate: function () {
     if (localStorage.getItem("token")) {
       window.location.replace("/");
     }
   },
   methods: {
-    attemptLogin: function() {
+    attemptLogin: function () {
       let vm = this;
       vm.errors = [];
 
@@ -84,55 +97,55 @@ export default {
         axios
           .post("/api/auth/login", {
             username: vm.input.username,
-            password: vm.input.password
+            password: vm.input.password,
           })
-          .then(function(response) {
+          .then(function (response) {
             if (response.status == 200) {
               console.log("response: " + response);
               toast({
                 message: "Συνδεθήκατε επιτυχώς",
                 type: "is-success",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" }
+                animate: { in: "fadeIn", out: "fadeOut" },
               });
               localStorage.token = response.data.access_token;
               axios
                 .get("/api/auth/user")
-                .then(response => {
+                .then((response) => {
                   localStorage.setItem(
                     "user_info",
                     JSON.stringify(response.data.data)
                   );
                 })
-                .catch(error => {
+                .catch((error) => {
                   localStorage.removeItem("token");
                   localStorage.removeItem("user_info");
                   delete axios.defaults.headers.common["Authorization"];
                   window.location.href = "/login";
                 });
-              window.location.replace("/");
+              // window.location.replace("/");
             } else {
               toast({
                 message: response.statusText,
                 type: "is-danger",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" }
+                animate: { in: "fadeIn", out: "fadeOut" },
               });
               console.log(response.data);
             }
           })
-          .catch(function(error) {
+          .catch(function (error) {
             toast({
               message: "Συνέβη κάποιο σφάλμα",
               type: "is-danger",
               position: "bottom-right",
-              animate: { in: "fadeIn", out: "fadeOut" }
+              animate: { in: "fadeIn", out: "fadeOut" },
             });
             console.log(error);
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
