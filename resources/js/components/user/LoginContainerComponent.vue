@@ -101,7 +101,7 @@ export default {
           })
           .then(function (response) {
             if (response.status == 200) {
-              console.log("response: " + response);
+              console.log("response: " + response.data);
               toast({
                 message: "Συνδεθήκατε επιτυχώς",
                 type: "is-success",
