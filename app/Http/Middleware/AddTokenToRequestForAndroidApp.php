@@ -15,15 +15,9 @@ class AddTokenToRequestForAndroidApp
      */
     public function handle($request, Closure $next)
     {
-        \Log::info('before');
-        \Log::info('--------------');
-        \Log::info(var_dump($request->all()));
-        \Log::info('--------------');
         if ($request->exists('access_token')) {
             $request->headers->set('Authorization', 'Bearer ' . $request->input('access_token'), true);
-            \Log::info('added header');
         }
-        \Log::info('after');
         return $next($request);
     }
 }
