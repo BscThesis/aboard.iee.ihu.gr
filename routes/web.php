@@ -34,7 +34,7 @@ Route::get('/announcements/{id}/edit', function ($id) {
 })->middleware('auth', 'web.id.check', 'is.the.author', 'web.announcement.check')->name('announcement.edit');
 
 Route::get('/announcements/{an_id}/attachments/{at_id}', 'AttachmentController@show')
-    ->middleware('announcement.attachment.check');
+    ->middleware('android.app', 'announcement.attachment.check');
 
 Route::get('/events', function () {
     return view('pages.events');

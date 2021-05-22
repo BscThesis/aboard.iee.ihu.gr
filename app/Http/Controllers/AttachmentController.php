@@ -17,8 +17,8 @@ class AttachmentController extends Controller
     public function __construct()
     {
         $this->middleware('android.app')->only('show');
-        // $this->middleware('announcement.attachment.check')->only('show');
-        // $this->middleware('api.announcement.attachment.check')->only('show');
+        $this->middleware('announcement.attachment.check')->only('show');
+        $this->middleware('api.announcement.attachment.check')->only('show');
     }
 
     /**
