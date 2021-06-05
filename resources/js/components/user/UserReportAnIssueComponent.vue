@@ -25,7 +25,12 @@
 
     <div class="field">
       <div class="control">
-        <button class="button is-link" v-on:click="submitAnIssue()">
+        <button
+          class="button is-link"
+          v-on:click="submitAnIssue()"
+          v-bind:class="{ 'is-loading': btnLoading }"
+          v-bind:disabled="btnLoading"
+        >
           Υποβολή
         </button>
       </div>
@@ -41,6 +46,7 @@ export default {
     return {
       issue: {},
       errors: [],
+      btnLoading: false,
     };
   },
   methods: {
