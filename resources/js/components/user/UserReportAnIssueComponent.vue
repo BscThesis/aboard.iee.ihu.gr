@@ -18,7 +18,7 @@
         <textarea
           class="textarea"
           placeholder="Κείμενο"
-          v-model="issue.text"
+          v-model="issue.body"
         ></textarea>
       </div>
     </div>
@@ -30,6 +30,8 @@
         </button>
       </div>
     </div>
+
+    <errors-component v-if="errors.length" :errors="errors"> </errors-component>
   </div>
 </template>
 
@@ -38,12 +40,18 @@ export default {
   data: function () {
     return {
       issue: {},
+      errors: [],
     };
   },
   methods: {
     submitAnIssue: function () {
       let vm = this;
-      console.log(vm.issue);
+      if (!vm.issue.title) {
+        vm.errors.push("Ο τίτλος δεν μπορεί να είναι κενός");
+      }
+      if (!vm.issue.body || vm.issue.body.replace(/<[^>]*>?/gm, "") == "") {
+        vm.errors.push("Το κείμενο δεν μπορεί να είναι κενό");
+      }
     },
   },
 };
