@@ -52,6 +52,8 @@ export default {
   methods: {
     submitAnIssue: function () {
       let vm = this;
+      vm.btnLoading = true;
+      vm.errors = [];
       if (!vm.issue.title) {
         vm.errors.push("Ο τίτλος δεν μπορεί να είναι κενός");
       }

@@ -79,6 +79,12 @@ class User extends Authenticatable
         ldap_set_option($ds, LDAP_OPT_REFERRALS, 0);
         ldap_set_option($ds, LDAP_OPT_NETWORK_TIMEOUT, 10);
 
+        $name_gr = '';
+        $name_eng = '';
+        $email = '';
+        $username = '';
+        $is_author = false;
+
         if (isset($username)) {
             $bind = 0;
             foreach ($ldapconfig['usersdn'] as $value) {
@@ -174,5 +180,13 @@ class User extends Authenticatable
     public function activities()
     {
         return $this->hasMany('App\Notification', 'notifiable_id', 'id');
+    }
+
+    /**
+     * Get issues submitted by a user.
+     */
+    public function issues()
+    {
+        return $this->hasMany('App\Issue ');
     }
 }
