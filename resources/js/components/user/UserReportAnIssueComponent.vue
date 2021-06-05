@@ -57,7 +57,7 @@ export default {
       if (!vm.issue.title) {
         vm.errors.push("Ο τίτλος δεν μπορεί να είναι κενός");
       }
-      if (!vm.issue.body || vm.issue.body.replace(/<[^>]*>?/gm, "") == "") {
+      if (!vm.issue.body.trim()) {
         vm.errors.push("Το κείμενο δεν μπορεί να είναι κενό");
       }
     },
