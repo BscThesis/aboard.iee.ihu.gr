@@ -1,5 +1,8 @@
 <template>
-  <nav class="breadcrumb is-small is-right has-bullet-separator" aria-label="breadcrumbs">
+  <nav
+    class="breadcrumb is-small is-right has-bullet-separator"
+    aria-label="breadcrumbs"
+  >
     <ul>
       <li class="is-active">
         <a>{{ updated_at }}</a>
@@ -16,12 +19,12 @@ export default {
   props: {
     updated_at: {
       type: String,
-      required: true
+      required: true,
     },
     author: {
       type: Object,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 };
 </script>

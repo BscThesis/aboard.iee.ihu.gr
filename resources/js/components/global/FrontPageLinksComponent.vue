@@ -6,27 +6,38 @@
       <button
         v-if="is_admin"
         class="button is-danger is-uppercase"
-        @click="modalOpen=true"
-      >Admin area</button>
+        @click="modalOpen = true"
+      >
+        Admin area
+      </button>
       <a
         v-if="is_author"
         class="button is-dark is-capitalized"
         href="/announcements/create"
-      >Προσθήκη ανακοίνωσης</a>
+        >Προσθήκη ανακοίνωσης</a
+      >
     </div>
 
-    <div v-if="is_admin" class="modal" v-bind:class="{ 'is-active': modalOpen }">
-      <div class="modal-background" @click="modalOpen=false">></div>
+    <div
+      v-if="is_admin"
+      class="modal"
+      v-bind:class="{ 'is-active': modalOpen }"
+    >
+      <div class="modal-background" @click="modalOpen = false">></div>
       <div class="modal-card">
         <header class="modal-card-head">
           <p class="modal-card-title">Διαχείριση ετικετών</p>
-          <button class="delete" aria-label="close" @click="modalOpen=false"></button>
+          <button
+            class="delete"
+            aria-label="close"
+            @click="modalOpen = false"
+          ></button>
         </header>
         <section class="modal-card-body">
           <admin-component></admin-component>
         </section>
         <footer class="modal-card-foot">
-          <button class="button" @click="modalOpen=false">Exit</button>
+          <button class="button" @click="modalOpen = false">Exit</button>
         </footer>
       </div>
     </div>
@@ -37,23 +48,23 @@
 import { bus } from "../../app";
 
 export default {
-  data: function() {
+  data: function () {
     return {
       is_author: false,
       is_admin: false,
-      modalOpen: false
+      modalOpen: false,
     };
   },
   watch: {
-    modalOpen: function(value) {
+    modalOpen: function (value) {
       if (value) {
         document.getElementsByTagName("html")[0].classList.add("is-clipped");
       } else {
         document.getElementsByTagName("html")[0].classList.remove("is-clipped");
       }
-    }
+    },
   },
-  mounted: function() {
+  mounted: function () {
     bus.$on("authCheckFinished", () => {
       if (localStorage.getItem("user_info")) {
         let vm = this;
@@ -61,7 +72,7 @@ export default {
         vm.is_admin = JSON.parse(localStorage.getItem("user_info")).is_admin;
       }
     });
-  }
+  },
 };
 </script>
 

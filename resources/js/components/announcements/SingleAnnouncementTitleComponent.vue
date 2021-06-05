@@ -11,13 +11,13 @@ export default {
   props: {
     title: {
       type: String,
-      required: true
+      required: true,
     },
     id: {
       type: Number,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 };
 </script>
 

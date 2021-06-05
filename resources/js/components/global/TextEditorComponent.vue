@@ -190,7 +190,10 @@
 
         <!-- Editor -->
         <div class="card-content">
-          <editor-content class="content has-background-white" :editor="editor" />
+          <editor-content
+            class="content has-background-white"
+            :editor="editor"
+          />
         </div>
       </div>
     </div>
@@ -217,18 +220,18 @@ import {
   Strike,
   Underline,
   History,
-  Image
+  Image,
 } from "tiptap-extensions";
 
 export default {
   props: ["value"],
   components: {
     EditorContent,
-    EditorMenuBar
+    EditorMenuBar,
   },
   data() {
     return {
-      editor: null
+      editor: null,
     };
   },
   methods: {
@@ -240,7 +243,7 @@ export default {
       if (src !== null && src.match(/\.(jpeg|jpg|gif|png)$/) != null) {
         command({ src });
       }
-    }
+    },
   },
   mounted() {
     this.editor = new Editor({
@@ -262,19 +265,19 @@ export default {
         new Strike(),
         new Underline(),
         new History(),
-        new Image()
+        new Image(),
       ],
       content: this.value,
       onUpdate: ({ getHTML }) => {
         this.$emit("input", getHTML());
-      }
+      },
     });
   },
   beforeDestroy() {
     if (this.editor) {
       this.editor.destroy();
     }
-  }
+  },
 };
 </script>
 

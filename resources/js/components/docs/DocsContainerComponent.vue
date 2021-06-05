@@ -190,13 +190,19 @@
       <div class="box has-background-grey-lighter">
         <div class="columns is-multiline">
           <div class="column is-full">
-            <model-item title="Announcement" v-bind:fields="announcementModel"></model-item>
+            <model-item
+              title="Announcement"
+              v-bind:fields="announcementModel"
+            ></model-item>
           </div>
           <div class="column is-full">
             <model-item title="Tag" v-bind:fields="tagModel"></model-item>
           </div>
           <div class="column is-full">
-            <model-item title="Attachment" v-bind:fields="attachmentModel"></model-item>
+            <model-item
+              title="Attachment"
+              v-bind:fields="attachmentModel"
+            ></model-item>
           </div>
           <div class="column is-full">
             <model-item title="User" v-bind:fields="userModel"></model-item>
@@ -209,7 +215,7 @@
 
 <script>
 export default {
-  data: function() {
+  data: function () {
     return {
       tagModel: {
         id: "bigint(20) auto_increment",
@@ -217,7 +223,7 @@ export default {
         is_public: "boolean",
         parent_id: "bigint(20)",
         created_at: "timestamp",
-        updated_at: "timestamp"
+        updated_at: "timestamp",
       },
       announcementModel: {
         id: "bigint(20) auto_increment",
@@ -237,7 +243,7 @@ export default {
         eng_body: "mediumtext",
         pinned_until: "timestamp",
         tags: "Tag []",
-        attachments: "Attachment []"
+        attachments: "Attachment []",
       },
       attachmentModel: {
         id: "bigint(20)",
@@ -248,7 +254,7 @@ export default {
         mime_type: "varchar(255)",
         created_at: "timestamp",
         updated_at: "timestamp",
-        deleted_at: "timestamp"
+        deleted_at: "timestamp",
       },
       userModel: {
         id: "bigint(20)",
@@ -259,7 +265,7 @@ export default {
         is_author: "tinyint(1)",
         is_admin: "tinyint(1)",
         last_login_at: "datetime",
-        uid: "varchar(255)"
+        uid: "varchar(255)",
       },
       tagResponseAll: `{ "data": [ { "id": 6, "title": "1102 Δομημένος Προγραμματισμός Εργαστήριο", "parent_id": 4, "is_public": 0 }, { "id": 5, "title": "1102 Δομημένος Προγραμματισμός Θεωρία", "parent_id": 4, "is_public": 0 }, { "id": 4, "title": "1102 Δομημένος Προγραμματισμός", "parent_id": 2, "is_public": 0 }, { "id": 3, "title": "Εκδηλώσεις", "parent_id": 1, "is_public": 1 }, { "id": 2, "title": "Εξάμηνο Α", "parent_id": 1, "is_public": 0 }, { "id": 1, "title": "Όλες οι ανακοινώσεις", "parent_id": null, "is_public": 0 } ] }`,
       tagResponseSingle: `{ "data": { "id": 2, "title": "Εξάμηνο Α", "parent_id": 1, "is_public": 0 } }`,
@@ -295,9 +301,9 @@ export default {
   --data-binary $'------WebKitFormBoundary8AHxBKN9Wu7AexMh\r\nContent-Disposition: form-data; name="title"\r\n\r\nTest title (edit)\r\n------WebKitFormBoundary8AHxBKN9Wu7AexMh\r\nContent-Disposition: form-data; name="body"\r\n\r\n<p>Test announcement (edit)</p>\r\n------WebKitFormBoundary8AHxBKN9Wu7AexMh\r\nContent-Disposition: form-data; name="is_pinned"\r\n\r\nfalse\r\n------WebKitFormBoundary8AHxBKN9Wu7AexMh\r\nContent-Disposition: form-data; name="is_event"\r\n\r\nfalse\r\n------WebKitFormBoundary8AHxBKN9Wu7AexMh\r\nContent-Disposition: form-data; name="tags"\r\n\r\n[10,108]\r\n------WebKitFormBoundary8AHxBKN9Wu7AexMh\r\nContent-Disposition: form-data; name="has_eng"\r\n\r\nfalse\r\n------WebKitFormBoundary8AHxBKN9Wu7AexMh\r\nContent-Disposition: form-data; name="_method"\r\n\r\nput\r\n------WebKitFormBoundary8AHxBKN9Wu7AexMh--\r\n'`,
       announcementUpdateResponse: `{"data":{"id":5,"title":"Test title (edit)","eng_title":null,"body":"<p>Test announcement (edit)<\/p>","eng_body":null,"has_eng":false,"created_at":"2020-05-28 22:06","updated_at":"2020-05-28 22:22","is_pinned":false,"pinned_until":null,"is_event":false,"event_start_time":null,"event_end_time":null,"event_location":null,"gmaps":null,"tags":[{"id":10,"title":"E\u03be\u03ac\u03bc\u03b7\u03bd\u03bf \u0398","parent_id":1,"is_public":0},{"id":108,"title":"1975 \u03a4\u03b5\u03c7\u03bd\u03bf\u03bb\u03bf\u03b3\u03af\u03b1 \u03a0\u03bf\u03bb\u03c5\u03bc\u03ad\u03c3\u03c9\u03bd","parent_id":10,"is_public":0}],"attachments":[],"author":{"name":"Nikolaos-Christos Nikolaidis","id":21}}}`,
       announcementDeleteRequest: `curl 'http://aboard.iee.ihu.gr/api/announcements/5' -X 'DELETE' -H 'Authorization: Bearer ACCESS_TOKEN'`,
-      announcementDeleteResponse: `{"data":{"all": "announcements", "not shown": "to keep this page as short as possible"}}`
+      announcementDeleteResponse: `{"data":{"all": "announcements", "not shown": "to keep this page as short as possible"}}`,
     };
-  }
+  },
 };
 </script>
 

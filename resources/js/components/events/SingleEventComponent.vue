@@ -4,7 +4,10 @@
       <div class="message-body">
         <div class="columns is-multiline is-mobile">
           <div class="column is-full">
-            <a class="is-not-decorated" v-bind:href="'/announcements/' + event.id">
+            <a
+              class="is-not-decorated"
+              v-bind:href="'/announcements/' + event.id"
+            >
               <p class="is-size-5 has-text-centered">{{ event.title }}</p>
             </a>
           </div>
@@ -18,8 +21,12 @@
                 <a
                   target="_blank"
                   v-if="event.gmaps"
-                  v-bind:href="'https://www.google.com/maps/search/?api=1&query=' + encodeURL(event.event_location)"
-                >{{ event.event_location }}</a>
+                  v-bind:href="
+                    'https://www.google.com/maps/search/?api=1&query=' +
+                    encodeURL(event.event_location)
+                  "
+                  >{{ event.event_location }}</a
+                >
                 <span v-else>{{ event.event_location }}</span>
               </div>
               <div class="column is-full">
@@ -27,7 +34,9 @@
                 <span class="icon">
                   <i class="fas fa-clock"></i>
                 </span>
-                <span v-if="event.event_start_time">{{ event.event_start_time }}</span>
+                <span v-if="event.event_start_time">{{
+                  event.event_start_time
+                }}</span>
                 <span v-else>-</span>
               </div>
               <div class="column is-full">
@@ -35,7 +44,9 @@
                 <span class="icon">
                   <i class="fas fa-clock"></i>
                 </span>
-                <span v-if="event.event_end_time">{{ event.event_end_time }}</span>
+                <span v-if="event.event_end_time">{{
+                  event.event_end_time
+                }}</span>
                 <span v-else>-</span>
               </div>
             </div>
@@ -51,13 +62,13 @@ export default {
   props: {
     event: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
     encodeURL(value) {
       return encodeURI(value);
-    }
-  }
+    },
+  },
 };
 </script>

@@ -19,7 +19,9 @@
 
     <div class="navbar-dropdown is-radiusless is-right">
       <div class="navbar-item">
-        <p class="is-size-6 has-text-weight-bold is-unselectable">{{ user.name }}</p>
+        <p class="is-size-6 has-text-weight-bold is-unselectable">
+          {{ user.name }}
+        </p>
       </div>
       <div class="navbar-item">
         <p class="is-size-6">{{ user.email }}</p>
@@ -41,39 +43,39 @@ import { mixin as clickaway } from "vue-clickaway";
 
 export default {
   mixins: [clickaway],
-  data: function() {
+  data: function () {
     return {
       openUserDropdown: false,
-      user: {}
+      user: {},
     };
   },
-  created: function() {
+  created: function () {
     let vm = this;
     if (localStorage.getItem("user_info")) {
       vm.user = JSON.parse(localStorage.getItem("user_info"));
     }
   },
   methods: {
-    away: function() {
+    away: function () {
       this.openUserDropdown = false;
     },
-    logout: function() {
+    logout: function () {
       axios
         .get("/api/auth/logout")
-        .then(response => {
+        .then((response) => {
           localStorage.removeItem("token");
           localStorage.removeItem("user_info");
           delete axios.defaults.headers.common["Authorization"];
           window.location.href = "/login";
         })
-        .catch(error => {
+        .catch((error) => {
           localStorage.removeItem("token");
           localStorage.removeItem("user_info");
           delete axios.defaults.headers.common["Authorization"];
           window.location.href = "/login";
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -37,13 +37,13 @@ export default {
   props: {
     code: {
       type: String,
-      required: true
+      required: true,
     },
     message: {
       type: String,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 };
 </script>
 

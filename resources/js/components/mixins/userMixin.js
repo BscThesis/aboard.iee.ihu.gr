@@ -3,7 +3,7 @@ import { bus } from "../../app";
 export default {
     data: function () {
         return {
-            userAuthenticated: false
+            userAuthenticated: false,
         };
     },
     created: function () {
@@ -27,6 +27,6 @@ export default {
                 }
             }
             bus.$emit("authCheckFinished");
-        }
-    }
+        },
+    },
 };

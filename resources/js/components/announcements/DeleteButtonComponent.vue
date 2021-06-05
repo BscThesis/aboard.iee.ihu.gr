@@ -19,10 +19,10 @@ export default {
   props: {
     announcement: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  data: function() {
+  data: function () {
     return {};
   },
   methods: {
@@ -30,11 +30,11 @@ export default {
       let vm = this;
       let forDeletion = {
         type: "announcement",
-        data: announcement
+        data: announcement,
       };
       bus.$emit("openModal", forDeletion);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -42,7 +42,7 @@ import dummyComp from "../ExampleComponent.vue";
 export default {
   components: {
     "admin-tags-component-bulma": tagsComp,
-    "dummy-componenent": dummyComp
+    "dummy-componenent": dummyComp,
   },
   data() {
     return { currentComponent: "admin-tags-component-bulma", isActive: 1 };
@@ -54,7 +54,7 @@ export default {
     setActiveComponent(comp, num) {
       this.currentComponent = comp;
       this.isActive = num;
-    }
-  }
+    },
+  },
 };
 </script>

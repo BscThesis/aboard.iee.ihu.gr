@@ -1,18 +1,23 @@
 <template>
   <div>
-    <div class="modal" v-if="removeModalActive" v-bind:class="{ 'is-active': removeModalActive }">
+    <div
+      class="modal"
+      v-if="removeModalActive"
+      v-bind:class="{ 'is-active': removeModalActive }"
+    >
       <div class="modal-background" @click="closeModal()"></div>
       <div class="modal-content">
         <div class="card">
           <header class="card-header">
-            <p
-              v-if="forDeletion.type == 'tag'"
-              class="card-header-title"
-            >Πρόκειται να διαγράψετε μία επικέτα!</p>
+            <p v-if="forDeletion.type == 'tag'" class="card-header-title">
+              Πρόκειται να διαγράψετε μία επικέτα!
+            </p>
             <p
               v-if="forDeletion.type == 'announcement'"
               class="card-header-title"
-            >Πρόκειται να διαγράψετε μία ανακοίνωση!</p>
+            >
+              Πρόκειται να διαγράψετε μία ανακοίνωση!
+            </p>
           </header>
           <div class="card-content">
             <div class="content">Να προχωρήσω;</div>
@@ -23,7 +28,11 @@
           </footer>
         </div>
       </div>
-      <button class="modal-close is-large" aria-label="close" @click="closeModal()"></button>
+      <button
+        class="modal-close is-large"
+        aria-label="close"
+        @click="closeModal()"
+      ></button>
     </div>
   </div>
 </template>
@@ -33,21 +42,21 @@ import { bus } from "../../app";
 import { toast } from "bulma-toast";
 
 export default {
-  created: function() {
-    bus.$on("openModal", data => {
+  created: function () {
+    bus.$on("openModal", (data) => {
       document.getElementsByTagName("html")[0].classList.add("is-clipped");
       this.forDeletion = data;
       this.removeModalActive = !this.removeModalActive;
     });
   },
-  data: function() {
+  data: function () {
     return {
       removeModalActive: false,
-      forDeletion: {}
+      forDeletion: {},
     };
   },
   methods: {
-    deleteObject: function() {
+    deleteObject: function () {
       let vm = this;
 
       let url = null;
@@ -60,12 +69,12 @@ export default {
       if (url) {
         axios
           .delete(url + vm.forDeletion.data.id)
-          .then(function(response) {
+          .then(function (response) {
             toast({
               message: "Διεγράφη επιτυχώς",
               type: "is-success",
               position: "bottom-right",
-              animate: { in: "fadeIn", out: "fadeOut" }
+              animate: { in: "fadeIn", out: "fadeOut" },
             });
             document
               .getElementsByTagName("html")[0]
@@ -73,12 +82,12 @@ export default {
             vm.removeModalActive = !vm.removeModalActive;
             bus.$emit("objectRemoved", true);
           })
-          .catch(function(error) {
+          .catch(function (error) {
             toast({
               message: "Συνέβη κάποιο σφάλμα",
               type: "is-danger",
               position: "bottom-right",
-              animate: { in: "fadeIn", out: "fadeOut" }
+              animate: { in: "fadeIn", out: "fadeOut" },
             });
             document
               .getElementsByTagName("html")[0]
@@ -88,12 +97,12 @@ export default {
           });
       }
     },
-    closeModal: function() {
+    closeModal: function () {
       let vm = this;
       document.getElementsByTagName("html")[0].classList.remove("is-clipped");
       vm.removeModalActive = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

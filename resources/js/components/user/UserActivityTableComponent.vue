@@ -23,7 +23,8 @@
               :href="'/announcements/' + notification.data.id"
               target="_blank"
               rel="noopener noreferrer"
-            >{{ notification.data.title }}</a>
+              >{{ notification.data.title }}</a
+            >
           </td>
           <td>{{ notification.data.user }}</td>
           <td>{{ notification.created_at }}</td>
@@ -44,17 +45,17 @@ import { bus } from "../../app";
 import { toast } from "bulma-toast";
 
 export default {
-  data: function() {
+  data: function () {
     return {
-      notifications: {}
+      notifications: {},
     };
   },
-  created: function() {
+  created: function () {
     this.fetchNotifications();
-    bus.$on("next", data => {
+    bus.$on("next", (data) => {
       this.fetchNotifications(data);
     });
-    bus.$on("prev", data => {
+    bus.$on("prev", (data) => {
       this.fetchNotifications(data);
     });
   },
@@ -64,38 +65,38 @@ export default {
       page_url = page_url;
       axios
         .get(page_url)
-        .then(response => {
+        .then((response) => {
           vm.notifications = response.data.data;
 
           let links = {
             next: response.data.links.next,
-            prev: response.data.links.prev
+            prev: response.data.links.prev,
           };
 
           let meta = {
             current_page: response.data.meta.current_page,
-            last_page: response.data.meta.last_page
+            last_page: response.data.meta.last_page,
           };
 
           let paginate = {
             links: links,
-            meta: meta
+            meta: meta,
           };
 
           bus.$emit("paginationObject", paginate);
           bus.$emit("loadingFinished", true);
         })
-        .catch(error => {
+        .catch((error) => {
           bus.$emit("loadingFinished", true);
           toast({
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" }
+            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
-    }
-  }
+    },
+  },
 };
 </script>

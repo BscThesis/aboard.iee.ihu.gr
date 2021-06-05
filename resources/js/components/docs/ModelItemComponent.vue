@@ -4,12 +4,16 @@
       <p class="card-header-title">{{ title }}</p>
       <p class="card-header-icon">
         <span class="icon">
-          <i v-if="isOpen == false" class="fas fa-chevron-right" aria-hidden="true"></i>
+          <i
+            v-if="isOpen == false"
+            class="fas fa-chevron-right"
+            aria-hidden="true"
+          ></i>
           <i v-else class="fas fa-chevron-down" aria-hidden="true"></i>
         </span>
       </p>
     </header>
-    <div class="card-content" v-bind:class=" { 'is-hidden': !isOpen }">
+    <div class="card-content" v-bind:class="{ 'is-hidden': !isOpen }">
       <div class="content">
         <div class="columns">
           <div class="column is-half">
@@ -44,18 +48,18 @@ export default {
   props: {
     title: {
       type: String,
-      required: true
+      required: true,
     },
     fields: {
       type: Object,
-      required: false
-    }
+      required: false,
+    },
   },
-  data: function() {
+  data: function () {
     return {
-      isOpen: false
+      isOpen: false,
     };
-  }
+  },
 };
 </script>
 

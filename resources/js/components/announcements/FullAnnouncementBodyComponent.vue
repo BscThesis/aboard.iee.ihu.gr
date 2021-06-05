@@ -1,5 +1,8 @@
 <template>
-  <div class="column content has-text-justified is-marginless is-full" v-html="body"></div>
+  <div
+    class="column content has-text-justified is-marginless is-full"
+    v-html="body"
+  ></div>
 </template>
 
 <script>
@@ -7,9 +10,9 @@ export default {
   props: {
     body: {
       type: String,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 };
 </script>
 

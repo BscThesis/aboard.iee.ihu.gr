@@ -1,17 +1,28 @@
 <template>
   <div class="block">
-    <div class="columns is-multiline is-mobile doc-item" v-bind:class="classObject">
+    <div
+      class="columns is-multiline is-mobile doc-item"
+      v-bind:class="classObject"
+    >
       <div class="column is-full is-clickable" @click="isOpen = !isOpen">
         <!-- Heading -->
         <div class="columns is-mobile">
           <div class="column is-narrow">
             <span class="icon has-text-white">
-              <i v-if="isOpen == false" class="fas fa-chevron-right" aria-hidden="true"></i>
+              <i
+                v-if="isOpen == false"
+                class="fas fa-chevron-right"
+                aria-hidden="true"
+              ></i>
               <i v-else class="fas fa-chevron-down" aria-hidden="true"></i>
             </span>
           </div>
           <div class="column is-narrow">
-            <span class="tag is-light is-uppercase" v-bind:class="tagClassObject">{{ requestType }}</span>
+            <span
+              class="tag is-light is-uppercase"
+              v-bind:class="tagClassObject"
+              >{{ requestType }}</span
+            >
           </div>
           <div class="column">
             <p class="subtitle is-5 has-text-white">{{ title }}</p>
@@ -33,7 +44,10 @@
           </div>
         </div>
       </div>
-      <div class="column is-full has-background-white" v-bind:class=" { 'is-hidden': !isOpen } ">
+      <div
+        class="column is-full has-background-white"
+        v-bind:class="{ 'is-hidden': !isOpen }"
+      >
         <!-- Content -->
         <article class="media">
           <div class="media-content">
@@ -56,61 +70,61 @@ export default {
   props: {
     title: {
       type: String,
-      required: true
+      required: true,
     },
     requestType: {
       type: String,
-      required: false
+      required: false,
     },
     description: {
       type: String,
-      required: true
+      required: true,
     },
     auth: {
       type: Boolean,
-      required: false
+      required: false,
     },
     admin: {
       type: Boolean,
-      required: false
+      required: false,
     },
     response: {
       type: String,
-      required: false
+      required: false,
     },
     request: {
       type: String,
-      required: false
-    }
+      required: false,
+    },
   },
-  data: function() {
+  data: function () {
     return {
-      isOpen: false
+      isOpen: false,
     };
   },
   computed: {
-    classObject: function() {
+    classObject: function () {
       return {
         "has-background-link": this.requestType === "GET",
         "has-background-danger": this.requestType === "DELETE",
         "has-background-success": this.requestType === "POST",
-        "has-background-primary": this.requestType === "PUT"
+        "has-background-primary": this.requestType === "PUT",
       };
     },
-    tagClassObject: function() {
+    tagClassObject: function () {
       return {
         "is-link": this.requestType === "GET",
         "is-danger": this.requestType === "DELETE",
         "is-success": this.requestType === "POST",
-        "is-primary": this.requestType === "PUT"
+        "is-primary": this.requestType === "PUT",
       };
-    }
+    },
   },
   filters: {
-    pretty: function(value) {
+    pretty: function (value) {
       return JSON.stringify(JSON.parse(value), null, 2);
-    }
-  }
+    },
+  },
 };
 </script>
 

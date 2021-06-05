@@ -1,15 +1,34 @@
 <template>
   <div>
-    <div class="modal" v-if="modalActive" v-bind:class="{ 'is-active': modalActive }">
-      <div class="modal-background" @click="closeModal()" @keyup.esc="closeModal()"></div>
+    <div
+      class="modal"
+      v-if="modalActive"
+      v-bind:class="{ 'is-active': modalActive }"
+    >
+      <div
+        class="modal-background"
+        @click="closeModal()"
+        @keyup.esc="closeModal()"
+      ></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title has-text-centered" v-if="tag.id">Επεξεργασία ετικέτας</p>
-          <p class="modal-card-title has-text-centered" v-else>Προσθήκη ετικέτας</p>
-          <button class="delete" aria-label="close" @click="closeModal()"></button>
+          <p class="modal-card-title has-text-centered" v-if="tag.id">
+            Επεξεργασία ετικέτας
+          </p>
+          <p class="modal-card-title has-text-centered" v-else>
+            Προσθήκη ετικέτας
+          </p>
+          <button
+            class="delete"
+            aria-label="close"
+            @click="closeModal()"
+          ></button>
         </header>
         <section class="modal-card-body">
-          <errors-component v-if="errors.length" :errors="errors"></errors-component>
+          <errors-component
+            v-if="errors.length"
+            :errors="errors"
+          ></errors-component>
 
           <!-- Tag Title -->
           <div class="field">
@@ -55,14 +74,18 @@
                     v-for="_tag in tags"
                     v-if="_tag.id != tag.id"
                     v-bind:value="_tag.id"
-                  >{{ _tag.title }}</option>
+                  >
+                    {{ _tag.title }}
+                  </option>
                 </select>
               </div>
             </div>
           </div>
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-success" @click="saveTag()">Αποθήκευση</button>
+          <button class="button is-success" @click="saveTag()">
+            Αποθήκευση
+          </button>
           <button class="button" @click="closeModal()">Ακύρωση</button>
         </footer>
       </div>
@@ -75,25 +98,25 @@ import { toast } from "bulma-toast";
 import { bus } from "../../app";
 
 export default {
-  data: function() {
+  data: function () {
     return {
       // single tag for insert/edit
       tag: {
         id: "",
         title: "",
         is_public: false,
-        parent_id: null
+        parent_id: null,
       },
       modalActive: false,
       edit: false,
       // errors
       errors: [],
       // all tags
-      tags: {}
+      tags: {},
     };
   },
-  mounted: function() {
-    bus.$on("openCreateEditModal", data => {
+  mounted: function () {
+    bus.$on("openCreateEditModal", (data) => {
       document.getElementsByTagName("html")[0].classList.add("is-clipped");
       this.errors = [];
       if (data.edit == true) {
@@ -104,7 +127,7 @@ export default {
           id: "",
           title: "",
           is_public: false,
-          parent_id: null
+          parent_id: null,
         };
         this.edit = false;
       }
@@ -117,15 +140,15 @@ export default {
       let vm = this;
       axios
         .get("/api/tags/" + vm.id)
-        .then(function(response) {
+        .then(function (response) {
           vm.tag = response.data.data;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           toast({
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" }
+            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
@@ -144,9 +167,9 @@ export default {
             .post("/api/tags", {
               title: this.tag.title,
               parent_id: this.tag.parent_id,
-              is_public: this.tag.is_public
+              is_public: this.tag.is_public,
             })
-            .then(function(response) {
+            .then(function (response) {
               bus.$emit("objectCreated", true);
               vm.modalActive = false;
               document
@@ -156,15 +179,15 @@ export default {
                 message: "Αποθηκεύτηκε επιτυχώς",
                 type: "is-success",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" }
+                animate: { in: "fadeIn", out: "fadeOut" },
               });
             })
-            .catch(function(error) {
+            .catch(function (error) {
               toast({
                 message: "Συνέβη κάποιο σφάλμα",
                 type: "is-danger",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" }
+                animate: { in: "fadeIn", out: "fadeOut" },
               });
               console.log(error.response.data);
             });
@@ -173,9 +196,9 @@ export default {
             .put("/api/tags/" + vm.tag.id, {
               title: this.tag.title,
               parent_id: this.tag.parent_id,
-              is_public: this.tag.is_public
+              is_public: this.tag.is_public,
             })
-            .then(function(response) {
+            .then(function (response) {
               bus.$emit("objectCreated", true);
               vm.modalActive = false;
               document
@@ -185,28 +208,28 @@ export default {
                 message: "Αποθηκεύτηκε επιτυχώς",
                 type: "is-success",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" }
+                animate: { in: "fadeIn", out: "fadeOut" },
               });
             })
-            .catch(function(error) {
+            .catch(function (error) {
               toast({
                 message: "Συνέβη κάποιο σφάλμα",
                 type: "is-danger",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" }
+                animate: { in: "fadeIn", out: "fadeOut" },
               });
               console.log(error);
             });
         }
       }
     },
-    closeModal: function() {
+    closeModal: function () {
       let vm = this;
       vm.modalActive = false;
       document.getElementsByTagName("html")[0].classList.remove("is-clipped");
       document.getElementsByTagName("html")[0].classList.remove("is-clipped");
-    }
-  }
+    },
+  },
 };
 </script>
 

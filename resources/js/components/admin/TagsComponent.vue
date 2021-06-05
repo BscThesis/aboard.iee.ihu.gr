@@ -1,11 +1,16 @@
 <template>
   <div>
     <section class="section" id="addTagButton">
-      <a class="button is-link is-capitalized" @click="openCreateEditModal()">Προσθήκη επικέτας</a>
+      <a class="button is-link is-capitalized" @click="openCreateEditModal()"
+        >Προσθήκη επικέτας</a
+      >
     </section>
 
     <!-- Tags Table -->
-    <table v-if="tags.length >= 0" class="table is-fullwidth is-bordered is-hoverable">
+    <table
+      v-if="tags.length >= 0"
+      class="table is-fullwidth is-bordered is-hoverable"
+    >
       <thead>
         <tr>
           <!-- <th class="has-text-centered">ID</th> -->
@@ -18,7 +23,9 @@
       <tbody>
         <tr v-for="tag in tags" v-bind:key="tag.id">
           <!-- <td class="has-text-centered">{{ tag.id }}</td> -->
-          <td class="has-text-centered" v-bind:title="tag.title">{{ tag.title }}</td>
+          <td class="has-text-centered" v-bind:title="tag.title">
+            {{ tag.title }}
+          </td>
           <!-- <td class="has-text-centered">{{ tag.parent_id }}</td> -->
           <!-- <td class="has-text-centered">{{ tag.is_public }}</td> -->
           <td class="has-text-centered">
@@ -63,19 +70,19 @@ import { toast } from "bulma-toast";
 import { bus } from "../../app";
 
 export default {
-  data: function() {
+  data: function () {
     return {
-      tags: {}
+      tags: {},
     };
   },
-  created: function() {
+  created: function () {
     this.getAllTags();
-    bus.$on("objectCreated", data => {
+    bus.$on("objectCreated", (data) => {
       if (data) {
         this.getAllTags();
       }
     });
-    bus.$on("objectRemoved", data => {
+    bus.$on("objectRemoved", (data) => {
       if (data) {
         this.getAllTags();
       }
@@ -86,15 +93,15 @@ export default {
       let vm = this;
       axios
         .get("/api/tags")
-        .then(function(response) {
+        .then(function (response) {
           vm.tags = response.data.data;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           toast({
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" }
+            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
@@ -103,7 +110,7 @@ export default {
       let data = {
         edit: edit,
         tags: this.tags,
-        tag: tag
+        tag: tag,
       };
       bus.$emit("openCreateEditModal", data);
     },
@@ -111,11 +118,11 @@ export default {
       let vm = this;
       let forDeletion = {
         type: "tag",
-        data: tag
+        data: tag,
       };
       bus.$emit("openModal", forDeletion);
-    }
-  }
+    },
+  },
 };
 </script>
 

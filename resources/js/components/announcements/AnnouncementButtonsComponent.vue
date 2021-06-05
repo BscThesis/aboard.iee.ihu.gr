@@ -2,8 +2,14 @@
   <div class="block">
     <div v-if="announcement.id" class="buttons is-centered">
       <back-button-component></back-button-component>
-      <edit-button-component v-if="is_admin || is_the_author" v-bind:id="announcement.id"></edit-button-component>
-      <delete-button-component v-if="is_admin || is_the_author" v-bind:announcement="announcement"></delete-button-component>
+      <edit-button-component
+        v-if="is_admin || is_the_author"
+        v-bind:id="announcement.id"
+      ></edit-button-component>
+      <delete-button-component
+        v-if="is_admin || is_the_author"
+        v-bind:announcement="announcement"
+      ></delete-button-component>
     </div>
   </div>
 </template>
@@ -17,16 +23,16 @@ export default {
   props: {
     announcement: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  data: function() {
+  data: function () {
     return {
       is_admin: false,
-      is_the_author: false
+      is_the_author: false,
     };
   },
-  mounted: function() {
+  mounted: function () {
     if (localStorage.getItem("user_info")) {
       let vm = this;
       vm.is_admin = JSON.parse(localStorage.getItem("user_info")).is_admin;
@@ -34,7 +40,7 @@ export default {
         JSON.parse(localStorage.getItem("user_info")).id ==
         this.announcement.author.id;
     }
-  }
+  },
 };
 </script>
 
