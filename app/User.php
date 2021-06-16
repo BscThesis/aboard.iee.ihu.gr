@@ -79,11 +79,11 @@ class User extends Authenticatable
         ldap_set_option($ds, LDAP_OPT_REFERRALS, 0);
         ldap_set_option($ds, LDAP_OPT_NETWORK_TIMEOUT, 10);
 
-        $name_gr = '';
-        $name_eng = '';
-        $email = '';
-        $username = '';
-        $is_author = false;
+        // $name_gr = '';
+        // $name_eng = '';
+        // $email = '';
+        // $username = '';
+        // $is_author = false;
 
         if (isset($username)) {
             $bind = 0;
@@ -187,6 +187,6 @@ class User extends Authenticatable
      */
     public function issues()
     {
-        return $this->hasMany('App\Issue ');
+        return $this->hasMany('App\Issue');
     }
 }
