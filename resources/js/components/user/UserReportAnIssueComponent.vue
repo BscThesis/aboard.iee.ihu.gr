@@ -55,7 +55,6 @@ export default {
   methods: {
     submitAnIssue: function () {
       let vm = this;
-      vm.btnLoading = true;
       vm.errors = [];
       if (!vm.issue.title) {
         vm.errors.push("Ο τίτλος δεν μπορεί να είναι κενός");
@@ -67,6 +66,34 @@ export default {
         if (!vm.issue.body.trim()) {
           vm.errors.push("Το κείμενο δεν μπορεί να είναι κενό");
         }
+      }
+
+      if (vm.errors.length == 0) {
+        vm.btnLoading = true;
+        axios
+          .post("/api/issues", {
+            title: this.issue.title,
+            body: this.issue.body,
+          })
+          .then(function (response) {
+            toast({
+              message: "Αποθηκεύτηκε επιτυχώς",
+              type: "is-success",
+              position: "bottom-right",
+              animate: { in: "fadeIn", out: "fadeOut" },
+            });
+            vm.btnLoading = false;
+          })
+          .catch(function (error) {
+            toast({
+              message: "Συνέβη κάποιο σφάλμα",
+              type: "is-danger",
+              position: "bottom-right",
+              animate: { in: "fadeIn", out: "fadeOut" },
+            });
+            console.log(error.response.data);
+            vm.btnLoading = false;
+          });
       }
     },
   },

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Issue;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreIssue;
 
 class IssueController extends Controller
 {
@@ -33,9 +34,10 @@ class IssueController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreIssue $request)
     {
-        //
+        $validated = $request->validated();
+        return Issue::create($validated);
     }
 
     /**

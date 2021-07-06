@@ -13,7 +13,7 @@ class StoreIssue extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return Auth::guard('api')->check();
     }
 
     /**
@@ -24,7 +24,11 @@ class StoreIssue extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => [
+                'required',
+                'max:255'
+            ],
+            'body' => 'required',
         ];
     }
 }
