@@ -55,5 +55,14 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+table {
+  table-layout: fixed;
+}
+
+td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 </style>
