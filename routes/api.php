@@ -77,6 +77,8 @@ Route::prefix('auth')->group(function () {
     Route::post('/subscribe', 'AuthController@subscribe');
 
     Route::get('/authors', 'AuthController@authors');
+
+    Route::post('/issues', 'IssueController@store');
 });
 
 //----------------------------------------
