@@ -57,7 +57,7 @@
       <div class="modal-background" @click="viewIssues = false">></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">Διαχείριση ετικετών</p>
+          <p class="modal-card-title">Προβολή προβλημάτων</p>
           <button
             class="delete"
             aria-label="close"
