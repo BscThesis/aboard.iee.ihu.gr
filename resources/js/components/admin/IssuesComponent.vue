@@ -23,9 +23,7 @@
             <button
               class="button is-danger is-light"
               title="Διαγραφή"
-              v-on:click="
-                return window.confirm('Are you sure you want to delete this?');
-              "
+              v-on:click="deleteIssue("issue.id")"
             >
               <span class="icon is-small">
                 <i class="fas fa-trash"></i>
@@ -49,7 +47,7 @@ export default {
     this.getAllIssues();
   },
   methods: {
-    getAllIssues() {
+    getAllIssues: function () {
       let vm = this;
       axios
         .get("/api/issues")
@@ -64,6 +62,11 @@ export default {
           });
           console.log(error);
         });
+    },
+    deleteIssue: function (id) {
+      if (confirm("Do you really want to delete this issue?")) {
+        console.log(id);
+      }
     },
   },
 };
