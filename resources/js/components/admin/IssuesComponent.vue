@@ -66,7 +66,7 @@ td {
   text-overflow: ellipsis;
 }
 
-td :hover {
+td:hover {
   white-space: unset;
   overflow: unset;
   text-overflow: unset;
