@@ -81,6 +81,7 @@ export default {
             toast({
               message: "Αποθηκεύτηκε επιτυχώς",
               type: "is-success",
+              position: "bottom-right",
             });
             vm.btnLoading = false;
           })
@@ -88,6 +89,7 @@ export default {
             toast({
               message: "Συνέβη κάποιο σφάλμα",
               type: "is-danger",
+              position: "bottom-right",
             });
             console.log(error.response.data);
             vm.btnLoading = false;
