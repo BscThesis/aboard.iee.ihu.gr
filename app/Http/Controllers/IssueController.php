@@ -37,10 +37,7 @@ class IssueController extends Controller
     public function store(StoreIssue $request)
     {
         $validated = $request->validated();
-        return auth('api')->user()->issues()->create([
-            'title' => $request->input('title'),
-            'body' => $request->input('body'),
-        ]);
+        return auth('api')->user()->issues()->create($validated);
     }
 
     /**
