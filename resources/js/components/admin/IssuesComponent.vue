@@ -24,7 +24,7 @@
               class="button is-danger is-light"
               title="Διαγραφή"
               v-on:click="
-                return confirm('Are you sure you want to delete this?');
+                return window.confirm('Are you sure you want to delete this?');
               "
             >
               <span class="icon is-small">
