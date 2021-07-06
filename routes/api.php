@@ -85,6 +85,8 @@ Route::prefix('auth')->group(function () {
 
 Route::post('/issues', 'IssueController@store');
 
+Route::get('/issues', 'IssueController@index');
+
 //----------------------------------------
 //          Fallback route
 //----------------------------------------
