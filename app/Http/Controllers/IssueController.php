@@ -5,9 +5,21 @@ namespace App\Http\Controllers;
 use App\Issue;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreIssue;
+use App\Http\Resources\Issue as IssueResource;
 
 class IssueController extends Controller
 {
+
+    /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,17 +27,10 @@ class IssueController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        if (auth('api')->user()->is_admin) {
+            $issues = Issue::orderBy('created_at')->get();
+            return IssueResource::collection($issues);
+        }
     }
 
     /**
@@ -38,40 +43,6 @@ class IssueController extends Controller
     {
         $validated = $request->validated();
         return auth('api')->user()->issues()->create($validated);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Issue  $issue
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Issue $issue)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Issue  $issue
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Issue $issue)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Issue  $issue
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Issue $issue)
-    {
-        //
     }
 
     /**
