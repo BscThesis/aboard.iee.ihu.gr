@@ -65,7 +65,7 @@
           ></button>
         </header>
         <section class="modal-card-body">
-          <admin-component></admin-component>
+          <issues-component></issues-component>
         </section>
         <footer class="modal-card-foot">
           <button class="button" @click="viewIssues = false">Exit</button>

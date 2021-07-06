@@ -188,6 +188,12 @@ Vue.component(
     require("./components/admin/TagsComponent.vue").default
 );
 
+// Admin view issues component
+Vue.component(
+    "issues-component",
+    require("./components/admin/IssuesComponent.vue").default
+);
+
 // Admin dashboard component
 Vue.component(
     "admin-modal",
