@@ -30,7 +30,7 @@
       v-bind:class="{ 'is-active': modalOpen }"
     >
       <div class="modal-background" @click="modalOpen = false">></div>
-      <div class="modal-card">
+      <div class="modal-card" style="width: 80%">
         <header class="modal-card-head">
           <p class="modal-card-title">Διαχείριση ετικετών</p>
           <button
