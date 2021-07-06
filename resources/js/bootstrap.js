@@ -1,3 +1,5 @@
+import * as bulmaToast from "bulma-toast";
+
 window._ = require("lodash");
 
 window.axios = require("axios");
