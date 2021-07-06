@@ -44,7 +44,10 @@
 export default {
   data: function () {
     return {
-      issue: {},
+      issue: {
+        title: "",
+        body: "",
+      },
       errors: [],
       btnLoading: false,
     };
@@ -60,8 +63,10 @@ export default {
       if (!vm.issue.body.trim() || !vm.issue.body) {
         vm.errors.push("Το κείμενο δεν μπορεί να είναι κενό");
       }
-      if (!vm.issue.body.trim() && vm.issue.body) {
-        vm.errors.push("Το κείμενο δεν μπορεί να είναι κενό");
+      if (vm.issue.body) {
+        if (!vm.issue.body.trim()) {
+          vm.errors.push("Το κείμενο δεν μπορεί να είναι κενό");
+        }
       }
     },
   },
