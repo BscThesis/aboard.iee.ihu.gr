@@ -16,7 +16,7 @@ export default {
     getAllIssues() {
       let vm = this;
       axios
-        .get("/api/tags")
+        .get("/api/issues")
         .then(function (response) {
           vm.issues = response.data.data;
         })
