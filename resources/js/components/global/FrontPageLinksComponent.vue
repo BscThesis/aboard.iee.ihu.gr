@@ -52,6 +52,7 @@
     <div
       v-if="is_admin"
       class="modal"
+      style="width: 80%"
       v-bind:class="{ 'is-active': viewIssues }"
     >
       <div class="modal-background" @click="viewIssues = false">></div>
