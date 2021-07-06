@@ -23,7 +23,7 @@
             <button
               class="button is-danger is-light"
               title="Διαγραφή"
-              v-on:click="deleteIssue("issue.id")"
+              v-on:click="deleteIssue(issue.id)"
             >
               <span class="icon is-small">
                 <i class="fas fa-trash"></i>
