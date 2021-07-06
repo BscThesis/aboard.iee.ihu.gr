@@ -19,7 +19,7 @@
           <td class="has-text-centered">
             {{ issue.body }}
           </td>
-          <td class="has-text-centered">
+          <td class="has-text-centered" style="width: 10%">
             <button class="button is-danger is-light" title="Διαγραφή">
               <span class="icon is-small">
                 <i class="fas fa-trash"></i>
