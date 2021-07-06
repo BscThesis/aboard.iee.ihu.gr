@@ -136,6 +136,12 @@ td {
   text-overflow: ellipsis;
 }
 
+td:hover {
+  white-space: unset;
+  overflow: unset;
+  text-overflow: unset;
+}
+
 .sixty-percent {
   width: 60%;
 }

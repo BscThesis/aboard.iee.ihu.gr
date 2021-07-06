@@ -8,6 +8,7 @@
         <tr>
           <th class="has-text-centered">Τίτλος</th>
           <th class="has-text-centered">Περιγραφή</th>
+          <th class="has-text-centered">Διαγραφή</th>
         </tr>
       </thead>
       <tbody>
@@ -17,6 +18,13 @@
           </td>
           <td class="has-text-centered">
             {{ issue.body }}
+          </td>
+          <td class="has-text-centered">
+            <button class="button is-danger is-light" title="Διαγραφή">
+              <span class="icon is-small">
+                <i class="fas fa-trash"></i>
+              </span>
+            </button>
           </td>
         </tr>
       </tbody>
