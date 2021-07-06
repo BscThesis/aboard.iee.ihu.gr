@@ -94,14 +94,14 @@ export default {
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
     },
     getSelectedTags: function () {
-      let subscriptions = JSON.parse(localStorage.getItem("user_info"))
-        .subscriptions;
+      let subscriptions = JSON.parse(
+        localStorage.getItem("user_info")
+      ).subscriptions;
       let tagArray = [];
       let vm = this;
 
@@ -126,7 +126,6 @@ export default {
               message: "Αποθηκεύτηκε",
               type: "is-success",
               position: "bottom-right",
-              animate: { in: "fadeIn", out: "fadeOut" },
             });
           })
           .catch(function (error) {
@@ -135,7 +134,6 @@ export default {
               message: "Συνέβη κάποιο σφάλμα",
               type: "is-danger",
               position: "bottom-right",
-              animate: { in: "fadeIn", out: "fadeOut" },
             });
             console.log(error);
           });
@@ -144,7 +142,6 @@ export default {
           message: "Επιλέξτε τουλάχιστον μία ετικέτα",
           type: "is-danger",
           position: "bottom-right",
-          animate: { in: "fadeIn", out: "fadeOut" },
         });
       }
     },
@@ -171,8 +168,9 @@ export default {
     },
     selectedTagsNames: function () {
       let vm = this;
-      let subscriptions = JSON.parse(localStorage.getItem("user_info"))
-        .subscriptions;
+      let subscriptions = JSON.parse(
+        localStorage.getItem("user_info")
+      ).subscriptions;
       let tagArray = [];
       if (subscriptions.length > 0) {
         subscriptions.forEach((element) => {

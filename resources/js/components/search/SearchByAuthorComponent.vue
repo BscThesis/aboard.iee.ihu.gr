@@ -83,7 +83,6 @@ export default {
               message: "Δε βρέθηκε",
               type: "is-danger",
               position: "bottom-right",
-              animate: { in: "fadeIn", out: "fadeOut" },
             });
           }
 
@@ -95,7 +94,6 @@ export default {
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });

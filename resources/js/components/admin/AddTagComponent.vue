@@ -148,7 +148,6 @@ export default {
             message: "Συνέβη κάποιο σφάλμα",
             type: "is-danger",
             position: "bottom-right",
-            animate: { in: "fadeIn", out: "fadeOut" },
           });
           console.log(error);
         });
@@ -179,7 +178,6 @@ export default {
                 message: "Αποθηκεύτηκε επιτυχώς",
                 type: "is-success",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" },
               });
             })
             .catch(function (error) {
@@ -187,7 +185,6 @@ export default {
                 message: "Συνέβη κάποιο σφάλμα",
                 type: "is-danger",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" },
               });
               console.log(error.response.data);
             });
@@ -208,7 +205,6 @@ export default {
                 message: "Αποθηκεύτηκε επιτυχώς",
                 type: "is-success",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" },
               });
             })
             .catch(function (error) {
@@ -216,7 +212,6 @@ export default {
                 message: "Συνέβη κάποιο σφάλμα",
                 type: "is-danger",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" },
               });
               console.log(error);
             });

@@ -105,7 +105,6 @@ export default {
                 message: "Συνδεθήκατε επιτυχώς",
                 type: "is-success",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" },
               });
               localStorage.token = response.data.access_token;
               axios
@@ -128,7 +127,6 @@ export default {
                 message: response.statusText,
                 type: "is-danger",
                 position: "bottom-right",
-                animate: { in: "fadeIn", out: "fadeOut" },
               });
               console.log(response.data);
             }
@@ -138,7 +136,6 @@ export default {
               message: "Συνέβη κάποιο σφάλμα",
               type: "is-danger",
               position: "bottom-right",
-              animate: { in: "fadeIn", out: "fadeOut" },
             });
             console.log(error);
           });

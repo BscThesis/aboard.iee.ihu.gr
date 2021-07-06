@@ -74,7 +74,6 @@ export default {
               message: "Διεγράφη επιτυχώς",
               type: "is-success",
               position: "bottom-right",
-              animate: { in: "fadeIn", out: "fadeOut" },
             });
             document
               .getElementsByTagName("html")[0]
@@ -87,7 +86,6 @@ export default {
               message: "Συνέβη κάποιο σφάλμα",
               type: "is-danger",
               position: "bottom-right",
-              animate: { in: "fadeIn", out: "fadeOut" },
             });
             document
               .getElementsByTagName("html")[0]
