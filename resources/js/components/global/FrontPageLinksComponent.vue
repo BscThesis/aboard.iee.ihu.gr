@@ -52,11 +52,10 @@
     <div
       v-if="is_admin"
       class="modal"
-      style="width: 80%"
       v-bind:class="{ 'is-active': viewIssues }"
     >
       <div class="modal-background" @click="viewIssues = false">></div>
-      <div class="modal-card">
+      <div class="modal-card" style="width: 80%">
         <header class="modal-card-head">
           <p class="modal-card-title">Προβολή προβλημάτων</p>
           <button
