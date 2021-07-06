@@ -65,4 +65,10 @@ td {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+td :hover {
+  white-space: unset;
+  overflow: unset;
+  text-overflow: unset;
+}
 </style>

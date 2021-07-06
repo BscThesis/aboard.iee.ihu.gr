@@ -13,7 +13,7 @@
     </div>
 
     <div class="field">
-      <label class="label">Κείμενο</label>
+      <label class="label">Περιγραφή</label>
       <div class="control">
         <textarea
           class="textarea"
