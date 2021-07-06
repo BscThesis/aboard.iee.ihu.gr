@@ -1,14 +1,19 @@
 <template>
   <div class="block" v-if="is_admin == true || is_author == true">
     <div class="buttons is-right">
-      <!-- <a v-if="is_admin" class="button is-danger is-uppercase" href="/admin">Admin area</a> -->
-      <!-- <admin-modal v-if="is_admin"></admin-modal> -->
       <button
         v-if="is_admin"
         class="button is-danger is-uppercase"
         @click="modalOpen = true"
       >
         Admin area
+      </button>
+      <button
+        v-if="is_admin"
+        class="button is-link is-uppercase"
+        @click="viewIssues = true"
+      >
+        View issues
       </button>
       <a
         v-if="is_author"
@@ -18,6 +23,7 @@
       >
     </div>
 
+    <!-- Admin area -->
     <div
       v-if="is_admin"
       class="modal"
@@ -41,6 +47,31 @@
         </footer>
       </div>
     </div>
+
+    <!-- View issues -->
+    <div
+      v-if="is_admin"
+      class="modal"
+      v-bind:class="{ 'is-active': viewIssues }"
+    >
+      <div class="modal-background" @click="viewIssues = false">></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Διαχείριση ετικετών</p>
+          <button
+            class="delete"
+            aria-label="close"
+            @click="viewIssues = false"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <admin-component></admin-component>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button" @click="viewIssues = false">Exit</button>
+        </footer>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -53,10 +84,18 @@ export default {
       is_author: false,
       is_admin: false,
       modalOpen: false,
+      viewIssues: false,
     };
   },
   watch: {
     modalOpen: function (value) {
+      if (value) {
+        document.getElementsByTagName("html")[0].classList.add("is-clipped");
+      } else {
+        document.getElementsByTagName("html")[0].classList.remove("is-clipped");
+      }
+    },
+    viewIssues: function (value) {
       if (value) {
         document.getElementsByTagName("html")[0].classList.add("is-clipped");
       } else {
