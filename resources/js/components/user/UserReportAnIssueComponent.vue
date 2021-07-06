@@ -83,6 +83,8 @@ export default {
               type: "is-success",
               position: "bottom-right",
             });
+            vm.title = "";
+            vm.body = "";
             vm.btnLoading = false;
           })
           .catch(function (error) {
