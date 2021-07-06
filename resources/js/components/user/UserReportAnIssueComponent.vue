@@ -60,6 +60,9 @@ export default {
       if (!vm.issue.body.trim() || !vm.issue.body) {
         vm.errors.push("Το κείμενο δεν μπορεί να είναι κενό");
       }
+      if (!vm.issue.body.trim() && vm.issue.body) {
+        vm.errors.push("Το κείμενο δεν μπορεί να είναι κενό");
+      }
     },
   },
 };
