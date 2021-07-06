@@ -8,7 +8,7 @@
         <tr>
           <th class="has-text-centered">Τίτλος</th>
           <th class="has-text-centered">Περιγραφή</th>
-          <th class="has-text-centered" style="width: 10%">Διαγραφή</th>
+          <th class="has-text-centered" style="width: 8%">Διαγραφή</th>
         </tr>
       </thead>
       <tbody>
@@ -20,7 +20,13 @@
             {{ issue.body }}
           </td>
           <td class="has-text-centered">
-            <button class="button is-danger is-light" title="Διαγραφή">
+            <button
+              class="button is-danger is-light"
+              title="Διαγραφή"
+              v-on:click="
+                return confirm('Are you sure you want to delete this?');
+              "
+            >
               <span class="icon is-small">
                 <i class="fas fa-trash"></i>
               </span>
