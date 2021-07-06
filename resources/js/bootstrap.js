@@ -1,5 +1,3 @@
-import * as bulmaToast from "bulma-toast";
-
 window._ = require("lodash");
 
 window.axios = require("axios");
@@ -25,9 +23,3 @@ window.axios.interceptors.response.use(
         return error.response;
     }
 );
-
-bulmaToast.setDefaults({
-    duration: 1000,
-    position: "top-left",
-    closeOnClick: false,
-});
