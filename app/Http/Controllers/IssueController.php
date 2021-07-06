@@ -38,8 +38,8 @@ class IssueController extends Controller
     {
         $validated = $request->validated();
         return auth('api')->user()->issues()->create([
-            'title' => $validated->title,
-            'body' => $validated->body,
+            'title' => 'foo',
+            'body' => 'bar',
         ]);
     }
 
