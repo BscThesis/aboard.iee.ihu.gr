@@ -51,8 +51,16 @@ class IssueController extends Controller
      * @param  \App\Issue  $issue
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Issue $issue)
+    public function destroy($id)
     {
-        //
+        if (auth('api')->user()->is_admin) {
+            $issue = Issue::findOrFail($id);
+            if ($issue->delete()) {
+                $issues = issue::orderBy('id', 'desc')->get();
+                return issueResource::collection($issues);
+            }
+        } else {
+            return response()->json(['message' => 'This action is unauthorized.'], 403);
+        }
     }
 }

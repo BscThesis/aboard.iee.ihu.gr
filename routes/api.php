@@ -87,6 +87,8 @@ Route::post('/issues', 'IssueController@store');
 
 Route::get('/issues', 'IssueController@index');
 
+Route::delete('/issues/{id}', 'IssueController@destroy');
+
 //----------------------------------------
 //          Fallback route
 //----------------------------------------
