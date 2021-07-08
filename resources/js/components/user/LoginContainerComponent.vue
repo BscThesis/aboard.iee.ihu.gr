@@ -107,6 +107,7 @@ export default {
                 position: "bottom-right",
               });
               localStorage.token = response.data.access_token;
+              localStorage.refresh = response.data.refresh_token;
               axios
                 .get("/api/auth/user")
                 .then((response) => {
@@ -117,6 +118,7 @@ export default {
                 })
                 .catch((error) => {
                   localStorage.removeItem("token");
+                  localStorage.removeItem("refresh");
                   localStorage.removeItem("user_info");
                   delete axios.defaults.headers.common["Authorization"];
                   window.location.href = "/login";

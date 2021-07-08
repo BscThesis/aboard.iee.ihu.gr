@@ -29,16 +29,16 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Auth::provider('my-ldap', function($app, array $config) {
+        Auth::provider('my-ldap', function ($app, array $config) {
             return new MyUserProvider($config['model']);
         });
 
         Passport::routes(function ($router) {
             $router->forAccessTokens();
         });
-        Passport::tokensExpireIn(now()->addHours(1));
-        Passport::refreshTokensExpireIn(now()->addHours(1));
-        Passport::personalAccessTokensExpireIn(now()->addHours(1));
+        Passport::tokensExpireIn(now()->addMinutes(2));
+        Passport::refreshTokensExpireIn(now()->addMinutes(5));
+        Passport::personalAccessTokensExpireIn(now()->addMinutes(5));
         Passport::cookie('announcements_token');
     }
 }

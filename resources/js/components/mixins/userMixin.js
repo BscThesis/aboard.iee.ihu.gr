@@ -14,6 +14,7 @@ export default {
             let vm = this;
             if (localStorage.getItem("token")) {
                 const response = await axios.get("/api/auth/user");
+                console.log(response);
                 if (response.status == 200 && response.statusText == "OK") {
                     localStorage.setItem(
                         "user_info",
