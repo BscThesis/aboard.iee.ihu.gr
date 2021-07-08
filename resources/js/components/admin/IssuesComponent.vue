@@ -42,7 +42,7 @@ import { toast } from "bulma-toast";
 export default {
   data: function () {
     return {
-      issues: {},
+      issues: [],
     };
   },
   created: function () {
