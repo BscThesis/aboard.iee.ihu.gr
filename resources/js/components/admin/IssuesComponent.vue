@@ -64,8 +64,27 @@ export default {
         });
     },
     deleteIssue: function (id) {
+      let url = "/api/issues/";
       if (confirm("Do you really want to delete this issue?")) {
-        console.log(id);
+        if (url) {
+          axios
+            .delete(url + id)
+            .then(function (response) {
+              toast({
+                message: "Διεγράφη επιτυχώς",
+                type: "is-success",
+                position: "bottom-right",
+              });
+            })
+            .catch(function (error) {
+              toast({
+                message: "Συνέβη κάποιο σφάλμα",
+                type: "is-danger",
+                position: "bottom-right",
+              });
+              console.log(error);
+            });
+        }
       }
     },
   },

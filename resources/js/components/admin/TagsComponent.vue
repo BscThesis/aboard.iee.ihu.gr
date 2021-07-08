@@ -13,21 +13,15 @@
     >
       <thead>
         <tr>
-          <!-- <th class="has-text-centered">ID</th> -->
           <th class="has-text-centered sixty-percent">Όνομα</th>
-          <!-- <th class="has-text-centered">Γονική ετικέτα</th> -->
-          <!-- <th class="has-text-centered">Δημόσιο</th> -->
           <th class="has-text-centered forty-percent">Διαχείριση</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="tag in tags" v-bind:key="tag.id">
-          <!-- <td class="has-text-centered">{{ tag.id }}</td> -->
           <td class="has-text-centered" v-bind:title="tag.title">
             {{ tag.title }}
           </td>
-          <!-- <td class="has-text-centered">{{ tag.parent_id }}</td> -->
-          <!-- <td class="has-text-centered">{{ tag.is_public }}</td> -->
           <td class="has-text-centered">
             <div class="buttons is-centered">
               <button
