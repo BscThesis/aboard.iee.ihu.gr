@@ -28,11 +28,10 @@ class AuthController extends Controller
     /**
      * Logs a user in
      *
-     * @return void
+     * @return json
      */
     public function login(Request $request)
     {
-
         $validatedData = $request->validate([
             'username' => 'required',
             'password' => 'required'
@@ -56,6 +55,44 @@ class AuthController extends Controller
             Notification::send($user, new UserLoggedIn());
             $user->update([
                 'last_login_at' => Carbon::now()->toDateTimeString(),
+            ]);
+
+            return $response->getBody();
+        } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+            Auth('web')->logout();
+            Session::flush();
+
+            if ($e->getCode() === 400) {
+                return response()->json('Invalid request', $e->getCode());
+            } else if ($e->getCode() === 401) {
+                return response()->json('Invalid credentials', 401);
+            }
+
+            return response()->json('Something went wrong on the server.', $e->getCode());
+        }
+    }
+
+    /**
+     * Logs a user in
+     *
+     * @return json
+     */
+    public function refresh(Request $request)
+    {
+        $validatedData = $request->validate([
+            'refresh_token' => 'required',
+        ]);
+
+        $http = new \GuzzleHttp\Client;
+
+        try {
+            $response = $http->post(config('services.passport.login_endpoint'), [
+                'form_params' => [
+                    'grant_type' => 'refresh_token',
+                    'refresh_token' => $validatedData['refresh_token'],
+                    'client_id' => config('services.passport.client_id'),
+                    'client_secret' => config('services.passport.client_secret'),
+                ]
             ]);
 
             return $response->getBody();
