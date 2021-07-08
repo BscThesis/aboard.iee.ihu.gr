@@ -37,7 +37,7 @@ class AuthController extends Controller
             'username' => 'required',
             'password' => 'required'
         ]);
-        
+
         $http = new \GuzzleHttp\Client;
 
         try {
@@ -60,7 +60,6 @@ class AuthController extends Controller
 
             return $response->getBody();
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-
             Auth('web')->logout();
             Session::flush();
 
@@ -88,7 +87,7 @@ class AuthController extends Controller
         Auth('web')->logout();
         Session::flush();
 
-        return response()->json(['message' =>'Logout success'], 200);
+        return response()->json(['message' => 'Logout success'], 200);
     }
 
     /**
