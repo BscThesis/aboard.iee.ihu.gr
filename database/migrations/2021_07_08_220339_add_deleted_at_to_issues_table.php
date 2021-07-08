@@ -14,7 +14,7 @@ class AddDeletedAtToIssuesTable extends Migration
     public function up()
     {
         Schema::table('issues', function (Blueprint $table) {
-            //
+            $table->softDeletes();
         });
     }
 
@@ -26,7 +26,7 @@ class AddDeletedAtToIssuesTable extends Migration
     public function down()
     {
         Schema::table('issues', function (Blueprint $table) {
-            //
+            $table->dropColumn('deleted_at');
         });
     }
 }
