@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import { toast } from "bulma-toast";
+
 export default {
   data: function () {
     return {
