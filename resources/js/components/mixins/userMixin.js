@@ -14,15 +14,20 @@ export default {
             let vm = this;
             if (localStorage.getItem("token")) {
                 const response = await axios.get("/api/auth/user");
-                console.log(response);
                 if (response.status == 200 && response.statusText == "OK") {
                     localStorage.setItem(
                         "user_info",
                         JSON.stringify(response.data.data)
                     );
                     vm.userAuthenticated = true;
+                } else if (
+                    response.status == 401 &&
+                    response.statusText == "Unauthorized"
+                ) {
+                    console.log("Unauthorized");
                 } else {
                     localStorage.removeItem("token");
+                    localStorage.removeItem("refresh");
                     localStorage.removeItem("user_info");
                     delete axios.defaults.headers.common["Authorization"];
                 }

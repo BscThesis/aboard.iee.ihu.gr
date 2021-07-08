@@ -64,12 +64,14 @@ export default {
         .get("/api/auth/logout")
         .then((response) => {
           localStorage.removeItem("token");
+          localStorage.removeItem("refresh");
           localStorage.removeItem("user_info");
           delete axios.defaults.headers.common["Authorization"];
           window.location.href = "/login";
         })
         .catch((error) => {
           localStorage.removeItem("token");
+          localStorage.removeItem("refresh");
           localStorage.removeItem("user_info");
           delete axios.defaults.headers.common["Authorization"];
           window.location.href = "/login";

@@ -24,7 +24,12 @@
 
     <div class="navbar-dropdown is-radiusless is-paddingless is-right">
       <div
-        class="notification is-uppercase is-radiusless is-marginless has-text-weight-bold is-unselectable"
+        class="
+          notification
+          is-uppercase is-radiusless is-marginless
+          has-text-weight-bold
+          is-unselectable
+        "
       >
         Activity (Last 10)
       </div>
