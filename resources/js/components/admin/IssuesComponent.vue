@@ -66,6 +66,7 @@ export default {
         });
     },
     deleteIssue: function (id) {
+      let vm = this;
       let url = "/api/issues/";
       if (confirm("Do you really want to delete this issue?")) {
         if (url) {
@@ -77,6 +78,7 @@ export default {
                 type: "is-success",
                 position: "bottom-right",
               });
+              vm.getAllIssues();
             })
             .catch(function (error) {
               toast({
