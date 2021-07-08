@@ -1,5 +1,5 @@
 <template>
-  <div class="block">
+  <div class="section">
     <table
       v-if="issues.length >= 0"
       class="table is-fullwidth is-bordered is-hoverable"
