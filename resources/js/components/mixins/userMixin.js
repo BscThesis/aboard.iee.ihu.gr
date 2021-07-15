@@ -26,8 +26,7 @@ export default {
                 ) {
                     axios
                         .post("/api/auth/refresh", {
-                            refresh_token:
-                                localStorage.getItem("refresh_token"),
+                            refresh_token: localStorage.getItem("refresh"),
                         })
                         .then(function (response) {
                             if (response.status == 200) {
