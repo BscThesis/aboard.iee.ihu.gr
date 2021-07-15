@@ -53,20 +53,10 @@ export default {
                                     });
                                 window.location.replace("/");
                             } else {
-                                toast({
-                                    message: response.statusText,
-                                    type: "is-danger",
-                                    position: "bottom-right",
-                                });
                                 console.log(response.data);
                             }
                         })
                         .catch(function (error) {
-                            toast({
-                                message: "Συνέβη κάποιο σφάλμα",
-                                type: "is-danger",
-                                position: "bottom-right",
-                            });
                             console.log(error);
                         });
                 } else {
