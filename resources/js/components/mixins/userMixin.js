@@ -24,39 +24,43 @@ export default {
                     response.status == 401 &&
                     response.statusText == "Unauthorized"
                 ) {
-                    axios
-                        .post("/api/auth/refresh", {
-                            refresh_token: localStorage.getItem("refresh"),
-                        })
-                        .then(function (response) {
-                            if (response.status == 200) {
-                                localStorage.token = response.data.access_token;
-                                localStorage.refresh =
-                                    response.data.refresh_token;
-                                axios
-                                    .get("/api/auth/user")
-                                    .then((response) => {
-                                        localStorage.setItem(
-                                            "user_info",
-                                            JSON.stringify(response.data.data)
-                                        );
-                                    })
-                                    .catch((error) => {
-                                        localStorage.removeItem("token");
-                                        localStorage.removeItem("refresh");
-                                        localStorage.removeItem("user_info");
-                                        delete axios.defaults.headers.common[
-                                            "Authorization"
-                                        ];
-                                        window.location.href = "/login";
-                                    });
-                            } else {
-                                console.log(response.data);
-                            }
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
+                    const response = await axios.post("/api/auth/refresh", {
+                        refresh_token: localStorage.getItem("refresh"),
+                    });
+                    console.log(response);
+                    // axios
+                    //     .post("/api/auth/refresh", {
+                    //         refresh_token: localStorage.getItem("refresh"),
+                    //     })
+                    //     .then(function (response) {
+                    //         if (response.status == 200) {
+                    //             localStorage.token = response.data.access_token;
+                    //             localStorage.refresh =
+                    //                 response.data.refresh_token;
+                    //             axios
+                    //                 .get("/api/auth/user")
+                    //                 .then((response) => {
+                    //                     localStorage.setItem(
+                    //                         "user_info",
+                    //                         JSON.stringify(response.data.data)
+                    //                     );
+                    //                 })
+                    //                 .catch((error) => {
+                    //                     localStorage.removeItem("token");
+                    //                     localStorage.removeItem("refresh");
+                    //                     localStorage.removeItem("user_info");
+                    //                     delete axios.defaults.headers.common[
+                    //                         "Authorization"
+                    //                     ];
+                    //                     window.location.href = "/login";
+                    //                 });
+                    //         } else {
+                    //             console.log(response.data);
+                    //         }
+                    //     })
+                    //     .catch(function (error) {
+                    //         console.log(error);
+                    //     });
                 } else {
                     localStorage.removeItem("token");
                     localStorage.removeItem("refresh");
