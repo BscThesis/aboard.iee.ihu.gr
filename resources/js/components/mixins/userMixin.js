@@ -50,7 +50,6 @@ export default {
                                         ];
                                         window.location.href = "/login";
                                     });
-                                window.location.replace("/");
                             } else {
                                 console.log(response.data);
                             }
