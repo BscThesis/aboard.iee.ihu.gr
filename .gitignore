@@ -12,6 +12,6 @@ npm-debug.log
 yarn-error.log
 .env
 foobar.vue
-/public/js/*
-/public/fonts/*
-/public/css/*
+public/js/*
+public/fonts/*
+public/css/*
