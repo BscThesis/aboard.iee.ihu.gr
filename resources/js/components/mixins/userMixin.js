@@ -24,7 +24,7 @@ export default {
                     response.status == 401 &&
                     response.statusText == "Unauthorized"
                 ) {
-                    console.log("Unauthorized");
+                    console.log("Unauthorized from here");
                 } else {
                     localStorage.removeItem("token");
                     localStorage.removeItem("refresh");
