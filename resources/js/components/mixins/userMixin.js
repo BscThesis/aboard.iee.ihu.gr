@@ -24,7 +24,51 @@ export default {
                     response.status == 401 &&
                     response.statusText == "Unauthorized"
                 ) {
-                    console.log("Unauthorized from here");
+                    axios
+                        .post("/api/auth/refresh", {
+                            refresh_token:
+                                localStorage.getItem("refresh_token"),
+                        })
+                        .then(function (response) {
+                            if (response.status == 200) {
+                                localStorage.token = response.data.access_token;
+                                localStorage.refresh =
+                                    response.data.refresh_token;
+                                axios
+                                    .get("/api/auth/user")
+                                    .then((response) => {
+                                        localStorage.setItem(
+                                            "user_info",
+                                            JSON.stringify(response.data.data)
+                                        );
+                                    })
+                                    .catch((error) => {
+                                        localStorage.removeItem("token");
+                                        localStorage.removeItem("refresh");
+                                        localStorage.removeItem("user_info");
+                                        delete axios.defaults.headers.common[
+                                            "Authorization"
+                                        ];
+                                        window.location.href = "/login";
+                                    });
+                                window.location.replace("/");
+                            } else {
+                                toast({
+                                    message: response.statusText,
+                                    type: "is-danger",
+                                    position: "bottom-right",
+                                });
+                                console.log(response.data);
+                            }
+                        })
+                        .catch(function (error) {
+                            toast({
+                                message: "Συνέβη κάποιο σφάλμα",
+                                type: "is-danger",
+                                position: "bottom-right",
+                            });
+                            console.log(error);
+                        });
                 } else {
                     localStorage.removeItem("token");
                     localStorage.removeItem("refresh");
