@@ -14,16 +14,18 @@ export default {
         checkAuth: async function () {
             let vm = this;
             if (localStorage.getItem("token")) {
-                console.log("i am here 1");
                 const response = await vm.checkAuth2();
             }
-            console.log("i am here 2");
             bus.$emit("authCheckFinished");
         },
         checkAuth2: function () {
+            console.log("1");
             const response = axios.get("/api/auth/user");
+            console.log("2");
             console.log(response);
+            console.log("3");
             if (response.status == 200 && response.statusText == "OK") {
+                console.log("4");
                 localStorage.setItem(
                     "user_info",
                     JSON.stringify(response.data.data)
@@ -34,6 +36,7 @@ export default {
                 response.statusText == "Unauthorized" &&
                 localStorage.getItem("refresh")
             ) {
+                console.log("5");
                 const response = axios.post("/api/auth/refresh", {
                     refresh_token: localStorage.getItem("refresh"),
                 });
@@ -72,6 +75,7 @@ export default {
                 //         console.log(error);
                 //     });
             } else {
+                console.log("6");
                 localStorage.removeItem("token");
                 localStorage.removeItem("refresh");
                 localStorage.removeItem("user_info");
