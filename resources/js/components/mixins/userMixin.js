@@ -19,6 +19,7 @@ export default {
             bus.$emit("authCheckFinished");
         },
         checkAuth2: async function () {
+            let vm = this;
             const response = await axios.get("/api/auth/user");
             console.log(response);
             if (response.status == 200 && response.statusText == "OK") {
