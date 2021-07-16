@@ -14,8 +14,10 @@ export default {
         checkAuth: async function () {
             let vm = this;
             if (localStorage.getItem("token")) {
+                console.log("i am here 1");
                 const response = await vm.checkAuth2();
             }
+            console.log("i am here 2");
             bus.$emit("authCheckFinished");
         },
         checkAuth2: function () {
