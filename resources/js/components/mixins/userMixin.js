@@ -1,5 +1,4 @@
 import { bus } from "../../app";
-import { toast } from "bulma-toast";
 
 export default {
     data: function () {
@@ -21,7 +20,6 @@ export default {
         checkAuth2: async function () {
             let vm = this;
             const response = await axios.get("/api/auth/user");
-            console.log(response);
             if (response.status == 200 && response.statusText == "OK") {
                 localStorage.setItem(
                     "user_info",
@@ -36,45 +34,28 @@ export default {
                 const response = await axios.post("/api/auth/refresh", {
                     refresh_token: localStorage.getItem("refresh"),
                 });
-                console.log(response);
-                // axios
-                //     .post("/api/auth/refresh", {
-                //         refresh_token: localStorage.getItem("refresh"),
-                //     })
-                //     .then(function (response) {
-                //         if (response.status == 200) {
-                //             localStorage.token = response.data.access_token;
-                //             localStorage.refresh =
-                //                 response.data.refresh_token;
-                //             axios
-                //                 .get("/api/auth/user")
-                //                 .then((response) => {
-                //                     localStorage.setItem(
-                //                         "user_info",
-                //                         JSON.stringify(response.data.data)
-                //                     );
-                //                 })
-                //                 .catch((error) => {
-                //                     localStorage.removeItem("token");
-                //                     localStorage.removeItem("refresh");
-                //                     localStorage.removeItem("user_info");
-                //                     delete axios.defaults.headers.common[
-                //                         "Authorization"
-                //                     ];
-                //                     window.location.href = "/login";
-                //                 });
-                //         } else {
-                //             console.log(response.data);
-                //         }
-                //     })
-                //     .catch(function (error) {
-                //         console.log(error);
-                //     });
+                if (response.statusText == "OK" && response.status == 200) {
+                    localStorage.token = response.data.access_token;
+                    localStorage.refresh = response.data.refresh_token;
+                    const response2 = await axios.get("/api/auth/user");
+                    localStorage.setItem(
+                        "user_info",
+                        JSON.stringify(response2.data.data)
+                    );
+                    vm.userAuthenticated = true;
+                } else {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("refresh");
+                    localStorage.removeItem("user_info");
+                    delete axios.defaults.headers.common["Authorization"];
+                    window.location.href = "/login";
+                }
             } else {
                 localStorage.removeItem("token");
                 localStorage.removeItem("refresh");
                 localStorage.removeItem("user_info");
                 delete axios.defaults.headers.common["Authorization"];
+                window.location.href = "/login";
             }
         },
     },
