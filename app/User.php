@@ -111,13 +111,14 @@ class User extends Authenticatable
                 $info = ldap_get_entries($ds, $sr);
 
                 // Get the results we need
-                $name_gr = Str::upper($info['0']['cn;lang-el']['0']);
-                $name_eng = !empty(Str::upper($info['0']['cn']['0'])) ? Str::upper($info['0']['cn']['0']) : Str::ascii($info['0']['cn;lang-el']['0']);
                 $group = $info['0']['edupersonaffiliation']['0'];
-                $is_author = false;
-                if ($group === "staff") {
-                    $is_author = true;
-                }
+                // $name_gr = Str::upper($info['0']['cn;lang-el']['0']);
+                $name_gr = $group === "stuff" ? $info['0']['cn']['0'] : Str::upper($info['0']['cn;lang-el']['0']);
+                $name_eng = !empty(Str::upper($info['0']['cn']['0'])) ? Str::upper($info['0']['cn']['0']) : Str::ascii($info['0']['cn;lang-el']['0']);
+                $is_author = $group === "staff";
+                // if ($group === "staff") {
+                //     $is_author = true;
+                // }
                 $email = $info['0']['edupersonnickname']['0'];
             } catch (Exception $e) {
                 return false;
