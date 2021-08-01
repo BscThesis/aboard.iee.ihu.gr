@@ -44,6 +44,8 @@ class AnnouncementController extends Controller
 
         if ($local_ip == 1 or Auth::guard('api')->check()) {
             $announcements = Announcement::orderBy('updated_at', 'desc')->paginate(10);
+        } elseif (!Auth::guard('api')->check()) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
         } else {
             $announcements = Announcement::whereHas('tags', function (Builder $query) {
                 $query->where('is_public', '=', 1);
