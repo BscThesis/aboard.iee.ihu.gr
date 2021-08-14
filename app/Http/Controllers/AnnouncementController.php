@@ -42,7 +42,7 @@ class AnnouncementController extends Controller
     {
         $local_ip = $request->session()->get('local_ip', 0);
 
-        \Log::info(var_dump($request));
+        \Log::info(var_dump($request->all()));
 
         if ($local_ip == 1 or Auth::guard('api')->check()) {
             $announcements = Announcement::orderBy('updated_at', 'desc')->paginate(10);
