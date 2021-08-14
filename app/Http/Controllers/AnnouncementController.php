@@ -41,7 +41,7 @@ class AnnouncementController extends Controller
     public function index(Request $request)
     {
         $local_ip = $request->session()->get('local_ip', 0);
-        \Log::info($request);
+        \Log::info($request->headers->all());
 
         if ($local_ip == 1 or Auth::guard('api')->check()) {
             $announcements = Announcement::orderBy('updated_at', 'desc')->paginate(10);
