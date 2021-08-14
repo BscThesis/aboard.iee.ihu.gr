@@ -41,11 +41,10 @@ class AnnouncementController extends Controller
     public function index(Request $request)
     {
         $local_ip = $request->session()->get('local_ip', 0);
-        \Log::info($request->headers->all());
 
         if ($local_ip == 1 or Auth::guard('api')->check()) {
             $announcements = Announcement::orderBy('updated_at', 'desc')->paginate(10);
-        } elseif ($request->filled('access_token') && !Auth::guard('api')->check()) {
+        } elseif ($request->headers->has('authorization') && !Auth::guard('api')->check()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         } else {
             $announcements = Announcement::whereHas('tags', function (Builder $query) {
