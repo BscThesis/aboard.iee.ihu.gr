@@ -47,7 +47,7 @@ export default {
       axios
         .get("/api/tags")
         .then(function (response) {
-          vm.tags = response.data;
+          vm.tags = response.data.data;
           bus.$emit("loadingFinished", true);
         })
         .catch(function (error) {
