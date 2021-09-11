@@ -42,7 +42,11 @@ Route::get('/events', function () {
 
 Route::get('/authors', function () {
     return view('pages.authors');
-})->middleware('auth');
+});
+
+Route::get('/tags', function () {
+    return view('pages.tags');
+});
 
 Route::get('/search/tag/{id}', function ($id) {
     return view('search.bytag')->with('id', $id);

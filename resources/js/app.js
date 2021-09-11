@@ -176,6 +176,12 @@ Vue.component(
     require("./components/global/AuthorsComponent.vue").default
 );
 
+// Tags component
+Vue.component(
+    "tags-component",
+    require("./components/global/TagsComponent.vue").default
+);
+
 // Loader component
 Vue.component(
     "loader-component",

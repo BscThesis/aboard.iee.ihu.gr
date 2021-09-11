@@ -39,6 +39,7 @@
         <a class="navbar-item" href="/">Αρχική</a>
         <a class="navbar-item" href="/events">Εκδηλώσεις</a>
         <a class="navbar-item" href="/authors">Συντάκτες</a>
+        <a class="navbar-item" href="/tags">Ετικέτες</a>
       </div>
 
       <div class="navbar-end">
