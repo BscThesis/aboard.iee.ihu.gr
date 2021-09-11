@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Συντάκτες')
+@section('title', 'Ετικέτες')
 
 @section('content')
 <tags-component>
