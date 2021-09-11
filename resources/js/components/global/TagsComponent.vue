@@ -45,7 +45,7 @@ export default {
     getTags: function () {
       let vm = this;
       axios
-        .get("/api/auth/tags")
+        .get("/api/tags")
         .then(function (response) {
           vm.tags = response.data;
           bus.$emit("loadingFinished", true);
