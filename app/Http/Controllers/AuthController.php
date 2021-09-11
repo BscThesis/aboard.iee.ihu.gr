@@ -180,6 +180,6 @@ class AuthController extends Controller
      */
     public function authors(Request $request)
     {
-        return User::select('id', 'name')->where('is_author', 1)->get();
+        return User::select('id', 'name')->where('is_author', 1)->sortBy('name')->get();
     }
 }
