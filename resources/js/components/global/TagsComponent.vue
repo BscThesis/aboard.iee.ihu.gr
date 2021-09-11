@@ -13,7 +13,7 @@
           <div class="box" @click="searchByTag(tag.id)">
             <div class="columns is-mobile is-vcentered">
               <div class="column is-10">
-                <h1 class="title is-4 is-unselectable">{{ tag.name }}</h1>
+                <h1 class="title is-4 is-unselectable">{{ tag.title }}</h1>
               </div>
               <div class="column">
                 <span class="icon">
