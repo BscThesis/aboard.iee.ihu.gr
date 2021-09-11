@@ -9,15 +9,11 @@
     <!-- Content -->
     <div class="block">
       <div class="columns is-multiline is-vcentered">
-        <div
-          class="column is-one-third"
-          v-for="author in authors"
-          v-bind:key="author.id"
-        >
-          <div class="box" @click="searchByAuthor(author.id)">
+        <div class="column is-half" v-for="tag in tags" v-bind:key="tag.id">
+          <div class="box" @click="searchByTag(tag.id)">
             <div class="columns is-mobile is-vcentered">
               <div class="column is-10">
-                <h1 class="title is-4 is-unselectable">{{ author.name }}</h1>
+                <h1 class="title is-4 is-unselectable">{{ tag.name }}</h1>
               </div>
               <div class="column">
                 <span class="icon">
@@ -39,19 +35,19 @@ import { toast } from "bulma-toast";
 export default {
   data: function () {
     return {
-      authors: [],
+      tags: [],
     };
   },
   created: function () {
-    this.getAuthors();
+    this.getTags();
   },
   methods: {
-    getAuthors: function () {
+    getTags: function () {
       let vm = this;
       axios
-        .get("/api/auth/authors")
+        .get("/api/auth/tags")
         .then(function (response) {
-          vm.authors = response.data;
+          vm.tags = response.data;
           bus.$emit("loadingFinished", true);
         })
         .catch(function (error) {
@@ -64,8 +60,8 @@ export default {
           console.log(error);
         });
     },
-    searchByAuthor: function (id) {
-      window.location.href = "/search/author/" + id;
+    searchByTag: function (id) {
+      window.location.href = "/search/tag/" + id;
     },
   },
 };
