@@ -59,6 +59,7 @@ export default {
           });
           console.log(error);
         });
+      console.log(vm.tags);
     },
     searchByTag: function (id) {
       window.location.href = "/search/tag/" + id;
