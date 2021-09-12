@@ -13,9 +13,10 @@
         <input
           class="input is-rounded"
           type="text"
-          placeholder="Input"
+          placeholder="Εισάγετε κείμενο"
           v-model="searchInput"
         />
+        <p class="help is-gray is-italic">Εισάγετε κείμενο για φιλτράρισμα</p>
       </div>
     </div>
 
