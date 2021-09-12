@@ -7,6 +7,18 @@
     <loader-component></loader-component>
 
     <!-- Content -->
+
+    <div class="block">
+      <div class="box">
+        <input
+          class="input is-rounded"
+          type="text"
+          placeholder="Input"
+          v-model="searchInput"
+        />
+      </div>
+    </div>
+
     <div class="block">
       <div class="columns is-multiline is-vcentered">
         <div class="column is-half" v-for="tag in tags" v-bind:key="tag.id">
@@ -36,6 +48,7 @@ export default {
   data: function () {
     return {
       tags: {},
+      searchInput: "",
     };
   },
   created: function () {
