@@ -14,7 +14,7 @@
           class="input is-rounded"
           type="text"
           placeholder="Εισάγετε κείμενο"
-          v-model="searchInput"
+          v-model="search"
         />
         <p class="help is-gray is-italic is-unselectable">
           Εισάγετε κείμενο για φιλτράρισμα
@@ -24,7 +24,11 @@
 
     <div class="block">
       <div class="columns is-multiline is-vcentered">
-        <div class="column is-half" v-for="tag in tags" v-bind:key="tag.id">
+        <div
+          class="column is-half"
+          v-for="tag in filteredTags"
+          v-bind:key="tag.id"
+        >
           <div class="box ihu-tag" @click="searchByTag(tag.id)">
             <div class="columns is-mobile is-vcentered">
               <div class="column is-10">
@@ -51,7 +55,7 @@ export default {
   data: function () {
     return {
       tags: {},
-      searchInput: "",
+      search: "",
     };
   },
   created: function () {
@@ -79,6 +83,24 @@ export default {
     },
     searchByTag: function (id) {
       window.location.href = "/search/tag/" + id;
+    },
+  },
+  computed: {
+    filteredTags: function () {
+      let vm = this;
+      if (vm.search == "") {
+        return vm.tags.filter(function (el) {
+          return el.parent_id != null;
+        });
+        // return vm.tags;
+      } else {
+        return vm.tags.filter(function (el) {
+          return (
+            el.title.toLowerCase().includes(vm.search.toLowerCase()) &&
+            el.parent_id != null
+          );
+        });
+      }
     },
   },
 };
