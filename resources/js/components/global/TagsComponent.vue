@@ -54,7 +54,7 @@ import { toast } from "bulma-toast";
 export default {
   data: function () {
     return {
-      tags: {},
+      tags: [],
       search: "",
     };
   },
