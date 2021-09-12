@@ -23,7 +23,7 @@
     <div class="block">
       <div class="columns is-multiline is-vcentered">
         <div class="column is-half" v-for="tag in tags" v-bind:key="tag.id">
-          <div class="box tag" @click="searchByTag(tag.id)">
+          <div class="box ihu-tag" @click="searchByTag(tag.id)">
             <div class="columns is-mobile is-vcentered">
               <div class="column is-10">
                 <h1 class="title is-4 is-unselectable">{{ tag.title }}</h1>
@@ -83,7 +83,7 @@ export default {
 </script>
 
 <style scoped>
-.tag:hover {
+.ihu-tag:hover {
   cursor: pointer;
   color: #1a6dae;
 }
