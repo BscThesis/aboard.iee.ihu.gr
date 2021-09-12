@@ -17,6 +17,9 @@
             placeholder="Αναζήτηση..."
             v-model="search"
           />
+          <p class="help is-gray is-italic is-unselectable">
+            Προσθέστε όρους και πατήστε Αναζήτηση
+          </p>
           <span class="icon is-left">
             <i class="fas fa-search" aria-hidden="true"></i>
           </span>
