@@ -16,7 +16,9 @@
           placeholder="Εισάγετε κείμενο"
           v-model="searchInput"
         />
-        <p class="help is-gray is-italic">Εισάγετε κείμενο για φιλτράρισμα</p>
+        <p class="help is-gray is-italic is-unselectable">
+          Εισάγετε κείμενο για φιλτράρισμα
+        </p>
       </div>
     </div>
 

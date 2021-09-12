@@ -16,7 +16,7 @@
                     v-on:keyup.enter="addToSearchList()"
                     v-model="search"
                   />
-                  <p class="help is-gray is-italic">
+                  <p class="help is-gray is-italic is-unselectable">
                     Προσθέστε όρους και πατήστε Αναζήτηση
                   </p>
                 </div>
