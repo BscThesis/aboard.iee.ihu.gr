@@ -17,15 +17,15 @@
             placeholder="Αναζήτηση..."
             v-model="search"
           />
-          <p class="help is-gray is-italic is-unselectable">
-            Προσθέστε όρους και πατήστε Αναζήτηση
-          </p>
           <span class="icon is-left">
             <i class="fas fa-search" aria-hidden="true"></i>
           </span>
           <span v-show="search" class="icon is-small is-right">
             <a class="delete" @click="search = ''"></a>
           </span>
+        </p>
+        <p class="help is-gray is-italic is-unselectable">
+          Προσθέστε όρους και πατήστε Αναζήτηση
         </p>
       </div>
     </div>
