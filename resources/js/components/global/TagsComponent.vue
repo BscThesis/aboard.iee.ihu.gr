@@ -10,14 +10,19 @@
 
     <div class="block">
       <div class="box">
-        <input
-          class="input is-rounded"
-          type="text"
-          placeholder="Εισάγετε κείμενο"
-          v-model="search"
-        />
-        <p class="help is-gray is-italic is-unselectable">
-          Εισάγετε κείμενο για φιλτράρισμα
+        <p class="control has-icons-left has-icons-right">
+          <input
+            class="input is-rounded"
+            type="text"
+            placeholder="Αναζήτηση..."
+            v-model="search"
+          />
+          <span class="icon is-left">
+            <i class="fas fa-search" aria-hidden="true"></i>
+          </span>
+          <span v-show="search" class="icon is-small is-right">
+            <a class="delete" @click="search = ''"></a>
+          </span>
         </p>
       </div>
     </div>
