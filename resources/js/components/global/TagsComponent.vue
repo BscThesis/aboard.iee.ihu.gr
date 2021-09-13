@@ -25,7 +25,7 @@
           </span>
         </p>
         <p class="help is-gray is-italic is-unselectable">
-          Προσθέστε όρους και πατήστε Αναζήτηση
+          Εισάγετε κείμενο για φιλτράρισμα
         </p>
       </div>
     </div>
