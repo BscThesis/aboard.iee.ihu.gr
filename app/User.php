@@ -113,7 +113,7 @@ class User extends Authenticatable
                 // Get the results we need
                 $group = $info['0']['edupersonaffiliation']['0'];
                 $name_gr = $group === "staff" ? $info['0']['cn;lang-el']['0'] : Str::upper($info['0']['cn;lang-el']['0']);
-                $name_eng = !empty(Str::upper($info['0']['cn']['0'])) ? Str::upper($info['0']['cn']['0']) : Str::ascii($info['0']['cn;lang-el']['0']);
+                $name_eng = !empty(Str::title($info['0']['cn']['0'])) ? Str::title($info['0']['cn']['0']) : Str::ascii($info['0']['cn;lang-el']['0']);
                 $is_author = $group === "staff";
                 $email = $info['0']['edupersonnickname']['0'];
             } catch (Exception $e) {
