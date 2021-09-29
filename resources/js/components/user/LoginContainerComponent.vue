@@ -24,7 +24,6 @@
                     <i class="fas fa-user"></i>
                   </span>
                 </div>
-                <p class="help is-italic">Όνομα χρήστη της μορφής: itXXXXXX</p>
               </div>
 
               <div class="field">
