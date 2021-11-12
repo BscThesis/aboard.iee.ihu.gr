@@ -1,33 +1,42 @@
 <template>
-  <div class="block">
-    <!-- Title -->
-    <page-title title="Ανακοινώσεις"></page-title>
+    <div class="block">
+        <!-- Title -->
+        <page-title title="Ανακοινώσεις"></page-title>
 
-    <!-- Links -->
-    <front-page-links></front-page-links>
+        <!-- Links -->
+        <front-page-links></front-page-links>
 
-    <!-- Search/Pinned Box -->
-    <search-component></search-component>
+        <!-- Announcements -->
+        <div class="block is-clipped">
+            <!-- Loader -->
+            <loader-component></loader-component>
 
-    <!-- Pagination 1 -->
-    <pagination-component></pagination-component>
+            <!-- Announcement loop -->
+            <!-- <single-announcement-component
+                v-for="announcement in announcements.data"
+                v-bind:key="announcement.id"
+                v-bind:announcement="announcement"
+            ></single-announcement-component> -->
 
-    <!-- Announcements -->
-    <div class="block is-clipped">
-      <!-- Loader -->
-      <loader-component></loader-component>
+            <!-- Announcement Default Layout -->
+            <single-announcement-component-default
+                v-for="announcement in announcements.data"
+                v-bind:key="announcement.id"
+                v-bind:announcement="announcement"
+            ></single-announcement-component-default>
+        </div>
 
-      <!-- Announcement loop -->
-      <single-announcement-component
-        v-for="announcement in announcements"
-        v-bind:key="announcement.id"
-        v-bind:announcement="announcement"
-      ></single-announcement-component>
-
-      <!-- Pagination 2 -->
-      <pagination-component></pagination-component>
+        <!-- Pagination -->
+        <pagination
+            :data="announcements"
+            :limit="1"
+            :show-disabled="true"
+            @pagination-change-page="getAnnouncements"
+        >
+            <span slot="prev-nav">Previous</span>
+            <span slot="next-nav">Next</span>
+        </pagination>
     </div>
-  </div>
 </template>
 
 <script>
@@ -35,45 +44,31 @@ import { bus } from "../../app";
 import { toast } from "bulma-toast";
 
 export default {
-  data: function () {
-    return {
-      announcements: {},
-    };
-  },
-  mounted: function () {
-    this.getAllAnnouncements();
-    bus.$on("next", (data) => {
-      this.getAllAnnouncements(data);
-    });
-    bus.$on("prev", (data) => {
-      this.getAllAnnouncements(data);
-    });
-  },
-  methods: {
-    getAllAnnouncements(page_url = "/api/announcements") {
-      let vm = this;
-      page_url = page_url;
-      axios
-        .get(page_url)
-        .then(function (response) {
-          vm.announcements = response.data.data;
-          let paginate = {
-            links: response.data.links,
-            meta: response.data.meta,
-          };
-          bus.$emit("paginationObject", paginate);
-          bus.$emit("loadingFinished", true);
-        })
-        .catch(function (error) {
-          bus.$emit("loadingFinished", true);
-          toast({
-            message: "Συνέβη κάποιο σφάλμα",
-            type: "is-danger",
-            position: "bottom-right",
-          });
-          console.log(error);
-        });
+    data: function() {
+        return {
+            announcements: {}
+        };
     },
-  },
+    mounted: function() {
+        this.getAnnouncements();
+    },
+    methods: {
+        getAnnouncements(page = 1) {
+            axios
+                .get("/api/announcements?page=" + page)
+                .then(response => {
+                    this.announcements = response.data;
+                    bus.$emit("loadingFinished", true);
+                })
+                .catch(() => {
+                    bus.$emit("loadingFinished", true);
+                    toast({
+                        message: "Συνέβη κάποιο σφάλμα",
+                        type: "is-danger",
+                        position: "bottom-right"
+                    });
+                });
+        }
+    }
 };
 </script>

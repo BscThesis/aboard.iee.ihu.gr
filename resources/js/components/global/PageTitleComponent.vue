@@ -1,19 +1,21 @@
 <template>
-  <section class="section">
-    <h1 class="title is-unselectable">{{ title }}</h1>
-  </section>
+    <div class="mt-5 box is-flex is-justify-content-center">
+        <h1 class="title is-unselectable">
+            {{ title }}
+        </h1>
+    </div>
 </template>
 
 <script>
 export default {
-  props: {
-    title: {
-      type: String,
-      required: true,
+    props: {
+        title: {
+            type: String,
+            required: true
+        }
     },
-  },
-  data() {
-    return {};
-  },
+    data() {
+        return {};
+    }
 };
 </script>

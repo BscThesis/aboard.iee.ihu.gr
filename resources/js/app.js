@@ -51,6 +51,19 @@ Vue.component(
     require("./components/announcements/AttachmentsComponent.vue").default
 );
 
+// Single Announcement Info component
+Vue.component(
+    "single-announcement-info-component",
+    require("./components/announcements/SingleAnnouncementInfoComponent.vue")
+        .default
+);
+
+// Tags Default component
+Vue.component(
+    "tags-default-component",
+    require("./components/announcements/TagsDefaultComponent.vue").default
+);
+
 // Last update component
 Vue.component(
     "last-update",
@@ -68,6 +81,13 @@ Vue.component(
 Vue.component(
     "full-announcement-title",
     require("./components/announcements/FullAnnouncementTitleComponent.vue")
+        .default
+);
+
+// Front page announcement component
+Vue.component(
+    "single-announcement-component-default",
+    require("./components/announcements/SingleAnnouncementComponentDefault.vue")
         .default
 );
 
@@ -162,12 +182,6 @@ Vue.component(
 Vue.component(
     "breadcrumb-component",
     require("./components/search/BreadcrumbComponent.vue").default
-);
-
-// Pagination component
-Vue.component(
-    "pagination-component",
-    require("./components/global/PaginationComponent.vue").default
 );
 
 // Authors component
@@ -297,6 +311,18 @@ Vue.component(
     require("./components/user/UserPreferencesComponent.vue").default
 );
 
+// Laravel Vue Pagination
+Vue.component(
+    "pagination",
+    require("./components/pagination/LaravelVuePagination.vue").default
+);
+
+Vue.component(
+    "renderless-laravel-vue-pagination",
+    require("./components/pagination/RenderlessLaravelVuePagination.vue")
+        .default
+);
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -309,5 +335,5 @@ Vue.component(
 export const bus = new Vue();
 
 const app = new Vue({
-    el: "#app",
+    el: "#app"
 });

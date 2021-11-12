@@ -1,26 +1,34 @@
 <template>
-  <div class="block">
-    <!-- Page Title -->
-    <page-title title="Εκδηλώσεις"></page-title>
-
-    <!-- Content -->
     <div class="block">
-      <!-- Pagination -->
-      <pagination-component></pagination-component>
+        <!-- Page Title -->
+        <page-title title="Εκδηλώσεις"></page-title>
 
-      <!-- Events -->
-      <div class="columns is-vcentered is-multiline">
-        <event-component
-          v-for="event in events"
-          v-bind:key="event.id"
-          v-bind:event="event"
-        ></event-component>
-      </div>
+        <!-- Content -->
+        <div class="block">
+            <!-- Events -->
+            <div class="columns is-vcentered is-multiline">
+                <event-component
+                    v-for="event in events.data"
+                    v-bind:key="event.id"
+                    v-bind:event="event"
+                ></event-component>
+            </div>
 
-      <!-- Loader -->
-      <loader-component></loader-component>
+            <!-- Loader -->
+            <loader-component></loader-component>
+
+            <!-- Pagination -->
+            <pagination
+                :data="events"
+                :limit="1"
+                :show-disabled="true"
+                @pagination-change-page="getEvents"
+            >
+                <span slot="prev-nav">Previous</span>
+                <span slot="next-nav">Next</span>
+            </pagination>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -28,60 +36,32 @@ import { bus } from "../../app";
 import { toast } from "bulma-toast";
 
 export default {
-  data: function () {
-    return {
-      events: {},
-    };
-  },
-  created: function () {
-    this.getEvents();
-    bus.$on("next", (data) => {
-      this.getEvents(data);
-    });
-    bus.$on("prev", (data) => {
-      this.getEvents(data);
-    });
-  },
-
-  methods: {
-    getEvents(page_url = "/api/events") {
-      let vm = this;
-      page_url = page_url;
-      axios
-        .get(page_url)
-        .then(function (response) {
-          vm.events = response.data.data;
-          // manually create links and meta objects
-          // and pass them to the pagination object
-          let links = {
-            next: response.data.next_page_url,
-            prev: response.data.prev_page_url,
-          };
-
-          let meta = {
-            current_page: response.data.current_page,
-            last_page: response.data.last_page,
-          };
-
-          let paginate = {
-            links: links,
-            meta: meta,
-          };
-          // this is because laravel's pagination is different
-          // when using api resources and standalone eloquent queries
-          bus.$emit("paginationObject", paginate);
-          bus.$emit("loadingFinished", true);
-        })
-        .catch(function (error) {
-          bus.$emit("loadingFinished", true);
-          toast({
-            message: "Συνέβη κάποιο σφάλμα",
-            type: "is-danger",
-            position: "bottom-right",
-          });
-          console.log(error);
-        });
+    data: function() {
+        return {
+            events: {}
+        };
     },
-  },
+    created: function() {
+        this.getEvents();
+    },
+
+    methods: {
+        getEvents(page = 1) {
+            axios
+                .get("/api/events?page=" + page)
+                .then(response => {
+                    this.events = response.data;
+                    bus.$emit("loadingFinished", true);
+                })
+                .catch(function(error) {
+                    bus.$emit("loadingFinished", true);
+                    toast({
+                        message: "Συνέβη κάποιο σφάλμα",
+                        type: "is-danger",
+                        position: "bottom-right"
+                    });
+                });
+        }
+    }
 };
 </script>

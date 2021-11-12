@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Attachment;
 
-use App\Attachment;
-use App\Announcement;
+use App\Http\Controllers\Controller;
+use App\Models\Attachment;
+use App\Models\Announcement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

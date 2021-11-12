@@ -5,7 +5,7 @@ namespace App\Listeners;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Events\NewAnnouncementWasCreatedEvent;
-use App\User;
+use App\Models\User;
 use App\Notifications\AnnouncementCreated;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Database\Eloquent\Builder;

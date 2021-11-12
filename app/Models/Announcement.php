@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,12 +16,12 @@ class Announcement extends Model implements Feedable
 
     public function tags()
     {
-        return $this->belongsToMany('App\Tag');
+        return $this->belongsToMany('App\Models\Tag');
     }
 
     public function attachments()
     {
-        return $this->hasMany('App\Attachment');
+        return $this->hasMany('App\Models\Attachment');
     }
 
     public function toFeedItem()
@@ -55,7 +55,7 @@ class Announcement extends Model implements Feedable
      */
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     /**

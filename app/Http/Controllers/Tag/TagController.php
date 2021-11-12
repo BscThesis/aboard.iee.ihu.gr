@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Tag;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\StoreTag;
-use App\Tag;
+use App\Models\Tag;
 use App\Http\Resources\Tag as TagResource;
 
 class TagController extends Controller
@@ -69,9 +70,10 @@ class TagController extends Controller
      */
     public function update(StoreTag $request, $id)
     {
+        $tag = Tag::find($id);
         $validated = $request->validated();
-        Tag::where('id', $id)->update($validated);
-        return new TagResource(Tag::findOrFail($id));
+        $tag->update($validated);
+        return new TagResource($tag);
     }
 
     /**
@@ -83,7 +85,7 @@ class TagController extends Controller
     public function destroy($id)
     {
         if (auth('api')->user()->is_admin) {
-            $tag = Tag::findOrFail($id);
+            $tag = Tag::find($id);
             if ($tag->delete()) {
                 $tags = Tag::orderBy('id', 'desc')->get();
                 return TagResource::collection($tags);

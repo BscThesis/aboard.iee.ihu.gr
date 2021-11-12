@@ -33,7 +33,7 @@ Route::get('/announcements/{id}/edit', function ($id) {
     return view('pages.edit-announcement')->with('id', $id);
 })->middleware('auth', 'web.id.check', 'is.the.author', 'web.announcement.check')->name('announcement.edit');
 
-Route::get('/announcements/{an_id}/attachments/{at_id}', 'AttachmentController@show')
+Route::get('/announcements/{an_id}/attachments/{at_id}', 'Attachment\AttachmentController@show')
     ->middleware('android.app', 'announcement.attachment.check');
 
 Route::get('/events', function () {
@@ -102,5 +102,5 @@ Route::prefix('errors')->group(function () {
     });
 });
 
-Route::get('/announcements/{announcement}', 'AnnouncementController@show')->name('announcements.rss');
+Route::get('/announcements/{announcement}', 'Announcement\AnnouncementController@show')->name('announcements.rss');
 Route::feeds();

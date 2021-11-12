@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Announcement;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\StoreAnnouncement;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Announcement;
-use App\Attachment;
-use App\Tag;
-use App\User;
+use App\Models\Announcement;
+use App\Models\Attachment;
+use App\Models\Tag;
+use App\Models\User;
 use App\Http\Resources\Announcement as AnnouncementResource;
 use App\Events\NewAnnouncementWasCreatedEvent;
 
@@ -25,7 +26,7 @@ class AnnouncementController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api')->only('store', 'update', 'destroy');
-
+        
         $this->middleware('api.id.check')->only('update', 'show', 'searchByTag', 'destroy');
 
         $this->middleware('api.tag.check')->only('searchByTag');
@@ -41,11 +42,18 @@ class AnnouncementController extends Controller
     public function index(Request $request)
     {
         $local_ip = $request->session()->get('local_ip', 0);
-
         if ($local_ip == 1 or Auth::guard('api')->check()) {
             $announcements = Announcement::orderBy('updated_at', 'desc')->paginate(10);
         } elseif ($request->headers->has('authorization') && !Auth::guard('api')->check()) {
+            
             return response()->json(['message' => 'Unauthenticated'], 401);
+        } else {
+            $announcements = Announcement::whereHas('tags', function (Builder $query) {
+                $query->where('is_public', '=', 1);
+            })->orderBy('updated_at', 'desc')->paginate(10);
+        }
+        if ($local_ip == 1) {
+            $announcements = Announcement::orderBy('updated_at', 'desc')->paginate(10);
         } else {
             $announcements = Announcement::whereHas('tags', function (Builder $query) {
                 $query->where('is_public', '=', 1);
@@ -272,6 +280,19 @@ class AnnouncementController extends Controller
         $local_ip = $request->session()->get('local_ip', 0);
 
         if ($local_ip == 1 or Auth::guard('api')->check()) {
+            $pinned = Announcement::where([['is_pinned', '=', 1], ['pinned_until', '>=', (string)date("Y-m-d H:i", time())]])
+                ->whereNull('deleted_at')
+                ->orderBy('updated_at', 'desc')->get(['id', 'title']);
+        } else {
+            $pinned = Announcement::whereHas('tags', function (Builder $query) {
+                $query->where('is_public', '=', 1);
+            })
+                ->where([['is_pinned', '=', 1], ['pinned_until', '>=', (string)date("Y-m-d H:i", time())]])
+                ->whereNull('deleted_at')
+                ->orderBy('updated_at', 'desc')->get(['id', 'title']);
+        }
+
+        if ($local_ip == 1) {
             $pinned = Announcement::where([['is_pinned', '=', 1], ['pinned_until', '>=', (string)date("Y-m-d H:i", time())]])
                 ->whereNull('deleted_at')
                 ->orderBy('updated_at', 'desc')->get(['id', 'title']);

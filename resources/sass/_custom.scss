@@ -87,3 +87,20 @@
 .tags-panel-block {
     border-bottom: none !important;
 }
+
+.breadcrumb.has-none-separator li + li::before {
+    content: none;
+}
+
+.fa-rotate-325 {
+    transform: rotate(325deg);
+}
+
+@media screen and (max-width: 768px) {
+    .pagination {
+        font-size: 0.75rem;
+    }
+    .pagination-link {
+        margin: 0;
+    }
+}
