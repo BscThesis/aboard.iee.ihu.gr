@@ -49,7 +49,7 @@ class IssueController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Issue  $issue
+     * @param  \App\Models\Issue  $issue
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

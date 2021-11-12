@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Announcement;
+use App\Models\Announcement;
 use App\Observers\AnnouncementObserver;
 
 class AppServiceProvider extends ServiceProvider
