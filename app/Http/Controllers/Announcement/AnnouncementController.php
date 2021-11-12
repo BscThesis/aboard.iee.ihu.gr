@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Announcement;
 use App\Models\Attachment;
 use App\Models\Tag;
-use App\Models\User;
+use App\User;
 use App\Http\Resources\Announcement as AnnouncementResource;
 use App\Events\NewAnnouncementWasCreatedEvent;
 

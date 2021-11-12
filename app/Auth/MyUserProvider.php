@@ -3,7 +3,7 @@
 namespace App\Auth;
 // namespace App\Providers;
 
-use App\Models\User;
+use App\User;
 use Illuminate\Contracts\Auth\UserProvider;
 
 class MyUserProvider implements UserProvider
