@@ -1,42 +1,47 @@
 <template>
-    <div class="block">
-        <!-- Title -->
-        <page-title title="Ανακοινώσεις"></page-title>
+    <section
+        class="main-content is-justify-content-center columns is-fullheight"
+    >
+        <sidebar></sidebar>
+        <div class="column is-9 block">
+            <!-- Title -->
+            <page-title title="Ανακοινώσεις"></page-title>
 
-        <!-- Links -->
-        <front-page-links></front-page-links>
+            <!-- Links -->
+            <front-page-links></front-page-links>
 
-        <!-- Announcements -->
-        <div class="block is-clipped">
-            <!-- Loader -->
-            <loader-component></loader-component>
+            <!-- Announcements -->
+            <div class="block is-clipped">
+                <!-- Loader -->
+                <loader-component></loader-component>
 
-            <!-- Announcement loop -->
-            <!-- <single-announcement-component
+                <!-- Announcement loop -->
+                <!-- <single-announcement-component
                 v-for="announcement in announcements.data"
                 v-bind:key="announcement.id"
                 v-bind:announcement="announcement"
             ></single-announcement-component> -->
 
-            <!-- Announcement Default Layout -->
-            <single-announcement-component-default
-                v-for="announcement in announcements.data"
-                v-bind:key="announcement.id"
-                v-bind:announcement="announcement"
-            ></single-announcement-component-default>
-        </div>
+                <!-- Announcement Default Layout -->
+                <single-announcement-component-default
+                    v-for="announcement in announcements.data"
+                    v-bind:key="announcement.id"
+                    v-bind:announcement="announcement"
+                ></single-announcement-component-default>
+            </div>
 
-        <!-- Pagination -->
-        <pagination
-            :data="announcements"
-            :limit="1"
-            :show-disabled="true"
-            @pagination-change-page="getAnnouncements"
-        >
-            <span slot="prev-nav">Previous</span>
-            <span slot="next-nav">Next</span>
-        </pagination>
-    </div>
+            <!-- Pagination -->
+            <pagination
+                :data="announcements"
+                :limit="1"
+                :show-disabled="true"
+                @pagination-change-page="getAnnouncements"
+            >
+                <span slot="prev-nav">Previous</span>
+                <span slot="next-nav">Next</span>
+            </pagination>
+        </div>
+    </section>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="block">
+    <div class="container block">
         <!-- Page Title -->
         <page-title title="Εκδηλώσεις"></page-title>
 

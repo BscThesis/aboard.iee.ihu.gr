@@ -1,0 +1,34 @@
+<template>
+    <section class="mb-4">
+        <p class="control has-icons-left has-icons-right">
+            <!-- <input
+                class="input is-rounded"
+                type="text"
+                placeholder="Αναζήτηση..."
+                v-model="search"
+            /> -->
+            <input
+                class="input is-rounded"
+                type="text"
+                placeholder="Αναζήτηση..."
+            />
+            <span class="icon is-left">
+                <i class="fas fa-search" aria-hidden="true"></i>
+            </span>
+            <!-- <span v-show="search" class="icon is-small is-right"> -->
+            <!-- <a class="delete" @click="search = ''"></a> -->
+            <!-- <a class="delete"></a>
+            </span> -->
+            <span class="icon is-small is-right">
+                <!-- <a class="delete" @click="search = ''"></a> -->
+                <a class="delete"></a>
+            </span>
+        </p>
+    </section>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style></style>

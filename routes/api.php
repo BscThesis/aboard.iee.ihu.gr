@@ -55,6 +55,8 @@ Route::delete('/tags/{id}', 'Tag\TagController@destroy');
 
 Route::get('/tags', 'Tag\TagController@index');
 
+Route::get('/filtertags', 'Tag\TagController@indexForFiltering');
+
 Route::get('/tags/{id}', 'Tag\TagController@show');
 
 //----------------------------------------

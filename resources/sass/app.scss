@@ -35,5 +35,7 @@ $navbar-item-hover-background-color: transparent;
 @import "../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss";
 @import "../../node_modules/@fortawesome/fontawesome-free/scss/regular.scss";
 
+@import "../../node_modules/@riophae/vue-treeselect/dist/vue-treeselect.min.css";
+
 // Import custom
 @import "custom";

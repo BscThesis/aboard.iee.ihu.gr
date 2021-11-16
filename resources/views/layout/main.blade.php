@@ -18,7 +18,7 @@
     <div id="app">
         <navbar-component-bulma></navbar-component-bulma>
 
-        <div class="container block">
+        <div class="container is-fluid block">
             @yield('content')
         </div>
 

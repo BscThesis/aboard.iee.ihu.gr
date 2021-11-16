@@ -1,3 +1,5 @@
+import Vue from "vue";
+
 require("./bootstrap");
 
 window.Vue = require("vue");
@@ -321,6 +323,18 @@ Vue.component(
     "renderless-laravel-vue-pagination",
     require("./components/pagination/RenderlessLaravelVuePagination.vue")
         .default
+);
+
+// Sidebar
+Vue.component(
+    "sidebar",
+    require("./components/sidebar/SidebarFilterComponent.vue").default
+);
+
+// Search Default
+Vue.component(
+    "search-default",
+    require("./components/sidebar/SearchDefaultComponent.vue").default
 );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

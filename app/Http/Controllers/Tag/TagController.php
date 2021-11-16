@@ -38,6 +38,17 @@ class TagController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexForFiltering()
+    {
+        $tags = Tag::with('childrenRecursive')->where('parent_id',1)->orderBy('title', 'asc')->get();
+        return $tags;
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  App\Http\Requests\StoreTag  $request

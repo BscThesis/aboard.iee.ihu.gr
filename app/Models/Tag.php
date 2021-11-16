@@ -33,6 +33,11 @@ class Tag extends Model
         return $this->hasOne('App\Models\Tag', 'id', 'parent_id');
     }
 
+    public function childrenRecursive()
+    {
+        return $this->children()->with('childrenRecursive');        
+    }
+
     /**
      * The users that belong to the role.
      */
