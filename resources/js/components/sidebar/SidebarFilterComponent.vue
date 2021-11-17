@@ -1,5 +1,6 @@
 <template>
     <aside
+        v-bind:class="{ sidebarShow: !showFilters }"
         class="column is-one-quarter-tablet is-one-fifth-fullhd is-fullheight section"
     >
         <p class="menu-label">Φίλτρα</p>
@@ -64,6 +65,12 @@ import Treeselect from "@riophae/vue-treeselect";
 import { toast } from "bulma-toast";
 
 export default {
+    props: {
+        showFilters: {
+            type: Boolean,
+            required: true
+        }
+    },
     components: { Treeselect },
     data: () => ({
         selectedTagValues: [],

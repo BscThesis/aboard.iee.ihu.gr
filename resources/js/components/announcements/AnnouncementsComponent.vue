@@ -1,9 +1,13 @@
 <template>
     <section
-        class="main-content is-justify-content-center columns is-fullheight"
+        class="main-content is-justify-content-center columns is-mobile is-fullheight"
     >
-        <sidebar></sidebar>
-        <div class="column is-9 block">
+        <sidebar v-bind:showFilters="showFilters"></sidebar>
+        <div
+            v-bind:class="{ noDisplay: showFilters }"
+            id="content"
+            class="column is-9 block"
+        >
             <!-- Title -->
             <page-title title="Ανακοινώσεις"></page-title>
 
@@ -41,6 +45,12 @@
                 <span slot="next-nav">Next</span>
             </pagination>
         </div>
+        <button
+            @click="filtersShow()"
+            class="filters-fab-btn-icon button is-link is-rounded"
+        >
+            <i class="fas fa-sliders-h"></i>
+        </button>
     </section>
 </template>
 
@@ -51,13 +61,17 @@ import { toast } from "bulma-toast";
 export default {
     data: function() {
         return {
-            announcements: {}
+            announcements: {},
+            showFilters: false
         };
     },
     mounted: function() {
         this.getAnnouncements();
     },
     methods: {
+        filtersShow() {
+            this.showFilters = !this.showFilters;
+        },
         getAnnouncements(page = 1) {
             axios
                 .get("/api/announcements?page=" + page)

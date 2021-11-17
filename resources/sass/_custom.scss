@@ -107,4 +107,31 @@
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
+    .noDisplay {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .sidebarShow {
+        display: none;
+    }
+    #content {
+        flex-basis: 0;
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+}
+
+.filters-fab-btn-icon {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 1;
+}
+
+@media screen and (min-width: 1023px) {
+    .filters-fab-btn-icon {
+        display: none;
+    }
 }
