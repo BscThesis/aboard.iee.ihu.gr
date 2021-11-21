@@ -2,7 +2,7 @@
     <section
         class="main-content is-justify-content-center columns is-mobile is-fullheight"
     >
-        <sidebar v-bind:showFilters="showFilters"></sidebar>
+        <sidebar ref="childProps" v-bind:showFilters="showFilters"></sidebar>
         <div
             v-bind:class="{ noDisplay: showFilters }"
             id="content"
@@ -19,19 +19,18 @@
                 <!-- Loader -->
                 <loader-component></loader-component>
 
-                <!-- Announcement loop -->
-                <!-- <single-announcement-component
-                v-for="announcement in announcements.data"
-                v-bind:key="announcement.id"
-                v-bind:announcement="announcement"
-            ></single-announcement-component> -->
-
                 <!-- Announcement Default Layout -->
                 <single-announcement-component-default
                     v-for="announcement in announcements.data"
                     v-bind:key="announcement.id"
                     v-bind:announcement="announcement"
                 ></single-announcement-component-default>
+                <!-- Announcement loop -->
+                <!-- <single-announcement-component
+                        v-for="announcement in announcements.data"
+                        v-bind:key="announcement.id"
+                        v-bind:announcement="announcement"
+                    ></single-announcement-component> -->
             </div>
 
             <!-- Pagination -->

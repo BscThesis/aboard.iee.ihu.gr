@@ -77,7 +77,7 @@ export default {
             axios
                 .get("/api/tags")
                 .then(function(response) {
-                    vm.tags = response.data;
+                    vm.tags = response.data.data;
                     bus.$emit("loadingFinished", true);
                 })
                 .catch(function(error) {
@@ -89,7 +89,6 @@ export default {
                     });
                     console.log(error);
                 });
-            console.log(vm.tags);
         },
         searchByTag: function(id) {
             window.location.href = "/search/tag/" + id;
@@ -98,12 +97,11 @@ export default {
     computed: {
         filteredTags: function() {
             let vm = this;
-            if (vm.search == "") {
+            if (vm.search == "" && vm.tags) {
                 return vm.tags.filter(function(el) {
                     return el.parent_id != null;
                 });
-                // return vm.tags;
-            } else {
+            } else if (vm.tags) {
                 return vm.tags.filter(function(el) {
                     return (
                         el.title

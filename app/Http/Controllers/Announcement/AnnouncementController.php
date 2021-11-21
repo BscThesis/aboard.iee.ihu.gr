@@ -51,15 +51,7 @@ class AnnouncementController extends Controller
             $announcements = Announcement::whereHas('tags', function (Builder $query) {
                 $query->where('is_public', '=', 1);
             })->orderBy('updated_at', 'desc')->paginate(10);
-        }
-        if ($local_ip == 1) {
-            $announcements = Announcement::orderBy('updated_at', 'desc')->paginate(10);
-        } else {
-            $announcements = Announcement::whereHas('tags', function (Builder $query) {
-                $query->where('is_public', '=', 1);
-            })->orderBy('updated_at', 'desc')->paginate(10);
-        }
-
+        }    
         // Return announcements as a json
         return AnnouncementResource::collection($announcements);
     }
@@ -291,20 +283,6 @@ class AnnouncementController extends Controller
                 ->whereNull('deleted_at')
                 ->orderBy('updated_at', 'desc')->get(['id', 'title']);
         }
-
-        if ($local_ip == 1) {
-            $pinned = Announcement::where([['is_pinned', '=', 1], ['pinned_until', '>=', (string)date("Y-m-d H:i", time())]])
-                ->whereNull('deleted_at')
-                ->orderBy('updated_at', 'desc')->get(['id', 'title']);
-        } else {
-            $pinned = Announcement::whereHas('tags', function (Builder $query) {
-                $query->where('is_public', '=', 1);
-            })
-                ->where([['is_pinned', '=', 1], ['pinned_until', '>=', (string)date("Y-m-d H:i", time())]])
-                ->whereNull('deleted_at')
-                ->orderBy('updated_at', 'desc')->get(['id', 'title']);
-        }
-
         return $pinned;
     }
 

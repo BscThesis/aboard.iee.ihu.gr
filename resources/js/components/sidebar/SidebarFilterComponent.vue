@@ -55,6 +55,7 @@
                 placeholder="Layout"
                 :clearable="false"
                 v-model="selectedLayoutValue"
+                v-on:input="layoutChange"
             />
         </section>
     </aside>
@@ -100,7 +101,7 @@ export default {
             id: index,
             label: value
         })),
-        selectedLayoutValue: "List",
+        selectedLayoutValue: 0,
         layout: ["List", "Compact", "Box"].map((value, index) => ({
             id: index,
             label: value
@@ -153,6 +154,10 @@ export default {
                         position: "bottom-right"
                     });
                 });
+        },
+        layoutChange: function(node, instanceId) {
+            // Κάνω την αλλαγή πρώτα στη βάση και μετά καλώ από τον parent για να δω τι layout διάλεξε ο χρήστης
+            this.$parent.getAnnouncements(2);
         }
     }
 };
