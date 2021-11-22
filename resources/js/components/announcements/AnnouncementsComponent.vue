@@ -2,7 +2,10 @@
     <section
         class="main-content is-justify-content-center columns is-mobile is-fullheight"
     >
-        <sidebar ref="childProps" v-bind:showFilters="showFilters"></sidebar>
+        <sidebar
+            v-bind:users.sync="selected.users"
+            v-bind:showFilters="showFilters"
+        ></sidebar>
         <div
             v-bind:class="{ noDisplay: showFilters }"
             id="content"
@@ -61,11 +64,22 @@ export default {
     data: function() {
         return {
             announcements: {},
-            showFilters: false
+            showFilters: false,
+            selected: {
+                users: []
+            }
         };
     },
     mounted: function() {
         this.getAnnouncements();
+    },
+    watch: {
+        selected: {
+            handler: function() {
+                this.getAnnouncements();
+            },
+            deep: true
+        }
     },
     methods: {
         filtersShow() {
@@ -73,7 +87,9 @@ export default {
         },
         getAnnouncements(page = 1) {
             axios
-                .get("/api/announcements?page=" + page)
+                .get("/api/announcements?page=" + page, {
+                    params: this.selected
+                })
                 .then(response => {
                     this.announcements = response.data;
                     bus.$emit("loadingFinished", true);

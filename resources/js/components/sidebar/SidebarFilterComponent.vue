@@ -30,6 +30,7 @@
                 :normalizer="profNormalizer"
                 placeholder="Επιλέξτε καθηγητές..."
                 v-model="selectedProfValues"
+                v-on:input="profValueChange"
             />
         </section>
 
@@ -69,6 +70,10 @@ export default {
     props: {
         showFilters: {
             type: Boolean,
+            required: true
+        },
+        users: {
+            type: Array,
             required: true
         }
     },
@@ -158,6 +163,9 @@ export default {
         layoutChange: function(node, instanceId) {
             // Κάνω την αλλαγή πρώτα στη βάση και μετά καλώ από τον parent για να δω τι layout διάλεξε ο χρήστης
             this.$parent.getAnnouncements(2);
+        },
+        profValueChange: function() {
+            this.$emit("update:users", this.selectedProfValues);
         }
     }
 };
