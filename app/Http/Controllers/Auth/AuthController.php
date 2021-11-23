@@ -10,6 +10,7 @@ use App\Notifications\UserLoggedIn;
 use App\Http\Resources\User as UserResource;
 use App\Http\Resources\Notification as NotificationResource;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Session;
 use \Carbon\Carbon;
@@ -181,11 +182,29 @@ class AuthController extends Controller
      */
     public function authors(Request $request)
     {
-        return User::select('id', 'name')->where('is_author', 1)
-        ->withCount(['announcements'=>function ($query){
-            $query->withFilters(
-                request()->input('users', []),
-                request()->input('tags', []));
-        }])->orderBy('name', 'asc')->get();
+        $local_ip = $request->session()->get('local_ip', 0);                
+        if ($local_ip == 1 or Auth::guard('api')->check()) {
+            return User::select('id', 'name')->where('is_author', 1)
+            ->withCount(['announcements'=>function ($query) use ($request){
+                $query->withFilters(
+                    request()->input('users', []),
+                    request()->input('tags', []));
+            }])->orderBy('name', 'asc')->get();
+        } elseif  ($request->headers->has('authorization') && !Auth::guard('api')->check()) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+         else {
+            return User::select('id', 'name')->where('is_author', 1)
+            ->withCount(['announcements'=>function ($query) use ($request){
+                $query->whereHas('tags', function ($query) {
+                    $query->where('is_public', 1);
+                })
+                ->withFilters(
+                    request()->input('users', []),
+                    request()->input('tags', [])  
+                );
+            }])->orderBy('name', 'asc')->get();
+            
+        }           
     }
 }
