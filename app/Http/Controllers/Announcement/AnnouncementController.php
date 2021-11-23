@@ -43,12 +43,14 @@ class AnnouncementController extends Controller
     {
         $local_ip = $request->session()->get('local_ip', 0);
         if ($local_ip == 1 or Auth::guard('api')->check()) {
-            $announcements = Announcement::withFilters( request()->input('users', []))->orderByRaw('IF(pinned_until >= NOW(), pinned_until, 1) DESC, updated_at DESC')->whereNull('deleted_at')->paginate(10);
+            $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]))->
+            orderByRaw('IF(pinned_until >= NOW(), pinned_until, 1) DESC, updated_at DESC')->whereNull('deleted_at')->paginate(10);
 
         } elseif ($request->headers->has('authorization') && !Auth::guard('api')->check()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         } else {
-            $announcements = Announcement::withFilters( request()->input('users', []))->whereHas('tags', function (Builder $query) {
+            $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]))
+            ->whereHas('tags', function (Builder $query) {
                 $query->where('is_public', '=', 1);
             })->orderByRaw('IF(pinned_until >= NOW(), pinned_until, 1) DESC, updated_at DESC')->whereNull('deleted_at')->paginate(10);
         }    

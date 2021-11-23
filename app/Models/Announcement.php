@@ -36,10 +36,16 @@ class Announcement extends Model implements Feedable
         ]);
     }
 
-    public function scopeWithFilters($query, $users)
+    public function scopeWithFilters($query, $users, $tags)
     {
         return $query->when(count($users), function ($query) use ($users) {
+
             $query->whereIn('user_id', $users);
+
+        })->when(count($tags), function ($query) use ($tags){
+           $query->whereHas('tags', function ($query) use ($tags) {
+                $query->whereIn('id', $tags);
+            });
         });
     }
 
