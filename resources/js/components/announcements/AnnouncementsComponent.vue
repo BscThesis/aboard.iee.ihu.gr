@@ -4,6 +4,7 @@
     >
         <sidebar
             v-bind:users.sync="selected.users"
+            v-bind:selectedTags.sync="selected.tags"
             v-bind:showFilters="showFilters"
         ></sidebar>
         <div
@@ -66,7 +67,8 @@ export default {
             announcements: {},
             showFilters: false,
             selected: {
-                users: []
+                users: [],
+                tags: []
             }
         };
     },

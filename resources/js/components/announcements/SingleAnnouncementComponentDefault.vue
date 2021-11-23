@@ -5,7 +5,10 @@
                 <div class="content">
                     <div class="columns is-multiline is-mobile">
                         <span
-                            v-if="announcement.is_pinned == 1"
+                            v-if="
+                                announcement.is_pinned == 1 &&
+                                    announcement.pinned_until >= getNow()
+                            "
                             class="icon mt-3 ml-3"
                         >
                             <i class="fas fa-thumbtack fa-lg fa-rotate-325"></i>
@@ -65,6 +68,24 @@ export default {
             displayEnglish: false,
             open: false
         };
+    },
+    methods: {
+        getNow() {
+            const today = new Date();
+            const date =
+                today.getFullYear() +
+                "-" +
+                (today.getMonth() + 1) +
+                "-" +
+                today.getDate();
+            const time =
+                today.getHours() +
+                ":" +
+                today.getMinutes() +
+                ":" +
+                today.getSeconds();
+            return date + " " + time;
+        }
     }
 };
 </script>

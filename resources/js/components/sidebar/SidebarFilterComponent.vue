@@ -17,6 +17,7 @@
                 :normalizer="tagNormalizer"
                 placeholder="Επιλέξτε ετικέτες..."
                 v-model="selectedTagValues"
+                v-on:input="tagValueChange"
             />
         </section>
 
@@ -75,6 +76,10 @@ export default {
         users: {
             type: Array,
             required: true
+        },
+        selectedTags: {
+            type: Array,
+            required: true
         }
     },
     components: { Treeselect },
@@ -95,15 +100,8 @@ export default {
             };
         },
         selectedSortValue: null,
-        sort: [
-            "Ετικέτες Α-Ζ",
-            "Ετικέτες Ζ-Α",
-            "Καθηγητές Α-Ζ",
-            "Καθηγητές Ζ-Α",
-            "Νεότερα",
-            "Παλαιότερα"
-        ].map((value, index) => ({
-            id: index,
+        sort: ["Νεότερα", "Παλαιότερα"].map((value, index) => ({
+            id: value,
             label: value
         })),
         selectedLayoutValue: 0,
@@ -166,6 +164,9 @@ export default {
         },
         profValueChange: function() {
             this.$emit("update:users", this.selectedProfValues);
+        },
+        tagValueChange: function() {
+            this.$emit("update:selectedTags", this.selectedTagValues);
         }
     }
 };
