@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\StoreTag;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Tag;
 use App\Http\Resources\Tag as TagResource;
 
@@ -42,9 +43,25 @@ class TagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function indexForFiltering()
+    public function indexForFiltering(Request $request)
     {
-        $tags = Tag::with('childrenRecursive')->where('parent_id',1)->orderBy('title', 'asc')->get();
+        $local_ip = $request->session()->get('local_ip', 0);
+
+        if ($local_ip == 1 or Auth::guard('api')->check()) {
+            $tags = Tag::with('childrenRecursive')->where('parent_id',1)->withCount(['announcements'=>function ($query){
+                $query->withFilters(
+                    request()->input('users', []),
+                    request()->input('tags', []));
+            }])->orderBy('title', 'asc')->get();
+        } elseif ($request->headers->has('authorization') && !Auth::guard('api')->check()) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        } else {
+            $tags = Tag::with('childrenRecursive')->where('parent_id',1)->where('is_public',1)->withCount(['announcements'=>function ($query){
+                $query->withFilters(
+                    request()->input('users', []),
+                    request()->input('tags', []));
+            }])->orderBy('title', 'asc')->get();
+        }    
         return $tags;
     }
 

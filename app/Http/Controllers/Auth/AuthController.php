@@ -181,6 +181,11 @@ class AuthController extends Controller
      */
     public function authors(Request $request)
     {
-        return User::select('id', 'name')->where('is_author', 1)->orderBy('name', 'asc')->get();
+        return User::select('id', 'name')->where('is_author', 1)
+        ->withCount(['announcements'=>function ($query){
+            $query->withFilters(
+                request()->input('users', []),
+                request()->input('tags', []));
+        }])->orderBy('name', 'asc')->get();
     }
 }

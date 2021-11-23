@@ -35,7 +35,11 @@ class Tag extends Model
 
     public function childrenRecursive()
     {
-        return $this->children()->with('childrenRecursive');        
+        return $this->children()->withCount(['announcements'=>function ($query){
+            $query->withFilters(
+                request()->input('users', []),
+                request()->input('tags', []));
+        }])->with('childrenRecursive');        
     }
 
     /**
