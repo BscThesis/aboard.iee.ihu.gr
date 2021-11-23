@@ -16,7 +16,7 @@
                 :options="tags"
                 :normalizer="tagNormalizer"
                 placeholder="Επιλέξτε ετικέτες..."
-                v-model="selectedTagValues"
+                v-model="selected.tags"
                 v-on:input="tagValueChange"
             />
         </section>
@@ -30,7 +30,7 @@
                 :options="profs"
                 :normalizer="profNormalizer"
                 placeholder="Επιλέξτε καθηγητές..."
-                v-model="selectedProfValues"
+                v-model="selected.users"
                 v-on:input="profValueChange"
             />
         </section>
@@ -84,19 +84,21 @@ export default {
     },
     components: { Treeselect },
     data: () => ({
-        selectedTagValues: [],
+        selected: {
+            users: [],
+            tags: []
+        },
         tags: [],
         tagNormalizer(node) {
             return {
-                label: node.title,
+                label: "[" + node.announcements_count + "] " + node.title,
                 children: node.children_recursive
             };
         },
-        selectedProfValues: [],
         profs: [],
         profNormalizer(node) {
             return {
-                label: node.name
+                label: "[" + node.announcements_count + "] " + node.name
             };
         },
         selectedSortValue: null,
@@ -110,7 +112,16 @@ export default {
             label: value
         }))
     }),
-    created: function() {
+    watch: {
+        selected: {
+            handler: function() {
+                this.getTags();
+                this.getProfs();
+            },
+            deep: true
+        }
+    },
+    mounted: function() {
         this.getTags();
         this.getProfs();
     },
@@ -118,7 +129,9 @@ export default {
         getTags: function() {
             let vm = this;
             axios
-                .get("/api/filtertags")
+                .get("/api/filtertags", {
+                    params: _.omit(this.selected, "tags")
+                })
                 .then(response => {
                     let apiTags = response.data;
                     vm.tags = vm.removeEmptyChildrenTags(apiTags);
@@ -146,7 +159,9 @@ export default {
         getProfs: function() {
             let vm = this;
             axios
-                .get("/api/auth/authors")
+                .get("/api/auth/authors", {
+                    params: _.omit(this.selected, "users")
+                })
                 .then(response => {
                     vm.profs = response.data;
                 })
@@ -163,10 +178,10 @@ export default {
             this.$parent.getAnnouncements(2);
         },
         profValueChange: function() {
-            this.$emit("update:users", this.selectedProfValues);
+            this.$emit("update:users", this.selected.users);
         },
         tagValueChange: function() {
-            this.$emit("update:selectedTags", this.selectedTagValues);
+            this.$emit("update:selectedTags", this.selected.tags);
         }
     }
 };
