@@ -13,7 +13,7 @@
             <treeselect
                 id="tags"
                 :multiple="true"
-                :options="tags"
+                :options="tagsOptions"
                 :normalizer="tagNormalizer"
                 placeholder="Επιλέξτε ετικέτες..."
                 v-model="selected.tags"
@@ -27,7 +27,7 @@
             <treeselect
                 id="profs"
                 :multiple="true"
-                :options="profs"
+                :options="profsOptions"
                 :normalizer="profNormalizer"
                 placeholder="Επιλέξτε καθηγητές..."
                 v-model="selected.users"
@@ -48,7 +48,7 @@
         </section>
 
         <!-- Layout Selection -->
-        <section>
+        <section class="mb-4">
             <label for="layout">Επιλογή εμφάνισης</label>
             <treeselect
                 id="layout"
@@ -58,6 +58,19 @@
                 :clearable="false"
                 v-model="selectedLayoutValue"
                 v-on:input="layoutChange"
+            />
+        </section>
+
+        <section>
+            <label for="perPage">Επιλογή ανά σελίδα:</label>
+            <treeselect
+                id="perPage"
+                :multiple="false"
+                :options="perPageOptions"
+                placeholder="Per Page"
+                :clearable="false"
+                v-model="selected.perPage"
+                v-on:input="perPageChange"
             />
         </section>
     </aside>
@@ -73,12 +86,16 @@ export default {
             type: Boolean,
             required: true
         },
-        users: {
+        usersProp: {
             type: Array,
             required: true
         },
-        selectedTags: {
+        tagsProp: {
             type: Array,
+            required: true
+        },
+        perPageProp: {
+            type: Number,
             required: true
         }
     },
@@ -86,29 +103,34 @@ export default {
     data: () => ({
         selected: {
             users: [],
-            tags: []
+            tags: [],
+            perPage: 10
         },
-        tags: [],
+        tagsOptions: [],
         tagNormalizer(node) {
             return {
                 label: "[" + node.announcements_count + "] " + node.title,
                 children: node.children_recursive
             };
         },
-        profs: [],
+        profsOptions: [],
         profNormalizer(node) {
             return {
                 label: "[" + node.announcements_count + "] " + node.name
             };
         },
         selectedSortValue: null,
-        sort: ["Νεότερα", "Παλαιότερα"].map((value, index) => ({
+        sort: ["Νεότερα", "Παλαιότερα"].map(value => ({
             id: value,
             label: value
         })),
         selectedLayoutValue: 0,
         layout: ["List", "Compact", "Box"].map((value, index) => ({
             id: index,
+            label: value
+        })),
+        perPageOptions: [5, 10, 15, 20].map(value => ({
+            id: value,
             label: value
         }))
     }),
@@ -134,7 +156,7 @@ export default {
                 })
                 .then(response => {
                     let apiTags = response.data;
-                    vm.tags = vm.removeEmptyChildrenTags(apiTags);
+                    vm.tagsOptions = vm.removeEmptyChildrenTags(apiTags);
                 })
                 .catch(() => {
                     toast({
@@ -163,7 +185,7 @@ export default {
                     params: _.omit(this.selected, "users")
                 })
                 .then(response => {
-                    vm.profs = response.data;
+                    vm.profsOptions = response.data;
                 })
                 .catch(() => {
                     toast({
@@ -178,10 +200,13 @@ export default {
             this.$parent.getAnnouncements(2);
         },
         profValueChange: function() {
-            this.$emit("update:users", this.selected.users);
+            this.$emit("update:usersProp", this.selected.users);
         },
         tagValueChange: function() {
-            this.$emit("update:selectedTags", this.selected.tags);
+            this.$emit("update:tagsProp", this.selected.tags);
+        },
+        perPageChange: function() {
+            this.$emit("update:perPageProp", this.selected.perPage);
         }
     }
 };

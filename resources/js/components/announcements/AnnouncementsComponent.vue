@@ -3,8 +3,9 @@
         class="main-content is-justify-content-center columns is-mobile is-fullheight"
     >
         <sidebar
-            v-bind:users.sync="selected.users"
-            v-bind:selectedTags.sync="selected.tags"
+            v-bind:usersProp.sync="selected.users"
+            v-bind:tagsProp.sync="selected.tags"
+            v-bind:perPageProp.sync="selected.perPage"
             v-bind:showFilters="showFilters"
         ></sidebar>
         <div
@@ -68,7 +69,8 @@ export default {
             showFilters: false,
             selected: {
                 users: [],
-                tags: []
+                tags: [],
+                perPage: 10
             }
         };
     },
