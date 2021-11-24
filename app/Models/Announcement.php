@@ -12,7 +12,10 @@ use \Carbon\Carbon;
 
 class Announcement extends Model implements Feedable
 {
+
     use SoftDeletes, Notifiable;
+
+    const SORT_VALUES = ['IF(pinned_until >= NOW(), pinned_until, 1) DESC, updated_at DESC','updated_at DESC','updated_at ASC'] ;
 
     public function tags()
     {

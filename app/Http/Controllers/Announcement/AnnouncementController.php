@@ -42,17 +42,20 @@ class AnnouncementController extends Controller
     public function index(Request $request)
     {
         $local_ip = $request->session()->get('local_ip', 0);
+        $per_page = request()->input('perPage',10);
+        $sort_id = request()->input('sortId',0);
+
         if ($local_ip == 1 or Auth::guard('api')->check()) {
             $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]))->
-            orderByRaw('IF(pinned_until >= NOW(), pinned_until, 1) DESC, updated_at DESC')->whereNull('deleted_at')->paginate(10);
+            orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at')->paginate($per_page);
 
         } elseif ($request->headers->has('authorization') && !Auth::guard('api')->check()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         } else {
             $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]))
             ->whereHas('tags', function (Builder $query) {
-                $query->where('is_public', '=', 1);
-            })->orderByRaw('IF(pinned_until >= NOW(), pinned_until, 1) DESC, updated_at DESC')->whereNull('deleted_at')->paginate(10);
+                $query->where('is_public', 1);
+            })->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at')->paginate($per_page);
         }    
         // Return announcements as a json
         return AnnouncementResource::collection($announcements);
