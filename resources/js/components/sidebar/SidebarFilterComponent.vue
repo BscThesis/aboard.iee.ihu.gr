@@ -42,8 +42,10 @@
                 id="sort"
                 :multiple="false"
                 :options="sort"
+                :clearable="false"
                 placeholder="Tαξινόμηση"
-                v-model="selectedSortValue"
+                v-model="selected.sortId"
+                v-on:input="sortIdChange"
             />
         </section>
 
@@ -97,6 +99,10 @@ export default {
         perPageProp: {
             type: Number,
             required: true
+        },
+        sortProp: {
+            type: Number,
+            required: true
         }
     },
     components: { Treeselect },
@@ -104,7 +110,8 @@ export default {
         selected: {
             users: [],
             tags: [],
-            perPage: 10
+            perPage: 10,
+            sortId: 0
         },
         tagsOptions: [],
         tagNormalizer(node) {
@@ -119,9 +126,8 @@ export default {
                 label: "[" + node.announcements_count + "] " + node.name
             };
         },
-        selectedSortValue: null,
-        sort: ["Νεότερα", "Παλαιότερα"].map(value => ({
-            id: value,
+        sort: ["Pinned First", "Newest", "Oldest"].map((value, index) => ({
+            id: index,
             label: value
         })),
         selectedLayoutValue: 0,
@@ -207,6 +213,9 @@ export default {
         },
         perPageChange: function() {
             this.$emit("update:perPageProp", this.selected.perPage);
+        },
+        sortIdChange: function() {
+            this.$emit("update:sortProp", this.selected.sortId);
         }
     }
 };

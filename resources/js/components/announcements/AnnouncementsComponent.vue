@@ -6,6 +6,7 @@
             v-bind:usersProp.sync="selected.users"
             v-bind:tagsProp.sync="selected.tags"
             v-bind:perPageProp.sync="selected.perPage"
+            v-bind:sortProp.sync="selected.sortId"
             v-bind:showFilters="showFilters"
         ></sidebar>
         <div
@@ -70,7 +71,8 @@ export default {
             selected: {
                 users: [],
                 tags: [],
-                perPage: 10
+                perPage: 10,
+                sortId: 0
             }
         };
     },
