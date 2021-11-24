@@ -16,7 +16,7 @@
                 :options="tagsOptions"
                 :normalizer="tagNormalizer"
                 placeholder="Επιλέξτε ετικέτες..."
-                v-model="selected.tags"
+                v-model="tags"
                 v-on:input="tagValueChange"
             />
         </section>
@@ -30,7 +30,7 @@
                 :options="profsOptions"
                 :normalizer="profNormalizer"
                 placeholder="Επιλέξτε καθηγητές..."
-                v-model="selected.users"
+                v-model="users"
                 v-on:input="profValueChange"
             />
         </section>
@@ -44,7 +44,7 @@
                 :options="sort"
                 :clearable="false"
                 placeholder="Tαξινόμηση"
-                v-model="selected.sortId"
+                v-model="sortId"
                 v-on:input="sortIdChange"
             />
         </section>
@@ -71,7 +71,7 @@
                 :options="perPageOptions"
                 placeholder="Per Page"
                 :clearable="false"
-                v-model="selected.perPage"
+                v-model="perPage"
                 v-on:input="perPageChange"
             />
         </section>
@@ -107,12 +107,10 @@ export default {
     },
     components: { Treeselect },
     data: () => ({
-        selected: {
-            users: [],
-            tags: [],
-            perPage: 10,
-            sortId: 0
-        },
+        users: [],
+        tags: [],
+        perPage: 10,
+        sortId: 0,
         tagsOptions: [],
         tagNormalizer(node) {
             return {
@@ -141,12 +139,15 @@ export default {
         }))
     }),
     watch: {
-        selected: {
+        users: {
             handler: function() {
                 this.getTags();
+            }
+        },
+        tags: {
+            handler: function() {
                 this.getProfs();
-            },
-            deep: true
+            }
         }
     },
     mounted: function() {
@@ -156,9 +157,14 @@ export default {
     methods: {
         getTags: function() {
             let vm = this;
+            let selected = {
+                users: this.users,
+                perPage: this.perPage,
+                sortId: this.sortId
+            };
             axios
                 .get("/api/filtertags", {
-                    params: _.omit(this.selected, "tags")
+                    params: selected
                 })
                 .then(response => {
                     let apiTags = response.data;
@@ -186,9 +192,14 @@ export default {
         },
         getProfs: function() {
             let vm = this;
+            let selected = {
+                tags: this.tags,
+                perPage: this.perPage,
+                sortId: this.sortId
+            };
             axios
                 .get("/api/auth/authors", {
-                    params: _.omit(this.selected, "users")
+                    params: selected
                 })
                 .then(response => {
                     vm.profsOptions = response.data;
@@ -206,16 +217,16 @@ export default {
             this.$parent.getAnnouncements(2);
         },
         profValueChange: function() {
-            this.$emit("update:usersProp", this.selected.users);
+            this.$emit("update:usersProp", this.users);
         },
         tagValueChange: function() {
-            this.$emit("update:tagsProp", this.selected.tags);
+            this.$emit("update:tagsProp", this.tags);
         },
         perPageChange: function() {
-            this.$emit("update:perPageProp", this.selected.perPage);
+            this.$emit("update:perPageProp", this.perPage);
         },
         sortIdChange: function() {
-            this.$emit("update:sortProp", this.selected.sortId);
+            this.$emit("update:sortProp", this.sortId);
         }
     }
 };
