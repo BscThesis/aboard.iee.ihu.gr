@@ -8,6 +8,7 @@
             v-bind:perPageProp.sync="selected.perPage"
             v-bind:sortProp.sync="selected.sortId"
             v-bind:showFilters="showFilters"
+            v-bind:searchProp.sync="selected.q"
         ></sidebar>
         <div
             v-bind:class="{ noDisplay: showFilters }"
@@ -72,7 +73,8 @@ export default {
                 users: [],
                 tags: [],
                 perPage: 10,
-                sortId: 0
+                sortId: 0,
+                q: ""
             }
         };
     },

@@ -5,7 +5,7 @@
     >
         <p class="menu-label">Φίλτρα</p>
         <!-- Search -->
-        <search-default></search-default>
+        <search-default v-bind:searchProp.sync="search"></search-default>
 
         <!-- Tags -->
         <section class="mb-4">
@@ -103,10 +103,15 @@ export default {
         sortProp: {
             type: Number,
             required: true
+        },
+        searchProp: {
+            type: String,
+            required: true
         }
     },
     components: { Treeselect },
     data: () => ({
+        search: "",
         users: [],
         tags: [],
         perPage: 10,
@@ -147,6 +152,13 @@ export default {
         tags: {
             handler: function() {
                 this.getProfs();
+            }
+        },
+        search: {
+            handler: function() {
+                this.$emit("update:searchProp", this.search);
+                this.getTags();
+                this.getProfs;
             }
         }
     },
