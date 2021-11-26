@@ -48,7 +48,6 @@ class AnnouncementController extends Controller
         if ($local_ip == 1 or Auth::guard('api')->check()) {
             $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]),json_decode(request()->input('q', '')))
             ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at');
-
         } elseif ($request->headers->has('authorization') && !Auth::guard('api')->check()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         } else {
@@ -58,7 +57,7 @@ class AnnouncementController extends Controller
             })->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at');
         }    
         // Return announcements as a json
-        $announcements = $announcements->paginate($per_page);
+        $announcements = $announcements->distinct()->paginate($per_page);
         return AnnouncementResource::collection($announcements);
     }
 

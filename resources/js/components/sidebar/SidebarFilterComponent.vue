@@ -111,7 +111,7 @@ export default {
     },
     components: { Treeselect },
     data: () => ({
-        search: "",
+        search: JSON.stringify(""),
         users: [],
         tags: [],
         perPage: 10,
@@ -158,7 +158,7 @@ export default {
             handler: function() {
                 this.$emit("update:searchProp", this.search);
                 this.getTags();
-                this.getProfs;
+                this.getProfs();
             }
         }
     },
@@ -172,7 +172,8 @@ export default {
             let selected = {
                 users: this.users,
                 perPage: this.perPage,
-                sortId: this.sortId
+                sortId: this.sortId,
+                q: this.search
             };
             axios
                 .get("/api/filtertags", {
@@ -207,7 +208,8 @@ export default {
             let selected = {
                 tags: this.tags,
                 perPage: this.perPage,
-                sortId: this.sortId
+                sortId: this.sortId,
+                q: this.search
             };
             axios
                 .get("/api/auth/authors", {

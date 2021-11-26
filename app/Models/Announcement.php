@@ -42,15 +42,12 @@ class Announcement extends Model implements Feedable
     public function scopeWithFilters($query, $users, $tags, $param)
     {
         return $query->when($param !== '', function ($query) use ($param) {
-            $query->orWhere('title', 'LIKE', '%' . $param . '%')
-            ->orWhere('eng_title', 'LIKE', '%' . $param . '%')
-            ->orWhere('eng_body', 'LIKE', '%' . $param . '%')
-            ->orWhere('body', 'LIKE', '%' . $param . '%');
-        })
-        ->when(count($users), function ($query) use ($users) {
-
+            $query->where(function($query) use ($param) {
+                $query->where('title', 'LIKE', '%' . $param . '%')
+                ->orWhere('eng_title', 'LIKE', '%' . $param . '%');
+            });            
+        })->when(count($users), function ($query) use ($users) {
             $query->whereIn('user_id', $users);
-
         })->when(count($tags), function ($query) use ($tags){
            $query->whereHas('tags', function ($query) use ($tags) {
                 $query->whereIn('id', $tags);

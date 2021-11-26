@@ -74,7 +74,7 @@ export default {
                 tags: [],
                 perPage: 10,
                 sortId: 0,
-                q: ""
+                q: JSON.stringify("")
             }
         };
     },
