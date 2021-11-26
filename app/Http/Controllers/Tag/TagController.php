@@ -51,7 +51,8 @@ class TagController extends Controller
             $tags = Tag::with('childrenRecursive')->where('parent_id',1)->withCount(['announcements'=>function ($query){
                 $query->withFilters(
                     request()->input('users', []),
-                    request()->input('tags', []));
+                    request()->input('tags', []),
+                    json_decode(request()->input('q', '')));
             }])->orderBy('title', 'asc')->get();
         } elseif ($request->headers->has('authorization') && !Auth::guard('api')->check()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
@@ -59,7 +60,8 @@ class TagController extends Controller
             $tags = Tag::with('childrenRecursive')->where('parent_id',1)->where('is_public',1)->withCount(['announcements'=>function ($query){
                 $query->withFilters(
                     request()->input('users', []),
-                    request()->input('tags', []));
+                    request()->input('tags', []),
+                    json_decode(request()->input('q', '')));
             }])->orderBy('title', 'asc')->get();
         }    
         return $tags;

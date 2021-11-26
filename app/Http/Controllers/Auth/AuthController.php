@@ -188,7 +188,8 @@ class AuthController extends Controller
             ->withCount(['announcements'=>function ($query) use ($request){
                 $query->withFilters(
                     request()->input('users', []),
-                    request()->input('tags', []));
+                    request()->input('tags', []),
+                    json_decode(request()->input('q', '')));
             }])->orderBy('name', 'asc')->get();
         } elseif  ($request->headers->has('authorization') && !Auth::guard('api')->check()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
@@ -201,7 +202,8 @@ class AuthController extends Controller
                 })
                 ->withFilters(
                     request()->input('users', []),
-                    request()->input('tags', [])  
+                    request()->input('tags', []),
+                    json_decode(request()->input('q', ''))  
                 );
             }])->orderBy('name', 'asc')->get();
             
