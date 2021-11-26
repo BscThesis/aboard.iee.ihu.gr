@@ -47,7 +47,7 @@ class AnnouncementController extends Controller
 
         if ($local_ip == 1 or Auth::guard('api')->check()) {
             $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]))->
-            orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at')->paginate($per_page);
+            orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at');
 
         } elseif ($request->headers->has('authorization') && !Auth::guard('api')->check()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
@@ -55,9 +55,19 @@ class AnnouncementController extends Controller
             $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]))
             ->whereHas('tags', function (Builder $query) {
                 $query->where('is_public', 1);
-            })->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at')->paginate($per_page);
+            })->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at');
         }    
+        if($request->exists("q")){
+            $param = json_decode($request->input("q"));
+            $announcements = $announcements->where(function ($query) use ($param) {
+                $query->orWhere('title', 'LIKE', '%' . $param . '%')
+                ->orWhere('eng_title', 'LIKE', '%' . $param . '%')
+                ->orWhere('eng_body', 'LIKE', '%' . $param . '%')
+                ->orWhere('body', 'LIKE', '%' . $param . '%');
+            });
+        }
         // Return announcements as a json
+        $announcements = $announcements->distinct()->paginate($per_page);
         return AnnouncementResource::collection($announcements);
     }
 
