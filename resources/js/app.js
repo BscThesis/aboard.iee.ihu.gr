@@ -17,93 +17,59 @@ Vue.component(
     require("./components/global/FrontPageLinksComponent.vue").default
 );
 
-// Tags component
-Vue.component(
-    "tags",
-    require("./components/announcements/TagsComponent.vue").default
-);
-
-// Tags tree component
-Vue.component(
-    "tags-tree",
-    require("./components/announcements/TagsTreeComponent.vue").default
-);
-
-// Node component
-Vue.component(
-    "node-tree",
-    require("./components/announcements/NodeTreeComponent.vue").default
-);
-
-// Tags caret component
-Vue.component(
-    "tag-caret",
-    require("./components/announcements/TagCaretComponent.vue").default
-);
-
-// Tags tree component
-Vue.component(
-    "tag-click",
-    require("./components/announcements/TagClickComponent.vue").default
-);
-
 // Attachments component
 Vue.component(
     "attachments",
-    require("./components/announcements/AttachmentsComponent.vue").default
+    require("./components/announcements/single_announcement/full_announcement/AttachmentsComponent.vue")
+        .default
 );
 
 // Single Announcement Info component
 Vue.component(
     "single-announcement-info-component",
-    require("./components/announcements/SingleAnnouncementInfoComponent.vue")
+    require("./components/announcements/single_announcement/SingleAnnouncementInfoComponent.vue")
         .default
 );
 
 // Tags Default component
 Vue.component(
     "tags-default-component",
-    require("./components/announcements/TagsDefaultComponent.vue").default
+    require("./components/announcements/single_announcement/TagsDefaultComponent.vue")
+        .default
 );
 
 // Last update component
 Vue.component(
     "last-update",
-    require("./components/announcements/TimeLastUpdateComponent.vue").default
+    require("./components/announcements/single_announcement/full_announcement/TimeLastUpdateComponent.vue")
+        .default
 );
 
 // Full announcement body component
 Vue.component(
     "full-announcement-body",
-    require("./components/announcements/FullAnnouncementBodyComponent.vue")
+    require("./components/announcements/single_announcement/full_announcement/FullAnnouncementBodyComponent.vue")
         .default
 );
 
 // Title for single announcement (full view)
 Vue.component(
     "full-announcement-title",
-    require("./components/announcements/FullAnnouncementTitleComponent.vue")
+    require("./components/announcements/single_announcement/full_announcement/FullAnnouncementTitleComponent.vue")
         .default
 );
 
 // Front page announcement component
 Vue.component(
     "single-announcement-component-default",
-    require("./components/announcements/SingleAnnouncementComponentDefault.vue")
-        .default
-);
-
-// Front page announcement component
-Vue.component(
-    "single-announcement-component",
-    require("./components/announcements/SingleAnnouncementComponent.vue")
+    require("./components/announcements/single_announcement/SingleAnnouncementComponentDefault.vue")
         .default
 );
 
 // Front page announcement title component
 Vue.component(
     "single-announcement-title",
-    require("./components/announcements/SingleAnnouncementTitleComponent.vue")
+    require("./components/announcements/single_announcement/SingleAnnouncementTitleComponent.vue")
         .default
 );
 
@@ -131,22 +97,11 @@ Vue.component(
     require("./components/global/TextEditorComponent.vue").default
 );
 
-// All events component
-Vue.component(
-    "events-component-bulma",
-    require("./components/events/EventsComponent.vue").default
-);
-
-// Single event component
-Vue.component(
-    "event-component",
-    require("./components/events/SingleEventComponent.vue").default
-);
-
 // Single (full) announcement component
 Vue.component(
     "announcement-component-bulma",
-    require("./components/announcements/AnnouncementComponent.vue").default
+    require("./components/announcements/single_announcement/full_announcement/AnnouncementComponent.vue")
+        .default
 );
 
 // Create announcement component
@@ -168,34 +123,10 @@ Vue.component(
     require("./components/search/SearchByAuthorComponent.vue").default
 );
 
-// Custom search component
-Vue.component(
-    "custom-search-component",
-    require("./components/search/CustomSearchComponent.vue").default
-);
-
-// Search component for front page
-Vue.component(
-    "search-component",
-    require("./components/search/SearchComponent.vue").default
-);
-
 // Breadcrumb component
 Vue.component(
     "breadcrumb-component",
     require("./components/search/BreadcrumbComponent.vue").default
-);
-
-// Authors component
-Vue.component(
-    "authors-component",
-    require("./components/global/AuthorsComponent.vue").default
-);
-
-// Tags component
-Vue.component(
-    "tags-component",
-    require("./components/global/TagsComponent.vue").default
 );
 
 // Loader component
@@ -243,26 +174,29 @@ Vue.component(
 // Announcement buttons component
 Vue.component(
     "announcement-buttons-component",
-    require("./components/announcements/AnnouncementButtonsComponent.vue")
+    require("./components/announcements/single_announcement/full_announcement/AnnouncementButtonsComponent.vue")
         .default
 );
 
 // Back button component
 Vue.component(
     "back-button-component",
-    require("./components/announcements/BackButtonComponent.vue").default
+    require("./components/announcements/single_announcement/full_announcement/BackButtonComponent.vue")
+        .default
 );
 
 // Edit button component
 Vue.component(
     "edit-button-component",
-    require("./components/announcements/EditButtonComponent.vue").default
+    require("./components/announcements/single_announcement/full_announcement/EditButtonComponent.vue")
+        .default
 );
 
 // Delete button component
 Vue.component(
     "delete-button-component",
-    require("./components/announcements/DeleteButtonComponent.vue").default
+    require("./components/announcements/single_announcement/full_announcement/DeleteButtonComponent.vue")
+        .default
 );
 
 // User dropdown

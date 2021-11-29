@@ -36,18 +36,6 @@ Route::get('/announcements/{id}/edit', function ($id) {
 Route::get('/announcements/{an_id}/attachments/{at_id}', 'Attachment\AttachmentController@show')
     ->middleware('android.app', 'announcement.attachment.check');
 
-Route::get('/events', function () {
-    return view('pages.events');
-});
-
-Route::get('/authors', function () {
-    return view('pages.authors');
-});
-
-Route::get('/tags', function () {
-    return view('pages.tags');
-});
-
 Route::get('/search/tag/{id}', function ($id) {
     return view('search.bytag')->with('id', $id);
 })->middleware('web.id.check', 'web.tag.check');
@@ -55,10 +43,6 @@ Route::get('/search/tag/{id}', function ($id) {
 Route::get('/search/author/{id}', function ($id) {
     return view('search.byauthor')->with('id', $id);
 })->middleware('web.id.check');
-
-Route::get('/search/q={params}', function ($params) {
-    return view('search.custom')->with('params', $params);
-});
 
 Route::get('/documentation', function () {
     return view('pages.docs');

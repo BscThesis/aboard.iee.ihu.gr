@@ -63,6 +63,7 @@
             />
         </section>
 
+        <!-- Announcements Per Page Selection -->
         <section>
             <label for="perPage">Επιλογή ανά σελίδα:</label>
             <treeselect
@@ -107,6 +108,10 @@ export default {
         searchProp: {
             type: String,
             required: true
+        },
+        layoutProp: {
+            type: Number,
+            required: true
         }
     },
     components: { Treeselect },
@@ -114,7 +119,9 @@ export default {
         search: JSON.stringify(""),
         users: [],
         tags: [],
-        perPage: 10,
+        perPage: localStorage.getItem("per_page")
+            ? parseInt(localStorage.getItem("per_page"))
+            : 10,
         sortId: 0,
         tagsOptions: [],
         tagNormalizer(node) {
@@ -133,7 +140,9 @@ export default {
             id: index,
             label: value
         })),
-        selectedLayoutValue: 0,
+        selectedLayoutValue: localStorage.getItem("layout")
+            ? parseInt(localStorage.getItem("layout"))
+            : 0,
         layout: ["List", "Compact", "Box"].map((value, index) => ({
             id: index,
             label: value
@@ -226,9 +235,9 @@ export default {
                     });
                 });
         },
-        layoutChange: function(node, instanceId) {
-            // Κάνω την αλλαγή πρώτα στη βάση και μετά καλώ από τον parent για να δω τι layout διάλεξε ο χρήστης
-            this.$parent.getAnnouncements(2);
+        layoutChange: function() {
+            localStorage.setItem("layout", this.selectedLayoutValue);
+            this.$emit("update:layoutProp", this.selectedLayoutValue);
         },
         profValueChange: function() {
             this.$emit("update:usersProp", this.users);
@@ -237,6 +246,7 @@ export default {
             this.$emit("update:tagsProp", this.tags);
         },
         perPageChange: function() {
+            localStorage.setItem("per_page", this.perPage);
             this.$emit("update:perPageProp", this.perPage);
         },
         sortIdChange: function() {

@@ -9,6 +9,7 @@
             v-bind:sortProp.sync="selected.sortId"
             v-bind:showFilters="showFilters"
             v-bind:searchProp.sync="selected.q"
+            v-bind:layoutProp.sync="layout"
         ></sidebar>
         <div
             v-bind:class="{ noDisplay: showFilters }"
@@ -31,13 +32,8 @@
                     v-for="announcement in announcements.data"
                     v-bind:key="announcement.id"
                     v-bind:announcement="announcement"
+                    v-bind:layout="layout"
                 ></single-announcement-component-default>
-                <!-- Announcement loop -->
-                <!-- <single-announcement-component
-                        v-for="announcement in announcements.data"
-                        v-bind:key="announcement.id"
-                        v-bind:announcement="announcement"
-                    ></single-announcement-component> -->
             </div>
 
             <!-- Pagination -->
@@ -72,10 +68,15 @@ export default {
             selected: {
                 users: [],
                 tags: [],
-                perPage: 10,
+                perPage: localStorage.getItem("per_page")
+                    ? parseInt(localStorage.getItem("per_page"))
+                    : 10,
                 sortId: 0,
                 q: JSON.stringify("")
-            }
+            },
+            layout: localStorage.getItem("layout")
+                ? parseInt(localStorage.getItem("layout"))
+                : 0
         };
     },
     mounted: function() {

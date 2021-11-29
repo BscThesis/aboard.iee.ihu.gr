@@ -1,5 +1,5 @@
 <template>
-    <div class="box p-2 mb-1">
+    <div v-bind:class="layout == 0 ? 'p-2 mb-1' : ''" class="box">
         <article class="media">
             <div class="media-content is-clipped">
                 <div class="content">
@@ -13,16 +13,14 @@
                         >
                             <i class="fas fa-thumbtack fa-lg fa-rotate-325"></i>
                         </span>
+
                         <!-- title -->
                         <single-announcement-title
-                            v-if="displayEnglish == false"
-                            v-bind:title="announcement.title"
-                            v-bind:id="announcement.id"
-                        ></single-announcement-title>
-
-                        <single-announcement-title
-                            v-if="displayEnglish == true"
-                            v-bind:title="announcement.eng_title"
+                            v-bind:title="
+                                displayEnglish
+                                    ? announcement.eng_title
+                                    : announcement.title
+                            "
                             v-bind:id="announcement.id"
                         ></single-announcement-title>
 
@@ -39,8 +37,39 @@
                                 <i class="fas fa-exchange-alt"></i>
                             </span>
                         </div>
+                        <template v-if="layout == 1">
+                            <!-- Dropdown -->
+                            <div class="column is-narrow">
+                                <span class="is-pulled-right">
+                                    <span
+                                        class="icon is-clickable"
+                                        @click="open = !open"
+                                    >
+                                        <i
+                                            v-bind:class="
+                                                open
+                                                    ? 'fas fa-chevron-down'
+                                                    : 'fas fa-chevron-right'
+                                            "
+                                        ></i>
+                                    </span>
+                                </span>
+                            </div>
+
+                            <!-- Announcement body -->
+                            <full-announcement-body
+                                v-bind:class="{ 'has-text-hidden': !open }"
+                                v-bind:body="
+                                    displayEnglish
+                                        ? announcement.eng_body
+                                        : announcement.body
+                                "
+                                v-bind:attachments="announcement.attachments"
+                            ></full-announcement-body>
+                        </template>
                     </div>
                 </div>
+
                 <hr class="my-1" />
 
                 <!-- Single Announcement Info -->
@@ -60,6 +89,10 @@ export default {
     props: {
         announcement: {
             type: Object,
+            required: true
+        },
+        layout: {
+            type: Number,
             required: true
         }
     },

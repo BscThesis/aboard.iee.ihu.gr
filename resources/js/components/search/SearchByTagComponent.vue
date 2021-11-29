@@ -17,11 +17,12 @@
                 <loader-component></loader-component>
 
                 <!-- Announcement loop -->
-                <single-announcement-component
+                <single-announcement-component-default
                     v-for="announcement in announcements.data"
                     v-bind:key="announcement.id"
                     v-bind:announcement="announcement"
-                ></single-announcement-component>
+                    v-bind:layout="layout"
+                ></single-announcement-component-default>
 
                 <!-- Pagination -->
                 <pagination
@@ -57,7 +58,10 @@ export default {
                 parent_id: "",
                 is_public: ""
             },
-            announcements: {}
+            announcements: {},
+            layout: localStorage.getItem("layout")
+                ? parseInt(localStorage.getItem("layout"))
+                : 0
         };
     },
     created: function() {
