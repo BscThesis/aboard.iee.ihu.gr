@@ -16,7 +16,7 @@
 
                 <div class="level-right is-hidden-mobile">
                     <p
-                        v-if="is_admin || is_the_author"
+                        v-if="is_admin || is_author"
                         class="level-item is-size-7"
                     >
                         <a href="/documentation">API Docs</a>
@@ -95,17 +95,17 @@ export default {
         return {
             modalOpen: false,
             is_admin: false,
-            is_the_author: false
+            is_author: false
         };
     },
     mounted: function() {
         if (localStorage.getItem("user_info")) {
+            this.is_author = JSON.parse(
+                localStorage.getItem("user_info")
+            ).is_author;
             this.is_admin = JSON.parse(
                 localStorage.getItem("user_info")
             ).is_admin;
-            this.is_the_author =
-                JSON.parse(localStorage.getItem("user_info")).id ==
-                this.announcement.author.id;
         }
     },
     methods: {
