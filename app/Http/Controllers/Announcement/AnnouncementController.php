@@ -253,45 +253,6 @@ class AnnouncementController extends Controller
     }
 
     /**
-     * Display events.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function events()
-    {
-        $events = Announcement::select('id', 'title', 'event_location', 'gmaps', 'event_start_time', 'event_end_time')
-            ->orderBy('updated_at', 'desc')
-            ->where('is_event', 1)
-            ->paginate(12);
-
-        return $events;
-    }
-
-    /**
-     * Display pinned announcements.
-     *
-     * @return array
-     */
-    public function pinned(Request $request)
-    {
-        $local_ip = $request->session()->get('local_ip', 0);
-
-        if ($local_ip == 1 or Auth::guard('api')->check()) {
-            $pinned = Announcement::where([['is_pinned', '=', 1], ['pinned_until', '>=', (string)date("Y-m-d H:i", time())]])
-                ->whereNull('deleted_at')
-                ->orderBy('updated_at', 'desc')->get(['id', 'title']);
-        } else {
-            $pinned = Announcement::whereHas('tags', function (Builder $query) {
-                $query->where('is_public', '=', 1);
-            })
-                ->where([['is_pinned', '=', 1], ['pinned_until', '>=', (string)date("Y-m-d H:i", time())]])
-                ->whereNull('deleted_at')
-                ->orderBy('updated_at', 'desc')->get(['id', 'title']);
-        }
-        return $pinned;
-    }
-
-    /**
      * Search based on given tag.
      *
      * @return \Illuminate\Http\Response
@@ -337,37 +298,6 @@ class AnnouncementController extends Controller
                 ->orderBy('updated_at', 'desc')->paginate(10);
         }
 
-        return AnnouncementResource::collection($results);
-    }
-
-    /**
-     * Search based custom input.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function customSearch(Request $request)
-    {
-        $local_ip = $request->session()->get('local_ip', 0);
-
-        if ($local_ip == 1  or Auth::guard('api')->check()) {
-            $results = Announcement::orderBy('updated_at', 'desc');
-        } else {
-            $results = Announcement::whereHas('tags', function (Builder $query) {
-                $query->where('is_public', '=', 1);
-            })
-                ->orderBy('updated_at', 'desc');
-        }
-
-        $params = json_decode($request->input("q"));
-
-        $results = $results->where(function ($query) use ($params) {
-            foreach ($params as $param) {
-                $query->orWhere('title', 'LIKE', '%' . $param . '%')
-                    ->orWhere('eng_title', 'LIKE', '%' . $param . '%');
-            }
-        });
-
-        $results = $results->distinct()->paginate(10);
         return AnnouncementResource::collection($results);
     }
 

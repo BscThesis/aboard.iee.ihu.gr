@@ -15,13 +15,10 @@
                 </p>
 
                 <div class="level-right is-hidden-mobile">
-                    <p
-                        v-if="is_admin || is_author"
-                        class="level-item is-size-7"
-                    >
+                    <p class="level-item is-size-7">
                         <a href="/documentation">API Docs</a>
                     </p>
-                    <p v-if="is_admin" class="level-item is-size-7">
+                    <p class="level-item is-size-7">
                         <a
                             href="https://github.com/BscThesis/aboard.iee.ihu.gr"
                             target="_blank"
@@ -93,20 +90,8 @@
 export default {
     data: function() {
         return {
-            modalOpen: false,
-            is_admin: false,
-            is_author: false
+            modalOpen: false
         };
-    },
-    mounted: function() {
-        if (localStorage.getItem("user_info")) {
-            this.is_author = JSON.parse(
-                localStorage.getItem("user_info")
-            ).is_author;
-            this.is_admin = JSON.parse(
-                localStorage.getItem("user_info")
-            ).is_admin;
-        }
     },
     methods: {
         bodyClass(val) {

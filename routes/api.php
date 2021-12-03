@@ -27,15 +27,15 @@ Route::get('/announcements', 'Announcement\AnnouncementController@index');
 
 Route::get('/announcements/{id}', 'Announcement\AnnouncementController@show');
 
-Route::get('/events', 'Announcement\AnnouncementController@events');
+//Route::get('/events', 'Announcement\AnnouncementController@events');
 
-Route::get('/pinned', 'Announcement\AnnouncementController@pinned');
+//Route::get('/pinned', 'Announcement\AnnouncementController@pinned');
 
 Route::get('/search/tag/{id}', 'Announcement\AnnouncementController@searchByTag');
 
 Route::get('/search/author/{id}', 'Announcement\AnnouncementController@searchByAuthor');
 
-Route::get('/search', 'Announcement\AnnouncementController@customSearch');
+//Route::get('/search', 'Announcement\AnnouncementController@customSearch');
 
 //----------------------------------------
 //          Attachments Routes

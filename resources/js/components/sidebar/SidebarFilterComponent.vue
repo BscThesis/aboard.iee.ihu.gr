@@ -180,8 +180,6 @@ export default {
             let vm = this;
             let selected = {
                 users: this.users,
-                perPage: this.perPage,
-                sortId: this.sortId,
                 q: this.search
             };
             axios
@@ -216,8 +214,6 @@ export default {
             let vm = this;
             let selected = {
                 tags: this.tags,
-                perPage: this.perPage,
-                sortId: this.sortId,
                 q: this.search
             };
             axios
