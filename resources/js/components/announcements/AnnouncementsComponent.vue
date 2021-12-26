@@ -154,6 +154,7 @@ export default {
         },
         updateUrlParam() {
             let state = { ...this.selected };
+            state.q = JSON.stringify(this.selected.q);
             window.history.pushState(
                 state,
                 "",
