@@ -31,9 +31,16 @@ export default {
             search: ""
         };
     },
+    watch: {
+        searchProp: {
+            handler: function() {
+                this.search = this.searchProp;
+            }
+        }
+    },
     methods: {
         searchSet: function() {
-            this.$emit("update:searchProp", JSON.stringify(this.search));
+            this.$emit("update:searchProp", this.search);
         },
         deleteSearch: function() {
             this.search = "";

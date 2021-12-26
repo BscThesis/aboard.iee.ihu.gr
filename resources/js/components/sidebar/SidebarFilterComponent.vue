@@ -120,7 +120,7 @@ export default {
     },
     components: { Treeselect },
     data: () => ({
-        search: JSON.stringify(""),
+        search: "",
         users: [],
         tags: [],
         perPage: localStorage.getItem("per_page")
@@ -169,7 +169,7 @@ export default {
         },
         search: {
             handler: function() {
-                this.$emit("update:searchProp", this.search);
+                this.$emit("update:searchProp", JSON.stringify(this.search));
                 this.getTags();
                 this.getProfs();
             }

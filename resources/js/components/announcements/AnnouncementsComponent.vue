@@ -75,7 +75,7 @@ export default {
                     ? parseInt(localStorage.getItem("per_page"))
                     : 10,
                 sortId: 0,
-                q: JSON.stringify("")
+                q: ""
             },
             layout: localStorage.getItem("layout")
                 ? parseInt(localStorage.getItem("layout"))
@@ -133,7 +133,7 @@ export default {
                 // this.page = parseInt(searchParams.get("page"));
                 this.selected.perPage = parseInt(searchParams.get("perPage"));
                 this.selected.sortId = parseInt(searchParams.get("sortId"));
-                this.selected.q = searchParams.get("q");
+                this.selected.q = JSON.parse(searchParams.get("q"));
                 if (searchParams.get("tags").length > 0) {
                     const tagArray = this.convertStringArrayToIntegerArray(
                         searchParams.get("tags").split(",")
