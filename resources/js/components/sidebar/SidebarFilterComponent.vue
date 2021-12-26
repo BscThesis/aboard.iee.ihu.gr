@@ -198,7 +198,7 @@ export default {
             let vm = this;
             let selected = {
                 users: this.users,
-                q: this.search
+                q: JSON.stringify(this.search)
             };
             axios
                 .get("/api/filtertags", {
@@ -232,7 +232,7 @@ export default {
             let vm = this;
             let selected = {
                 tags: this.tags,
-                q: this.search
+                q: JSON.stringify(this.search)
             };
             axios
                 .get("/api/auth/authors", {
