@@ -112,6 +112,10 @@ export default {
         layoutProp: {
             type: Number,
             required: true
+        },
+        queryParamsProp: {
+            type: Boolean,
+            required: true
         }
     },
     components: { Treeselect },
@@ -169,6 +173,13 @@ export default {
                 this.getTags();
                 this.getProfs();
             }
+        },
+        queryParamsProp: {
+            handler: function() {
+                if (this.queryParamsProp) {
+                    this.setParams();
+                }
+            }
         }
     },
     mounted: function() {
@@ -176,6 +187,13 @@ export default {
         this.getProfs();
     },
     methods: {
+        setParams() {
+            this.search = this.searchProp;
+            this.users = this.usersProp;
+            this.tags = this.tagsProp;
+            this.perPage = this.perPageProp;
+            this.sortId = this.sortProp;
+        },
         getTags: function() {
             let vm = this;
             let selected = {

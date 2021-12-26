@@ -10,6 +10,7 @@
             v-bind:showFilters="showFilters"
             v-bind:searchProp.sync="selected.q"
             v-bind:layoutProp.sync="layout"
+            v-bind:queryParamsProp.sync="queryParams"
         ></sidebar>
         <div
             v-bind:class="{ noDisplay: showFilters }"
@@ -65,6 +66,8 @@ export default {
         return {
             announcements: {},
             showFilters: false,
+            queryParams: false,
+            // page: 1,
             selected: {
                 users: [],
                 tags: [],
@@ -81,14 +84,23 @@ export default {
     },
     mounted: function() {
         this.getAnnouncements();
+        this.setParamsToValues();
     },
     watch: {
         selected: {
             handler: function() {
+                // if (this.queryParams) this.getAnnouncements(this.page);
+                // else
                 this.getAnnouncements();
+                this.updateUrlParam();
             },
             deep: true
         }
+        // page: {
+        //     handler: function() {
+        //         this.updateUrlParam();
+        //     }
+        // }
     },
     methods: {
         filtersShow() {
@@ -101,6 +113,7 @@ export default {
                 })
                 .then(response => {
                     this.announcements = response.data;
+                    // this.page = page;
                     bus.$emit("loadingFinished", true);
                 })
                 .catch(() => {
@@ -111,6 +124,41 @@ export default {
                         position: "bottom-right"
                     });
                 });
+        },
+        setParamsToValues() {
+            var href = window.location.search;
+            if (href.length > 0) {
+                this.queryParams = true;
+                let searchParams = new URLSearchParams(href);
+                // this.page = parseInt(searchParams.get("page"));
+                this.selected.perPage = parseInt(searchParams.get("perPage"));
+                this.selected.sortId = parseInt(searchParams.get("sortId"));
+                this.selected.q = searchParams.get("q");
+                if (searchParams.get("tags").length > 0) {
+                    const tagArray = this.convertStringArrayToIntegerArray(
+                        searchParams.get("tags").split(",")
+                    );
+                    this.selected.tags = tagArray;
+                }
+                if (searchParams.get("users").length > 0) {
+                    const userArray = this.convertStringArrayToIntegerArray(
+                        searchParams.get("users").split(",")
+                    );
+                    this.selected.users = userArray;
+                }
+            }
+        },
+        convertStringArrayToIntegerArray(array) {
+            array = array.map(x => +x);
+            return array;
+        },
+        updateUrlParam() {
+            let state = { ...this.selected };
+            window.history.pushState(
+                state,
+                "",
+                "?" + new URLSearchParams(state).toString()
+            );
         }
     }
 };
