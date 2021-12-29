@@ -14,7 +14,7 @@ use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Session;
 use \Carbon\Carbon;
-use Socialite;
+use Laravel\Socialite\Facades\Socialite;
 use Str;
 use Hash;
 
@@ -31,9 +31,10 @@ class AuthController extends Controller
     }
 
 
-    public function singIn()
+    public function signIn()
     {
-        return Socialite::driver('iee')->redirect();
+	//dd(Socialite::driver('iee'));
+	return Socialite::driver('iee')->redirect();
     }
 
     public function redirect()

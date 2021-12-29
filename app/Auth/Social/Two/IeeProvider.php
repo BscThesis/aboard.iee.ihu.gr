@@ -3,6 +3,7 @@
 use Laravel\Socialite\Two\AbstractProvider;
 use Laravel\Socialite\Two\ProviderInterface;
 use Laravel\Socialite\Two\User;
+use Str;
 
 class IeeProvider extends AbstractProvider implements ProviderInterface  {
     /**
@@ -27,7 +28,7 @@ class IeeProvider extends AbstractProvider implements ProviderInterface  {
      */
     protected function getAuthUrl($state)
     {
-        return $this->buildAuthUrlFromBase('https://login.iee.ihu.gr/authorization/', $state);
+        return $this->buildAuthUrlFromBase('https://login.iee.ihu.gr/authorization', $state);
     }
 
     /**
@@ -48,11 +49,14 @@ class IeeProvider extends AbstractProvider implements ProviderInterface  {
      */
     protected function getUserByToken($token)
     {
-        $userUrl = 'https://api.iee.ihu.gr/profile';
+
+	$userUrl = 'https://api.iee.ihu.gr/profile?access_token=' . $token;
 
         $response = $this->getHttpClient()->get(
-            $userUrl, $this->getRequestOptions($token)
-        );
+		$userUrl, ['headers' => [
+			'Accept' => 'application/json',
+		],
+	]);
 
         $user = json_decode($response->getBody(), true);
 
@@ -67,12 +71,11 @@ class IeeProvider extends AbstractProvider implements ProviderInterface  {
      */
     protected function mapUserToObject(array $user)
     {
-
-        $group = $user['edupersonaffiliation'];
+        $group = $user['eduPersonAffiliation'];
         $name_gr = $group === "staff" ? $user['cn;lang-el'] : Str::upper($user['cn;lang-el']);
         $name_eng = !empty(Str::title($user['cn'])) ? Str::title($user['cn']) : Str::ascii($user['cn;lang-el']);
         $is_author = $group === "staff";
-        $email = $user['edupersonnickname'];
+        $email = $user['mail'];
 
         return (new User)->setRaw($user)->map([
             'id'       => $user['id'],

@@ -5,7 +5,7 @@ use Laravel\Socialite\SocialiteServiceProvider;
 
 class SocialitePlusServiceProvider extends SocialiteServiceProvider {
     public function register() {
-        $this->app->bindShared('Laravel\Socialite\Contracts\Factory', function ($app) {
+        $this->app->singleton('Laravel\Socialite\Contracts\Factory', function ($app) {
             $socialiteManager = new SocialiteManager($app);
  
             $socialiteManager->extend('iee', function() use ($socialiteManager) {

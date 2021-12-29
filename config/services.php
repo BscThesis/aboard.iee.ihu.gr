@@ -52,7 +52,8 @@ return [
 
     'iee' => [
         'client_id' => env('CLIENT_ID'),
-        'client_secret' => env('SECRET'),
-        'redirect'=> env('REDIRECT_URL')
+        'redirect' => env('REDIRECT_URI'),
+	'response_type' => env('RESPONSE_TYPE'),
+	'client_secret' => env('CLIENT_SECRET'),
     ],
 ];
