@@ -14,6 +14,9 @@ use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Session;
 use \Carbon\Carbon;
+use Socialite;
+use Str;
+use Hash;
 
 class AuthController extends Controller
 {
@@ -24,7 +27,21 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api')->except(['login', 'refresh', 'authors']);
+        $this->middleware('auth:api')->except(['login', 'refresh', 'authors', 'signIn', 'redirect']);
+    }
+
+
+    public function singIn()
+    {
+        return Socialite::driver('login.iee.ihu.gr')->redirect();
+    }
+
+    public function redirect()
+    {
+        $user = Socialite::driver('login.iee.ihu.gr')->user();
+        $user1 = User::query()->whereEmail($user->email)->first();
+        Auth::guard('web')->login($user);
+        return redirect('/announcements');
     }
 
     /**

@@ -49,4 +49,10 @@ return [
         'single_ips' => env('DEV_IP'),
         'ip_ranges' => env('LOCAL_IP_RANGES'),
     ],
+
+    'login.iee.ihu.gr' => [
+        'client_id' => env('CLIENT_ID'),
+        'client_secret' => env('SECRET'),
+        'redirect'=> env('REDIRECT_URL')
+    ],
 ];

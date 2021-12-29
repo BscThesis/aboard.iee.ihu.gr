@@ -48,7 +48,7 @@
                     v-if="userAuthenticated"
                 ></user-dropdown-component>
                 <div v-if="!userAuthenticated" class="navbar-item">
-                    <a class="button is-dark" href="/login">
+                    <a class="button is-dark" href="/sign-in">
                         <span class="is-size-6">Είσοδος</span>
                     </a>
                 </div>

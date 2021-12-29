@@ -52,6 +52,9 @@ Route::get('/login', function () {
     return view('user.login');
 })->name('login');
 
+Route::get('/sign-in', 'Auth\AuthController@signIn');
+Route::get('/sign-in/redirect', 'Auth\AuthController@redirect');
+
 Route::get('/user/preferences', function () {
     return view('user.preferences');
 })->middleware('auth')->name('preferences');
