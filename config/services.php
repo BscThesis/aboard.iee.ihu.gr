@@ -50,7 +50,7 @@ return [
         'ip_ranges' => env('LOCAL_IP_RANGES'),
     ],
 
-    'login.iee.ihu.gr' => [
+    'iee' => [
         'client_id' => env('CLIENT_ID'),
         'client_secret' => env('SECRET'),
         'redirect'=> env('REDIRECT_URL')

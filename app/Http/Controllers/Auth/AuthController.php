@@ -33,15 +33,16 @@ class AuthController extends Controller
 
     public function singIn()
     {
-        return Socialite::driver('login.iee.ihu.gr')->redirect();
+        return Socialite::driver('iee')->redirect();
     }
 
     public function redirect()
     {
-        $user = Socialite::driver('login.iee.ihu.gr')->user();
-        $user1 = User::query()->whereEmail($user->email)->first();
-        Auth::guard('web')->login($user);
-        return redirect('/announcements');
+        $user = Socialite::driver('iee')->user();
+        dd($user);
+        // $user1 = User::query()->whereEmail($user->email)->first();
+        // Auth::guard('web')->login($user);
+        // return redirect('/announcements');
     }
 
     /**
