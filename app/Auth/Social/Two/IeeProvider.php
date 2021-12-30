@@ -78,7 +78,7 @@ class IeeProvider extends AbstractProvider implements ProviderInterface  {
         $email = $user['mail'];
 
         return (new User)->setRaw($user)->map([
-            'id'       => $user['id'],
+            'uid'       => $user['uid'],
             'name'     => $name_gr,
             'name_eng' => $name_eng,
             'email'    => $email,
