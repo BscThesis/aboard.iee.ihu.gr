@@ -23,7 +23,7 @@ Route::get('/announcements/create', function () {
 
 Route::get('/announcements', function () {
     return view('pages.announcements');
-});
+})->name('announcements');
 
 Route::get('/announcements/{id}', function ($id) {
     return view('pages.announcement')->with('id', $id);
@@ -52,7 +52,7 @@ Route::get('/login', function () {
     return view('user.login');
 })->name('login');
 
-Route::get('/sign-in', 'Auth\AuthController@signIn');
+Route::get('/sign-in', 'Auth\AuthController@signIn')->name('sign-in');
 Route::get('/sign-in/redirect', 'Auth\AuthController@redirect');
 
 Route::get('/user/preferences', function () {

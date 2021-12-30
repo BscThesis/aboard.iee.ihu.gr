@@ -42,7 +42,7 @@ class AuthController extends Controller
         $user = Socialite::driver('iee')->user();
         
         $this->login($user);
-
+	return redirect(route('announcements'));
 
         // $user1 = User::query()->whereEmail($user->email)->first();
         // Auth::guard('web')->login($user);
@@ -56,38 +56,38 @@ class AuthController extends Controller
      */
     public function login($socialiteUser)
     {
+	//dd($socialiteUser['uid']);
         // Create or update user based on our results
-        $user = User::where('uid', $socialiteUser['uid'])->first();
+        $user = User::where('uid', $socialiteUser->uid)->first();
         if ($user === null) {
             $user = User::create(
                 [
-                    'name' => $socialiteUser['name'],
-                    'name_eng' => $socialiteUser['name_eng'],
-                    'email' => $socialiteUser['email'],
-                    'uid' => $socialiteUser['uid'],
-                    'is_author' => $socialiteUser['is_author']
+                    'name' => $socialiteUser->name,
+                    'name_eng' => $socialiteUser->name_eng,
+                    'email' => $socialiteUser->email,
+                    'uid' => $socialiteUser->uid,
+                    'is_author' => $socialiteUser->is_author
                 ]
             );
         } else {
-            $user = User::where('uid', $socialiteUser['uid'])->update(
+            $user = User::where('uid', $socialiteUser->uid)->update(
                 [
-                    'name' => $socialiteUser['name'],
-                    'name_eng' => $socialiteUser['name_eng'],
-                    'email' => $socialiteUser['email'],
-                    'uid' => $socialiteUser['uid'],
-                    'is_author' => $socialiteUser['is_author']
+                    'name' => $socialiteUser->name,
+                    'name_eng' => $socialiteUser->name_eng,
+                    'email' => $socialiteUser->email,
+                    'uid' => $socialiteUser->uid,
+                    'is_author' => $socialiteUser->is_author
                 ]
             );
         }
         try {
-            $user = User::where('uid', $socialiteUser['uid'])->first();
-            Auth::login($user);
+            $user = User::where('uid', $socialiteUser->uid)->first();
+            Auth('web')->login($user);
             Notification::send($user, new UserLoggedIn());
             $user->update([
                 'last_login_at' => Carbon::now()->toDateTimeString(),
-            ]);
-            return redirect('/announcements');
-            
+	    ]);
+	    return $user; 
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
             Auth('web')->logout();
             Session::flush();
