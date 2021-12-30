@@ -56,28 +56,26 @@ class AuthController extends Controller
      */
     public function login($socialiteUser)
     {
-        dd($socialiteUser);
-
         // Create or update user based on our results
         $user = User::where('uid', $socialiteUser['uid'])->first();
         if ($user === null) {
             $user = User::create(
                 [
-                    'name' => $name_gr,
-                    'name_eng' => $name_eng,
-                    'email' => $email,
+                    'name' => $socialiteUser['name'],
+                    'name_eng' => $socialiteUser['name_eng'],
+                    'email' => $socialiteUser['email'],
                     'uid' => $socialiteUser['uid'],
-                    'is_author' => $is_author
+                    'is_author' => $socialiteUser['is_author']
                 ]
             );
         } else {
             $user = User::where('uid', $socialiteUser['uid'])->update(
                 [
-                    'name' => $name_gr,
-                    'name_eng' => $name_eng,
-                    'email' => $email,
+                    'name' => $socialiteUser['name'],
+                    'name_eng' => $socialiteUser['name_eng'],
+                    'email' => $socialiteUser['email'],
                     'uid' => $socialiteUser['uid'],
-                    'is_author' => $is_author
+                    'is_author' => $socialiteUser['is_author']
                 ]
             );
         }
