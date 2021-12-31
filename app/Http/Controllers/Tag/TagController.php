@@ -46,7 +46,17 @@ class TagController extends Controller
     public function indexForFiltering(Request $request)
     {
         $local_ip = $request->session()->get('local_ip', 0);
-
+        if ($request->headers->has('authorization') && !Auth::guard('web')->check()) {
+            try{
+                $socialiteUser = Socialite::driver('iee')->userFromToken($request->bearerToken());
+                $user = User::where('uid', $socialiteUser['uid'])->first();
+                Auth('web')->login($user);
+            } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+                Auth('web')->logout();
+                Session::flush();
+                return response()->json(['message' => 'Unauthenticated'], 401);
+            }
+        }
         if ($local_ip == 1 or Auth::guard('web')->check()) {
             $tags = Tag::with('childrenRecursive')->where('parent_id',1)->withCount(['announcements'=>function ($query){
                 $query->withFilters(
@@ -54,8 +64,6 @@ class TagController extends Controller
                     request()->input('tags', []),
                     json_decode(request()->input('q', '')));
             }])->orderBy('title', 'asc')->get();
-        } elseif ($request->headers->has('authorization') && !Auth::guard('web')->check()) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
         } else {
             $tags = Tag::with('childrenRecursive')->where('parent_id',1)->where('is_public',1)->withCount(['announcements'=>function ($query){
                 $query->withFilters(

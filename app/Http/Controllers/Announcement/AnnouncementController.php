@@ -44,12 +44,20 @@ class AnnouncementController extends Controller
         $local_ip = $request->session()->get('local_ip', 0);
         $per_page = request()->input('perPage',10);
         $sort_id = request()->input('sortId',0);
-        
+        if ($request->headers->has('authorization') && !Auth::guard('web')->check()) {
+            try{
+                $socialiteUser = Socialite::driver('iee')->userFromToken($request->bearerToken());
+                $user = User::where('uid', $socialiteUser['uid'])->first();
+                Auth('web')->login($user);
+            } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+                Auth('web')->logout();
+                Session::flush();
+                return response()->json(['message' => 'Unauthenticated'], 401);
+            }
+        }
         if ($local_ip == 1 or Auth::guard('web')->check()) {
             $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]),json_decode(request()->input('q', '')))
             ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at');
-        } elseif ($request->headers->has('authorization') && !Auth::guard('web')->check()) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
         } else {
             $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]),json_decode(request()->input('q', '')))
             ->whereHas('tags', function (Builder $query) {
@@ -250,55 +258,6 @@ class AnnouncementController extends Controller
         } else {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
-    }
-
-    /**
-     * Search based on given tag.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function searchByTag($id, Request $request)
-    {
-        $local_ip = $request->session()->get('local_ip', 0);
-
-        if ($local_ip == 1  or Auth::guard('web')->check()) {
-            $results = Announcement::whereHas('tags', function (Builder $query) use ($id) {
-                $query->where('id', '=', $id);
-            })
-                ->orderBy('updated_at', 'desc')->paginate(10);
-        } else {
-            $results = Announcement::whereHas('tags', function (Builder $query) use ($id) {
-                $query->where('id', '=', $id);
-            })->whereHas('tags', function (Builder $query) {
-                $query->where('is_public', '=', 1);
-            })
-                ->orderBy('updated_at', 'desc')->paginate(10);
-        }
-
-        return AnnouncementResource::collection($results);
-    }
-
-    /**
-     * Search based on given tag.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function searchByAuthor($id, Request $request)
-    {
-        $local_ip = $request->session()->get('local_ip', 0);
-
-        if ($local_ip == 1  or Auth::guard('web')->check()) {
-            $results = Announcement::where('user_id', $id)
-                ->orderBy('updated_at', 'desc')->paginate(10);
-        } else {
-            $results = Announcement::where('user_id', $id)
-                ->whereHas('tags', function (Builder $query) {
-                    $query->where('is_public', '=', 1);
-                })
-                ->orderBy('updated_at', 'desc')->paginate(10);
-        }
-
-        return AnnouncementResource::collection($results);
     }
 
     /**

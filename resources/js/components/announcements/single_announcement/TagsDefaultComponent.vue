@@ -6,7 +6,6 @@
                     class="tag is-dark is-clickable"
                     v-for="tag in filteredTags"
                     v-bind:key="tag.id"
-                    @click="tagSearch(tag.id)"
                     >{{ tag.title }}</span
                 >
             </div>
@@ -20,11 +19,6 @@ export default {
         tags: {
             type: Array,
             required: true
-        }
-    },
-    methods: {
-        tagSearch(id) {
-            window.location.href = "/search/tag/" + id;
         }
     },
     computed: {

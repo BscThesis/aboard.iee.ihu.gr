@@ -12,9 +12,7 @@
                     <a>{{ updated_at }}</a>
                 </li>
                 <li class="mx-2">
-                    <a :href="'/search/author/' + author.id">{{
-                        author.name
-                    }}</a>
+                    <a>{{ author.name }}</a>
                 </li>
                 <li v-if="tags.length > 0" class="mx-2">
                     <!-- Tags -->
