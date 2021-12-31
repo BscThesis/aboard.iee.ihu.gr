@@ -27,7 +27,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api')->except(['login', 'refresh', 'authors', 'signIn', 'redirect']);
+        $this->middleware('auth:web')->except(['login', 'refresh', 'authors', 'signIn', 'redirect']);
     }
 
 
@@ -40,8 +40,8 @@ class AuthController extends Controller
     public function redirect()
     {
         $user = Socialite::driver('iee')->user();
-        
-        $this->login($user);
+	$this->login($user);
+	//dd($user);
 	return redirect(route('announcements'));
 
         // $user1 = User::query()->whereEmail($user->email)->first();
@@ -79,15 +79,18 @@ class AuthController extends Controller
                     'is_author' => $socialiteUser->is_author
                 ]
             );
-        }
+	}
+	
         try {
-            $user = User::where('uid', $socialiteUser->uid)->first();
-            Auth('web')->login($user);
+            $user = User::where('uid', $socialiteUser->uid)->first();	    
+	    $attributes = ['id' => $user->id];
+	    Auth::login($user);
             Notification::send($user, new UserLoggedIn());
             $user->update([
                 'last_login_at' => Carbon::now()->toDateTimeString(),
-	    ]);
-	    return $user; 
+	]);
+	  
+	    return new static($attributes); 
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
             Auth('web')->logout();
             Session::flush();
@@ -174,7 +177,7 @@ class AuthController extends Controller
      */
     public function subscribe(Request $request)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
         $tags = json_decode($request->input('tags'));
         $user->subscriptions()->sync($tags);
         return $request->user()->only('id', 'subscriptions');
@@ -187,7 +190,7 @@ class AuthController extends Controller
      */
     public function notifications(Request $request)
     {
-        $activities = auth('api')->user()->activities()->orderBy('created_at', 'desc')->paginate(10);
+        $activities = auth('web')->user()->activities()->orderBy('created_at', 'desc')->paginate(10);
         return NotificationResource::collection($activities);
     }
 
@@ -198,8 +201,8 @@ class AuthController extends Controller
      */
     public function readNotifications(Request $request)
     {
-        auth('api')->user()->unreadNotifications()->update(['read_at' => now()]);
-        $activities = auth('api')->user()->activities()->orderBy('created_at', 'desc')->paginate(10);
+        auth()->user()->unreadNotifications()->update(['read_at' => now()]);
+        $activities = auth()->user()->activities()->orderBy('created_at', 'desc')->paginate(10);
         return NotificationResource::collection($activities);
     }
 
@@ -210,8 +213,20 @@ class AuthController extends Controller
      */
     public function authors(Request $request)
     {
+	//TODO do that where you check for guard('web') and has public or non public info
+	if ($request->headers->has('authorization') && !Auth::guard('web')->check()) {
+            try{
+                $socialiteUser = Socialite::driver('iee')->userFromToken($request->bearerToken());
+                $user = User::where('uid', $socialiteUser['uid'])->first();
+                Auth('web')->login($user);
+            } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+                Auth('web')->logout();
+                Session::flush();
+                return response()->json(['message' => 'Unauthenticated'], 401);
+            }
+        }
         $local_ip = $request->session()->get('local_ip', 0);                
-        if ($local_ip == 1 or Auth::guard('api')->check()) {
+        if ($local_ip == 1 or Auth::guard()->check()) {
             return User::select('id', 'name')->where('is_author', 1)
             ->withCount(['announcements'=>function ($query) use ($request){
                 $query->withFilters(
@@ -219,10 +234,8 @@ class AuthController extends Controller
                     request()->input('tags', []),
                     json_decode(request()->input('q', '')));
             }])->orderBy('name', 'asc')->get();
-        } elseif  ($request->headers->has('authorization') && !Auth::guard('api')->check()) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
-        }
-         else {
+	} 
+        else {
             return User::select('id', 'name')->where('is_author', 1)
             ->withCount(['announcements'=>function ($query) use ($request){
                 $query->whereHas('tags', function ($query) {

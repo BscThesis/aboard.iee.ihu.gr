@@ -18,7 +18,7 @@ class IssueController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware('auth:web');
     }
 
     /**
@@ -28,7 +28,7 @@ class IssueController extends Controller
      */
     public function index()
     {
-        if (auth('api')->user()->is_admin) {
+        if (auth('web')->user()->is_admin) {
             $issues = Issue::orderBy('created_at')->get();
             return IssueResource::collection($issues);
         }
@@ -43,7 +43,7 @@ class IssueController extends Controller
     public function store(StoreIssue $request)
     {
         $validated = $request->validated();
-        return auth('api')->user()->issues()->create($validated);
+        return auth('web')->user()->issues()->create($validated);
     }
 
     /**
@@ -54,7 +54,7 @@ class IssueController extends Controller
      */
     public function destroy($id)
     {
-        if (auth('api')->user()->is_admin) {
+        if (auth('web')->user()->is_admin) {
             $issue = Issue::findOrFail($id);
             if ($issue->delete()) {
                 $issues = issue::orderBy('id', 'desc')->get();

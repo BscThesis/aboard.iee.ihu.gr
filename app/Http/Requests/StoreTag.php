@@ -16,7 +16,7 @@ class StoreTag extends FormRequest
     public function authorize()
     {
         // return true;
-        return Auth::guard('api')->check() && Auth::guard('api')->user()->is_admin;
+        return Auth::guard('web')->check() && Auth::guard('web')->user()->is_admin;
     }
 
     /**

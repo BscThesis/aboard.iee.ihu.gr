@@ -25,7 +25,7 @@ class AnnouncementController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api')->only('store', 'update', 'destroy');
+        $this->middleware('auth:web')->only('store', 'update', 'destroy');
         
         $this->middleware('api.id.check')->only('update', 'show', 'searchByTag', 'destroy');
 
@@ -45,10 +45,10 @@ class AnnouncementController extends Controller
         $per_page = request()->input('perPage',10);
         $sort_id = request()->input('sortId',0);
         
-        if ($local_ip == 1 or Auth::guard('api')->check()) {
+        if ($local_ip == 1 or Auth::guard('web')->check()) {
             $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]),json_decode(request()->input('q', '')))
             ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at');
-        } elseif ($request->headers->has('authorization') && !Auth::guard('api')->check()) {
+        } elseif ($request->headers->has('authorization') && !Auth::guard('web')->check()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         } else {
             $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]),json_decode(request()->input('q', '')))
@@ -69,7 +69,7 @@ class AnnouncementController extends Controller
      */
     public function store(StoreAnnouncement $request)
     {
-        if (Auth::guard('api')->check()) {
+        if (Auth::guard('web')->check()) {
             $announcement = new Announcement;
             $announcement->title = $request->input('title');
             $announcement->eng_title = $request->input('eng_title');
@@ -85,13 +85,13 @@ class AnnouncementController extends Controller
             $announcement->gmaps = $request->input('gmaps');
 
             if (isset($request->user_id)) {
-                if (auth('api')->user()->is_admin) {
+                if (auth('web')->user()->is_admin) {
                     $announcement->user_id = $request->user_id;
                 } else {
                     return response()->json(['message' => 'Not permitted to upload as other person'], 401);
                 }
             } else {
-                $announcement->user_id = auth('api')->user()->id;
+                $announcement->user_id = auth('web')->user()->id;
             }
 
             if ($announcement->save()) {
@@ -159,7 +159,7 @@ class AnnouncementController extends Controller
      */
     public function update(StoreAnnouncement $request, $id)
     {
-        if (Auth::guard('api')->check()) {
+        if (Auth::guard('web')->check()) {
             $announcement = Announcement::findOrFail($id);
 
             $announcement->title = $request->input('title');
@@ -238,7 +238,7 @@ class AnnouncementController extends Controller
      */
     public function destroy($id)
     {
-        if (Auth::guard('api')->check()) {
+        if (Auth::guard('web')->check()) {
             // Get single announcement
             $announcement = Announcement::findOrFail($id);
 
@@ -261,7 +261,7 @@ class AnnouncementController extends Controller
     {
         $local_ip = $request->session()->get('local_ip', 0);
 
-        if ($local_ip == 1  or Auth::guard('api')->check()) {
+        if ($local_ip == 1  or Auth::guard('web')->check()) {
             $results = Announcement::whereHas('tags', function (Builder $query) use ($id) {
                 $query->where('id', '=', $id);
             })
@@ -287,7 +287,7 @@ class AnnouncementController extends Controller
     {
         $local_ip = $request->session()->get('local_ip', 0);
 
-        if ($local_ip == 1  or Auth::guard('api')->check()) {
+        if ($local_ip == 1  or Auth::guard('web')->check()) {
             $results = Announcement::where('user_id', $id)
                 ->orderBy('updated_at', 'desc')->paginate(10);
         } else {

@@ -43,7 +43,7 @@ return [
 
         'api' => [
             'driver' => 'passport',
-            'provider' => 'my-ldap',
+            'provider' => 'users',
             'hash' => false,
         ],
     ],

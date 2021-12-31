@@ -20,7 +20,7 @@ class TagController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api')->only('store', 'update', 'destroy');
+        $this->middleware('auth:web')->only('store', 'update', 'destroy');
 
         $this->middleware('api.id.check')->only('show', 'update', 'destroy');
 
@@ -47,14 +47,14 @@ class TagController extends Controller
     {
         $local_ip = $request->session()->get('local_ip', 0);
 
-        if ($local_ip == 1 or Auth::guard('api')->check()) {
+        if ($local_ip == 1 or Auth::guard('web')->check()) {
             $tags = Tag::with('childrenRecursive')->where('parent_id',1)->withCount(['announcements'=>function ($query){
                 $query->withFilters(
                     request()->input('users', []),
                     request()->input('tags', []),
                     json_decode(request()->input('q', '')));
             }])->orderBy('title', 'asc')->get();
-        } elseif ($request->headers->has('authorization') && !Auth::guard('api')->check()) {
+        } elseif ($request->headers->has('authorization') && !Auth::guard('web')->check()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         } else {
             $tags = Tag::with('childrenRecursive')->where('parent_id',1)->where('is_public',1)->withCount(['announcements'=>function ($query){
@@ -114,7 +114,7 @@ class TagController extends Controller
      */
     public function destroy($id)
     {
-        if (auth('api')->user()->is_admin) {
+        if (auth('web')->user()->is_admin) {
             $tag = Tag::find($id);
             if ($tag->delete()) {
                 $tags = Tag::orderBy('id', 'desc')->get();

@@ -3,6 +3,10 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
+use App\User;
+use Session;
 
 class Authenticate extends Middleware
 {
@@ -14,7 +18,17 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        if (! $request->expectsJson()) {
+	if (!empty($request->bearerToken()) && !Auth::guard()->check()){
+		try{
+			$user = Socialite::driver('iee')->userFromToken($request->bearerToken());
+			$user1 = User::where('uid', $user['uid'])->first();
+			Auth('web')->login($user1);
+        	} catch (\GuzzleHttp\Exception\BadResponseException $e) {
+		        Auth('web')->logout();
+        		Session::flush();
+       		}    
+	}
+	else if (! $request->expectsJson()) {
             return route('sign-in');
         }
     }
