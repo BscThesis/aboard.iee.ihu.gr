@@ -2,7 +2,7 @@ export default {
     data: function() {
         return {
             userAuthenticated: false,
-            userInfo: {}
+            user_info: {}
         };
     },
     created: function() {
@@ -11,9 +11,9 @@ export default {
     methods: {
         checkAuth: async function() {
             let vm = this;
-            if (this.$cookies.get("token")) {
-                const response = await vm.checkAuth2();
-            }
+            //if (this.$cookies.get("token")) {
+            const response = await vm.checkAuth2();
+            //}
         },
         checkAuth2: async function() {
             let vm = this;
@@ -23,10 +23,8 @@ export default {
                 response.status == 200 &&
                 response.statusText == "OK"
             ) {
-                vm.userInfo = JSON.stringify(response.data.data);
+                vm.userInfo = response.data.data;
                 vm.userAuthenticated = true;
-                console.log(vm.userInfo);
-                console.log(vm.userInfo.subscriptions);
             }
         }
     }

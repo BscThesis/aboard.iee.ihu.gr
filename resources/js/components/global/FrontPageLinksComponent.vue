@@ -119,10 +119,10 @@ export default {
     },
     mounted: function() {
         bus.$on("authCheckFinished", () => {
-            if (user_info) {
+            if (this.$data.user_info) {
                 let vm = this;
-                vm.is_author = JSON.parse(user_info).is_author;
-                vm.is_admin = JSON.parse(user_info).is_admin;
+                vm.is_author = this.$data.user_info.is_author;
+                vm.is_admin = this.$data.user_info.is_admin;
             }
         });
     }

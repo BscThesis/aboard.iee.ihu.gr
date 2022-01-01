@@ -53,8 +53,8 @@ export default {
     },
     created: function() {
         let vm = this;
-        if (user_info) {
-            vm.user = JSON.parse(user_info);
+        if (this.$data.user_info) {
+            vm.user = this.$data.user_info;
         }
     },
     methods: {

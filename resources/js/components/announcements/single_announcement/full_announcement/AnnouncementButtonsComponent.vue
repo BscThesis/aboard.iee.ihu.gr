@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import userMixin from "../mixins/userMixin";
+import userMixin from "../../../mixins/userMixin";
 
 export default {
     mixins: [userMixin],
@@ -32,10 +32,10 @@ export default {
         };
     },
     mounted: function() {
-        if (user_info) {
-            this.is_admin = JSON.parse(user_info).is_admin;
+        if (this.$data.user_info) {
+            this.is_admin = this.$data.user_info.is_admin;
             this.is_the_author =
-                JSON.parse(user_info).id == this.announcement.author.id;
+                this.$data.user_info.id == this.announcement.author.id;
         }
     }
 };

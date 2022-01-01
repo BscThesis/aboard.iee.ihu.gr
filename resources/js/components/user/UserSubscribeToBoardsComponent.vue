@@ -114,7 +114,7 @@ export default {
                 });
         },
         getSelectedTags: function() {
-            let subscriptions = JSON.parse(user_info).subscriptions;
+            let subscriptions = this.$data.user_info.subscriptions;
             let tagArray = [];
             let vm = this;
 
@@ -183,7 +183,7 @@ export default {
         },
         selectedTagsNames: function() {
             let vm = this;
-            let subscriptions = JSON.parse(user_info).subscriptions;
+            let subscriptions = this.$data.user_info.subscriptions;
             let tagArray = [];
             if (subscriptions.length > 0) {
                 subscriptions.forEach(element => {
