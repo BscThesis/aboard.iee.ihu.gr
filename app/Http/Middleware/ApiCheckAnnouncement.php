@@ -41,7 +41,7 @@ class ApiCheckAnnouncement
         } else if ($announcement[0]->tags_count == 0 && $local_ip == 0) {
             // if we don't, 401 unauthorized
             return response()->json([
-                'error' => 'Unauthorized'
+                'error' => 'Unauthorized 2'
             ], 401);
         }
 

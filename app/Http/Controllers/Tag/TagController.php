@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Tag;
 
+use Session;
+use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\StoreTag;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Tag;
+use App\User;
 use App\Http\Resources\Tag as TagResource;
 
 class TagController extends Controller
@@ -53,8 +56,8 @@ class TagController extends Controller
                 Auth('web')->login($user);
             } catch (\GuzzleHttp\Exception\BadResponseException $e) {
                 Auth('web')->logout();
-                Session::flush();
-                return response()->json(['message' => 'Unauthenticated'], 401);
+		Session::flush();
+		return response()->json(['message' => 'Unauthenticated'], 401);
             }
         }
         if ($local_ip == 1 or Auth::guard('web')->check()) {

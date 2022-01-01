@@ -49,7 +49,7 @@ class ApiCheckAnnIdAttId
             return $next($request);
         } else if (!$announcement->hasPublicTags() && $local_ip == 0) {
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => 'Unauthorized 1'
             ], 401);
         }
 

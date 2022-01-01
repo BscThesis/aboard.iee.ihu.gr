@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Announcement;
 
+use Session;
+use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests;

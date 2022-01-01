@@ -25,11 +25,12 @@ class Authenticate extends Middleware
 			Auth('web')->login($user1);
         	} catch (\GuzzleHttp\Exception\BadResponseException $e) {
 		        Auth('web')->logout();
-        		Session::flush();
+			Session::flush();
+			return route('sign-in');
        		}    
 	}
 	else if (! $request->expectsJson()) {
-            return route('sign-in');
+	    return route('sign-in');
         }
     }
 }
