@@ -42,7 +42,7 @@ class AuthController extends Controller
         $user = Socialite::driver('iee')->user();
 	$this->login($user);
 	//dd($user);
-	return redirect(route('announcements'));
+	return redirect(route('announcements'))->withCookie(cookie('token', $user->token, 60));
 
         // $user1 = User::query()->whereEmail($user->email)->first();
         // Auth::guard('web')->login($user);

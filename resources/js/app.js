@@ -1,6 +1,9 @@
 import Vue from "vue";
+import VueCookies from "vue-cookies";
 
 require("./bootstrap");
+
+Vue.use(VueCookies);
 
 window.Vue = require("vue");
 
