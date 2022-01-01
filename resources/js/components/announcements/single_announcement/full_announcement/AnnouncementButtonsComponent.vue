@@ -15,7 +15,10 @@
 </template>
 
 <script>
+import userMixin from "../mixins/userMixin";
+
 export default {
+    mixins: [userMixin],
     props: {
         announcement: {
             type: Object,
@@ -29,13 +32,10 @@ export default {
         };
     },
     mounted: function() {
-        if (localStorage.getItem("user_info")) {
-            this.is_admin = JSON.parse(
-                localStorage.getItem("user_info")
-            ).is_admin;
+        if (user_info) {
+            this.is_admin = JSON.parse(user_info).is_admin;
             this.is_the_author =
-                JSON.parse(localStorage.getItem("user_info")).id ==
-                this.announcement.author.id;
+                JSON.parse(user_info).id == this.announcement.author.id;
         }
     }
 };

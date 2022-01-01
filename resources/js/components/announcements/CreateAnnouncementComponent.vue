@@ -439,8 +439,10 @@ import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 import { toast } from "bulma-toast";
 import { bus } from "../../app";
+import userMixin from "../mixins/userMixin";
 
 export default {
+    mixins: [userMixin],
     props: {
         id: {
             type: Number,
@@ -502,11 +504,9 @@ export default {
     created: function() {
         this.getAllTags();
         bus.$on("authCheckFinished", () => {
-            if (localStorage.getItem("user_info")) {
+            if (user_info) {
                 let vm = this;
-                vm.is_admin = JSON.parse(
-                    localStorage.getItem("user_info")
-                ).is_admin;
+                vm.is_admin = JSON.parse(user_info).is_admin;
                 if (vm.is_admin) {
                     this.getAuthors();
                 }
