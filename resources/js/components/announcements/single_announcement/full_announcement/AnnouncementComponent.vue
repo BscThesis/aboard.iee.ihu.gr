@@ -57,6 +57,7 @@
             <announcement-buttons-component
                 v-if="announcement"
                 v-bind:announcement="announcement"
+		:user="user"
             ></announcement-buttons-component>
         </div>
         <loader-component v-else></loader-component>
@@ -72,7 +73,11 @@ export default {
         id: {
             type: Number,
             required: true
-        }
+        },
+	user: {
+	    type: Object,
+	    required: false
+	}
     },
     data: function() {
         return {

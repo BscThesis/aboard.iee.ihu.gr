@@ -15,15 +15,19 @@
 </template>
 
 <script>
-import userMixin from "../../../mixins/userMixin";
+//import userMixin from "../../../mixins/userMixin";
 
 export default {
-    mixins: [userMixin],
+    //mixins: [userMixin],
     props: {
         announcement: {
             type: Object,
             required: true
-        }
+        },
+	user: {
+	    type: Object,
+	    required: false
+	}
     },
     data: function() {
         return {
@@ -31,12 +35,16 @@ export default {
             is_the_author: false
         };
     },
-    mounted: function() {
-        if (this.$data.user_info) {
-            this.is_admin = this.$data.user_info.is_admin;
-            this.is_the_author =
-                this.$data.user_info.id == this.announcement.author.id;
-        }
+    watch: {
+	user: {
+	    immediate: true,
+	    handler (val, oldVal) {
+		if (val) {
+		    this.is_admin = val.is_admin;
+		    this.is_the_author = val.id == this.announcement.author.id;
+		}
+	    }
+	}
     }
 };
 </script>

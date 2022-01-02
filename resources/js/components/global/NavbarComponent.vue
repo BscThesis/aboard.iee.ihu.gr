@@ -41,13 +41,14 @@
 
             <div class="navbar-end">
                 <user-activity-component
-                    v-if="userAuthenticated"
+                    v-if="user"		   
                 ></user-activity-component>
-                <span class="navbar-divider" v-if="userAuthenticated"></span>
+                <span class="navbar-divider" v-if="user"></span>
                 <user-dropdown-component
-                    v-if="userAuthenticated"
+                    v-if="user"
+		    :user="user"
                 ></user-dropdown-component>
-                <div v-if="!userAuthenticated" class="navbar-item">
+                <div v-if="!user" class="navbar-item">
                     <a class="button is-dark" href="/sign-in">
                         <span class="is-size-6">Είσοδος</span>
                     </a>
@@ -58,15 +59,21 @@
 </template>
 
 <script>
-import userMixin from "../mixins/userMixin";
+//import userMixin from "../mixins/userMixin";
 
 export default {
-    mixins: [userMixin],
+    //mixins: [userMixin],
+    props: {
+        user: {
+            type: Object,
+            required: false
+        }
+    },
     data: function() {
         return {
             showMobileMenu: false
         };
-    }
+    },
 };
 </script>
 

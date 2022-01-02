@@ -439,15 +439,19 @@ import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 import { toast } from "bulma-toast";
 import { bus } from "../../app";
-import userMixin from "../mixins/userMixin";
+//import userMixin from "../mixins/userMixin";
 
 export default {
-    mixins: [userMixin],
+    //mixins: [userMixin],
     props: {
         id: {
             type: Number,
             required: false
-        }
+        },
+	user: {
+	    type: Object,
+	    required: false
+	}
     },
     components: {
         flatPickr
@@ -498,23 +502,28 @@ export default {
             errors: [],
             // announcement has public tag
             has_public: false,
-            search: ""
+            search: "",
         };
     },
     created: function() {
         this.getAllTags();
-        bus.$on("authCheckFinished", () => {
-            if (this.$data.user_info) {
-                let vm = this;
-                vm.is_admin = this.$data.user_info.is_admin;
-                if (vm.is_admin) {
-                    this.getAuthors();
-                }
-            }
-        });
     },
-    mounted: function() {
-        if (this.id) {
+    watch: {
+	user: {
+	    immediate:true,
+	    handler(val, oldVal) {	    
+	        if (val) {
+		    let vm = this;		    
+		    vm.is_admin = val.is_admin; 
+		    if (vm.is_admin) {
+		        this.getAuthors();
+		    }
+	    	}
+	    }
+	}
+    },
+    mounted: function() {        
+	if (this.id) {
             this.getSingle();
         } else {
             this.loading = false;

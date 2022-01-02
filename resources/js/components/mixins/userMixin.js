@@ -6,7 +6,7 @@ export default {
         };
     },
     created: function() {
-        this.checkAuth();
+        this.checkAuth2();
     },
     methods: {
         checkAuth: async function() {
@@ -23,9 +23,11 @@ export default {
                 response.status == 200 &&
                 response.statusText == "OK"
             ) {
-                vm.userInfo = response.data.data;
-                vm.userAuthenticated = true;
+                vm.user_info = response.data.data;
+                vm.userAuthenticated = true;		
+		return vm.user_info;
             }
+	    return;
         }
     }
 };

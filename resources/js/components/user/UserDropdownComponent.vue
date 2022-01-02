@@ -40,22 +40,18 @@
 
 <script>
 import { mixin as clickaway } from "vue-clickaway";
-import userMixin from "../mixins/userMixin";
+//import userMixin from "../mixins/userMixin";
 
 export default {
-    mixins: [clickaway, userMixin],
-
+    mixins: [clickaway],
+    props: {
+        user: Object,
+	required: false
+    },
     data: function() {
         return {
-            openUserDropdown: false,
-            user: {}
+            openUserDropdown: false
         };
-    },
-    created: function() {
-        let vm = this;
-        if (this.$data.user_info) {
-            vm.user = this.$data.user_info;
-        }
     },
     methods: {
         away: function() {

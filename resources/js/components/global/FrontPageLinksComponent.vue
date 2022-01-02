@@ -1,22 +1,22 @@
 <template>
-    <div class="block" v-if="is_admin == true || is_author == true">
+    <div class="block" v-if="user.is_admin == true || user.is_author == true">
         <div class="buttons is-right">
             <button
-                v-if="is_admin"
+                v-if="user.is_admin"
                 class="button is-danger is-uppercase"
                 @click="modalOpen = true"
             >
                 Admin area
             </button>
             <button
-                v-if="is_admin"
+                v-if="user.is_admin"
                 class="button is-link is-uppercase"
                 @click="viewIssues = true"
             >
                 View issues
             </button>
             <a
-                v-if="is_author"
+                v-if="user.is_author"
                 class="button is-dark is-capitalized"
                 href="/announcements/create"
                 >Προσθήκη ανακοίνωσης</a
@@ -25,7 +25,7 @@
 
         <!-- Admin area -->
         <div
-            v-if="is_admin"
+            v-if="user.is_admin"
             class="modal"
             v-bind:class="{ 'is-active': modalOpen }"
         >
@@ -52,7 +52,7 @@
 
         <!-- View issues -->
         <div
-            v-if="is_admin"
+            v-if="user.is_admin"
             class="modal"
             v-bind:class="{ 'is-active': viewIssues }"
         >
@@ -81,14 +81,16 @@
 
 <script>
 import { bus } from "../../app";
-import userMixin from "../mixins/userMixin";
+//import userMixin from "../mixins/userMixin";
 
 export default {
-    mixins: [userMixin],
+    //mixins: [userMixin],
+    props: {
+	user: Object,
+	required: false
+    },
     data: function() {
         return {
-            is_author: false,
-            is_admin: false,
             modalOpen: false,
             viewIssues: false
         };
@@ -115,17 +117,8 @@ export default {
                     .getElementsByTagName("html")[0]
                     .classList.remove("is-clipped");
             }
-        }
+        },        
     },
-    mounted: function() {
-        bus.$on("authCheckFinished", () => {
-            if (this.$data.user_info) {
-                let vm = this;
-                vm.is_author = this.$data.user_info.is_author;
-                vm.is_admin = this.$data.user_info.is_admin;
-            }
-        });
-    }
 };
 </script>
 

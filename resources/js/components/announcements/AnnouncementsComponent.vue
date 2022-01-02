@@ -21,7 +21,7 @@
             <page-title title="Ανακοινώσεις"></page-title>
 
             <!-- Links -->
-            <front-page-links></front-page-links>
+            <front-page-links :user.sync="user"></front-page-links>
 
             <!-- Announcements -->
             <div class="block is-clipped">
@@ -62,6 +62,10 @@ import { bus } from "../../app";
 import { toast } from "bulma-toast";
 
 export default {
+    props: {
+        user: Object,
+	required: false,
+    },
     data: function() {
         return {
             announcements: {},
