@@ -38,14 +38,19 @@ class Announcement extends Model implements Feedable
             'author' => $this->user->name,
         ]);
     }
-
-    public function scopeWithFilters($query, $users, $tags, $param)
+    
+    public function scopeWithFilters($query, $users, $tags, $param, $param2)
     {
         return $query->when($param !== '', function ($query) use ($param) {
             $query->where(function($query) use ($param) {
                 $query->where('title', 'LIKE', '%' . $param . '%')
                 ->orWhere('eng_title', 'LIKE', '%' . $param . '%');
             });            
+        })->when($param2 !== '', function ($query) use ($param2){
+            $query->where(function($query) use ($param2) {
+                $query->where('body', 'LIKE', '%' . $param2 . '%')
+                ->orWhere('eng_body', 'LIKE', '%' . $param2 . '%');
+            });
         })->when(count($users), function ($query) use ($users) {
             $query->whereIn('user_id', $users);
         })->when(count($tags), function ($query) use ($tags){

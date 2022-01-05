@@ -182,6 +182,17 @@ class AuthController extends Controller
         $user->subscriptions()->sync($tags);
         return $request->user()->only('id', 'subscriptions');
     }
+    
+    /**
+     * Returns users subscriptions
+     *
+     * @return void
+     */
+    public function getSubscriptions(Request $request)
+    {
+        $user = auth()->user();
+        return  $user->subscriptions();
+    }
 
     /**
      * Get notifications
