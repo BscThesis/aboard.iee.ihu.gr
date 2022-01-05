@@ -194,7 +194,7 @@ class AuthController extends Controller
         if($user === null){
             return response()->json(['message' => 'Unauthenticated'], 401);
         }else{
-            return  $user->subscriptions();
+            return  response()->json(['message' => 'mpike']);
         }
     }
 
