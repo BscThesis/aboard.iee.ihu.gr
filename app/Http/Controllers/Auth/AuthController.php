@@ -191,7 +191,11 @@ class AuthController extends Controller
     public function getSubscriptions(Request $request)
     {
         $user = auth()->user();
-        return  $user->subscriptions();
+        if($user === null){
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }else{
+            return  $user->subscriptions();
+        }
     }
 
     /**
