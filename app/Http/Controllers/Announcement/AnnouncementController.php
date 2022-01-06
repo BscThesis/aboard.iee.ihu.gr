@@ -58,10 +58,10 @@ class AnnouncementController extends Controller
             }
         }
         if ($local_ip == 1 or Auth::guard('web')->check()) {
-            $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]),json_decode(request()->input('q', '')),json_decode(request()->input('f', '')))
+            $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]),json_decode(request()->input('title', '')),json_decode(request()->input('body', '')))
             ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at');
         } else {
-            $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]),json_decode(request()->input('q', '')),json_decode(request()->input('f', '')))
+            $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]),json_decode(request()->input('title', '')),json_decode(request()->input('body', '')))
             ->whereHas('tags', function (Builder $query) {
                 $query->where('is_public', 1);
             })->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at');

@@ -46,7 +46,7 @@ export default {
     mixins: [clickaway],
     props: {
         user: Object,
-	required: false
+        required: false
     },
     data: function() {
         return {
@@ -61,18 +61,12 @@ export default {
             axios
                 .get("/api/auth/logout")
                 .then(response => {
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("refresh");
-                    localStorage.removeItem("user_info");
                     delete axios.defaults.headers.common["Authorization"];
-                    window.location.href = "/login";
+                    window.location.href = "/";
                 })
                 .catch(error => {
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("refresh");
-                    localStorage.removeItem("user_info");
                     delete axios.defaults.headers.common["Authorization"];
-                    window.location.href = "/login";
+                    window.location.href = "/";
                 });
         }
     }

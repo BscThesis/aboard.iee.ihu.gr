@@ -39,17 +39,17 @@ class Announcement extends Model implements Feedable
         ]);
     }
     
-    public function scopeWithFilters($query, $users, $tags, $param, $param2)
+    public function scopeWithFilters($query, $users, $tags, $title, $body)
     {
-        return $query->when($param !== '', function ($query) use ($param) {
-            $query->where(function($query) use ($param) {
-                $query->where('title', 'LIKE', '%' . $param . '%')
-                ->orWhere('eng_title', 'LIKE', '%' . $param . '%');
+        return $query->when($title !== '', function ($query) use ($title) {
+            $query->where(function($query) use ($title) {
+                $query->where('title', 'LIKE', '%' . $title . '%')
+                ->orWhere('eng_title', 'LIKE', '%' . $title . '%');
             });            
-        })->when($param2 !== '', function ($query) use ($param2){
-            $query->where(function($query) use ($param2) {
-                $query->where('body', 'LIKE', '%' . $param2 . '%')
-                ->orWhere('eng_body', 'LIKE', '%' . $param2 . '%');
+        })->when($body !== '', function ($query) use ($body){
+            $query->where(function($query) use ($body) {
+                $query->where('body', 'LIKE', '%' . $body . '%')
+                ->orWhere('eng_body', 'LIKE', '%' . $body . '%');
             });
         })->when(count($users), function ($query) use ($users) {
             $query->whereIn('user_id', $users);

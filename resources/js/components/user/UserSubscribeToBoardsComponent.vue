@@ -80,10 +80,8 @@
 
 <script>
 import { toast } from "bulma-toast";
-import userMixin from "../mixins/userMixin";
 
 export default {
-    mixins: [userMixin],
     data: function() {
         return {
             tags: [],

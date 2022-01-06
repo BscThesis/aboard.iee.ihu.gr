@@ -4,7 +4,7 @@
             <input
                 class="input is-rounded"
                 type="text"
-                placeholder="Αναζήτηση..."
+                :placeholder="title"
                 v-model="search"
                 v-on:keyup.enter="searchSet()"
             />
@@ -21,6 +21,10 @@
 <script>
 export default {
     props: {
+        title: {
+            type: String,
+            required: true
+        },
         searchProp: {
             type: String,
             required: true

@@ -39,7 +39,9 @@ class Tag extends Model
             $query->withFilters(
                 request()->input('users', []),
                 request()->input('tags', []),
-                json_decode(request()->input('q', '')));
+                json_decode(request()->input('title', '')),
+                json_decode(request()->input('body', ''))
+            );
         }])->with('childrenRecursive');        
     }
 

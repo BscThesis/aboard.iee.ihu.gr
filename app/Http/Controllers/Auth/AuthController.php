@@ -27,26 +27,32 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:web')->except(['login', 'refresh', 'authors', 'signIn', 'redirect']);
+        $this->middleware('auth:web')->except(['login', 'authors', 'signIn', 'redirect']);
     }
 
-
+    /**
+     * Try to get user from OAuth2.0 and the call callback method below
+     *
+     * @return json
+     */
     public function signIn()
     {
-	//dd(Socialite::driver('iee'));
-	return Socialite::driver('iee')->redirect();
+	    return Socialite::driver('iee')->redirect();
     }
 
+    /**
+     * Redirect user after successful login
+     *
+     * @return route
+     */
     public function redirect()
     {
+        // Get user from Login Iee Ihu with OAuth2.0 
         $user = Socialite::driver('iee')->user();
-	$this->login($user);
-	//dd($user);
-	return redirect(route('announcements'))->withCookie(cookie('token', $user->token, 60));
-
-        // $user1 = User::query()->whereEmail($user->email)->first();
-        // Auth::guard('web')->login($user);
-        // return redirect('/announcements');
+    	// Try to log user in calling our login method below
+        $this->login($user);
+        // Then redirect user to announcements page
+	    return redirect(route('announcements'));
     }
 
     /**
@@ -56,7 +62,6 @@ class AuthController extends Controller
      */
     public function login($socialiteUser)
     {
-	//dd($socialiteUser['uid']);
         // Create or update user based on our results
         $user = User::where('uid', $socialiteUser->uid)->first();
         if ($user === null) {
@@ -79,60 +84,25 @@ class AuthController extends Controller
                     'is_author' => $socialiteUser->is_author
                 ]
             );
-	}
+	    }
 	
         try {
+            // Get user and then try to log in and sent notification
             $user = User::where('uid', $socialiteUser->uid)->first();	    
-	    $attributes = ['id' => $user->id];
-	    Auth::login($user);
+            $attributes = ['id' => $user->id];
+            Auth::login($user);
             Notification::send($user, new UserLoggedIn());
             $user->update([
                 'last_login_at' => Carbon::now()->toDateTimeString(),
-	]);
+	        ]);
 	  
-	    return new static($attributes); 
+	        return new static($attributes); 
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+            // If an error occurs log user out and clear the session
             Auth('web')->logout();
             Session::flush();
-
-            if ($e->getCode() === 400) {
-                return response()->json('Invalid request', $e->getCode());
-            } else if ($e->getCode() === 401) {
-                return response()->json('Invalid credentials', 401);
-            }
-
-            return response()->json('Something went wrong on the server.', $e->getCode());
-        }
-    }
-
-    /**
-     * Logs a user in
-     *
-     * @return json
-     */
-    public function refresh(Request $request)
-    {
-        $validatedData = $request->validate([
-            'refresh_token' => 'required',
-        ]);
-
-        $http = new \GuzzleHttp\Client;
-
-        try {
-            $response = $http->post(config('services.passport.login_endpoint'), [
-                'form_params' => [
-                    'grant_type' => 'refresh_token',
-                    'refresh_token' => $validatedData['refresh_token'],
-                    'client_id' => config('services.passport.client_id'),
-                    'client_secret' => config('services.passport.client_secret'),
-                ]
-            ]);
-
-            return $response->getBody();
-        } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-            Auth('web')->logout();
-            Session::flush();
-
+            
+            // Depending on the error code sent the appropriate message
             if ($e->getCode() === 400) {
                 return response()->json('Invalid request', $e->getCode());
             } else if ($e->getCode() === 401) {
@@ -177,9 +147,11 @@ class AuthController extends Controller
      */
     public function subscribe(Request $request)
     {
+        // Get logged in user and tags from the request and updated user's subscriptions table
         $user = auth()->user();
         $tags = json_decode($request->input('tags'));
         $user->subscriptions()->sync($tags);
+        // Return user's id and subscriptions
         return $request->user()->only('id', 'subscriptions');
     }
     
@@ -190,6 +162,7 @@ class AuthController extends Controller
      */
     public function getSubscriptions(Request $request)
     {
+        // Check if user is logged in and return subscription otherwise return message
         $user = auth()->user();
         if($user === null){
             return response()->json(['message' => 'Unauthenticated'], 401);
@@ -205,7 +178,8 @@ class AuthController extends Controller
      */
     public function notifications(Request $request)
     {
-        $activities = auth('web')->user()->activities()->orderBy('created_at', 'desc')->paginate(10);
+        // Return user's notifications paginated by 10 and order it by newest first
+        $activities = auth()->user()->activities()->orderBy('created_at', 'desc')->paginate(10);
         return NotificationResource::collection($activities);
     }
 
@@ -216,7 +190,9 @@ class AuthController extends Controller
      */
     public function readNotifications(Request $request)
     {
+        // Update read_at column in user's table
         auth()->user()->unreadNotifications()->update(['read_at' => now()]);
+        // Show user's notifications paginated by 10 and order it by newest first
         $activities = auth()->user()->activities()->orderBy('created_at', 'desc')->paginate(10);
         return NotificationResource::collection($activities);
     }
@@ -228,8 +204,8 @@ class AuthController extends Controller
      */
     public function authors(Request $request)
     {
-	//TODO do that where you check for guard('web') and has public or non public info
-	if ($request->headers->has('authorization') && !Auth::guard('web')->check()) {
+        // Check if header has authorization and if user is not logged in and then try to log in from the token
+	    if ($request->headers->has('authorization') && !Auth::guard('web')->check()) {
             try{
                 $socialiteUser = Socialite::driver('iee')->userFromToken($request->bearerToken());
                 $user = User::where('uid', $socialiteUser['uid'])->first();
@@ -240,6 +216,7 @@ class AuthController extends Controller
                 return response()->json(['message' => 'Unauthenticated'], 401);
             }
         }
+        // If user is logged in or inside university's wifi return authors filtering and then counting every announcement each one has
         $local_ip = $request->session()->get('local_ip', 0);                
         if ($local_ip == 1 or Auth::guard()->check()) {
             return User::select('id', 'name')->where('is_author', 1)
@@ -247,9 +224,12 @@ class AuthController extends Controller
                 $query->withFilters(
                     request()->input('users', []),
                     request()->input('tags', []),
-                    json_decode(request()->input('q', '')));
+                    json_decode(request()->input('title', '')),
+                    json_decode(request()->input('body', ''))
+                );
             }])->orderBy('name', 'asc')->get();
-	} 
+	    } 
+        // Else return authors filtering and then counting every public announcement each one has
         else {
             return User::select('id', 'name')->where('is_author', 1)
             ->withCount(['announcements'=>function ($query) use ($request){
@@ -259,10 +239,10 @@ class AuthController extends Controller
                 ->withFilters(
                     request()->input('users', []),
                     request()->input('tags', []),
-                    json_decode(request()->input('q', ''))  
+                    json_decode(request()->input('title', '')),
+                    json_decode(request()->input('body', '')) 
                 );
-            }])->orderBy('name', 'asc')->get();
-            
+            }])->orderBy('name', 'asc')->get();            
         }           
     }
 }

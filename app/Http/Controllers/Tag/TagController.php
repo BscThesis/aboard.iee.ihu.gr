@@ -56,23 +56,27 @@ class TagController extends Controller
                 Auth('web')->login($user);
             } catch (\GuzzleHttp\Exception\BadResponseException $e) {
                 Auth('web')->logout();
-		Session::flush();
-		return response()->json(['message' => 'Unauthenticated'], 401);
+		        Session::flush();
+		        return response()->json(['message' => 'Unauthenticated'], 401);
             }
         }
         if ($local_ip == 1 or Auth::guard('web')->check()) {
-            $tags = Tag::with('childrenRecursive')->where('parent_id',1)->withCount(['announcements'=>function ($query){
+            $tags = Tag::with('childrenRecursive')->where('parent_id',1)->withCount(['announcements'=>function ($query) use ($request){
                 $query->withFilters(
                     request()->input('users', []),
                     request()->input('tags', []),
-                    json_decode(request()->input('q', '')));
+                    json_decode(request()->input('title', '')),
+                    json_decode(request()->input('body', ''))
+                );
             }])->orderBy('title', 'asc')->get();
         } else {
-            $tags = Tag::with('childrenRecursive')->where('parent_id',1)->where('is_public',1)->withCount(['announcements'=>function ($query){
+            $tags = Tag::with('childrenRecursive')->where('parent_id',1)->where('is_public',1)->withCount(['announcements'=>function ($query) use ($request){
                 $query->withFilters(
                     request()->input('users', []),
                     request()->input('tags', []),
-                    json_decode(request()->input('q', '')));
+                    json_decode(request()->input('title', '')),
+                    json_decode(request()->input('body', ''))
+                );
             }])->orderBy('title', 'asc')->get();
         }    
         return $tags;

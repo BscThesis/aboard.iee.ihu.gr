@@ -8,7 +8,8 @@
             v-bind:perPageProp.sync="selected.perPage"
             v-bind:sortProp.sync="selected.sortId"
             v-bind:showFilters="showFilters"
-            v-bind:searchProp.sync="selected.q"
+            v-bind:searchTitleProp.sync="selected.title"
+            v-bind:searchBodyProp.sync="selected.body"
             v-bind:layoutProp.sync="layout"
             v-bind:queryParamsProp.sync="queryParams"
         ></sidebar>
@@ -21,7 +22,7 @@
             <page-title title="Ανακοινώσεις"></page-title>
 
             <!-- Links -->
-            <front-page-links :user.sync="user"></front-page-links>
+            <front-page-links v-if="user" :user="user"></front-page-links>
 
             <!-- Announcements -->
             <div class="block is-clipped">
@@ -64,7 +65,7 @@ import { toast } from "bulma-toast";
 export default {
     props: {
         user: Object,
-	required: false,
+        required: false
     },
     data: function() {
         return {
@@ -79,7 +80,8 @@ export default {
                     ? parseInt(localStorage.getItem("per_page"))
                     : 10,
                 sortId: 0,
-                q: ""
+                title: "",
+                body: ""
             },
             layout: localStorage.getItem("layout")
                 ? parseInt(localStorage.getItem("layout"))
@@ -137,7 +139,8 @@ export default {
                 // this.page = parseInt(searchParams.get("page"));
                 this.selected.perPage = parseInt(searchParams.get("perPage"));
                 this.selected.sortId = parseInt(searchParams.get("sortId"));
-                this.selected.q = JSON.parse(searchParams.get("q"));
+                this.selected.title = JSON.parse(searchParams.get("title"));
+                this.selected.body = JSON.parse(searchParams.get("body"));
                 if (searchParams.get("tags").length > 0) {
                     const tagArray = this.convertStringArrayToIntegerArray(
                         searchParams.get("tags").split(",")
@@ -158,7 +161,10 @@ export default {
         },
         updateUrlParam() {
             let state = { ...this.selected };
-            if (state.q == "") state.q = JSON.stringify(this.selected.q);
+            if (state.title == "")
+                state.title = JSON.stringify(this.selected.title);
+            if (state.body == "")
+                state.body = JSON.stringify(this.selected.body);
             window.history.pushState(
                 state,
                 "",

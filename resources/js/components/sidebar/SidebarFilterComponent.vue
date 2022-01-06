@@ -3,9 +3,25 @@
         v-bind:class="{ sidebarShow: !showFilters }"
         class="column is-one-quarter-tablet is-one-fifth-fullhd is-fullheight section"
     >
-        <p class="menu-label">Φίλτρα</p>
-        <!-- Search -->
-        <search-default v-bind:searchProp.sync="search"></search-default>
+        <p class="menu-label">Φιλτρα</p>
+
+        <label for="searchTitle">Αναζήτηση Τίτλου</label>
+
+        <!-- Title Search -->
+        <search-default
+            id="searchTitle"
+            title="Αναζήτηση..."
+            v-bind:searchProp.sync="searchTitle"
+        ></search-default>
+
+        <label for="searchBody">Αναζήτηση Κειμένου</label>
+
+        <!-- Body Search -->
+        <search-default
+            id="searchBody"
+            title="Αναζήτηση..."
+            v-bind:searchProp.sync="searchBody"
+        ></search-default>
 
         <!-- Tags -->
         <section class="mb-4">
@@ -105,7 +121,11 @@ export default {
             type: Number,
             required: true
         },
-        searchProp: {
+        searchTitleProp: {
+            type: String,
+            required: true
+        },
+        searchBodyProp: {
             type: String,
             required: true
         },
@@ -120,7 +140,8 @@ export default {
     },
     components: { Treeselect },
     data: () => ({
-        search: "",
+        searchTitle: "",
+        searchBody: "",
         users: [],
         tags: [],
         perPage: localStorage.getItem("per_page")
@@ -167,9 +188,22 @@ export default {
                 this.getProfs();
             }
         },
-        search: {
+        searchTitle: {
             handler: function() {
-                this.$emit("update:searchProp", JSON.stringify(this.search));
+                this.$emit(
+                    "update:searchTitleProp",
+                    JSON.stringify(this.searchTitle)
+                );
+                this.getTags();
+                this.getProfs();
+            }
+        },
+        searchBody: {
+            handler: function() {
+                this.$emit(
+                    "update:searchBodyProp",
+                    JSON.stringify(this.searchBody)
+                );
                 this.getTags();
                 this.getProfs();
             }
@@ -188,7 +222,8 @@ export default {
     },
     methods: {
         setParams() {
-            this.search = this.searchProp;
+            this.searchTitle = this.searchTitleProp;
+            this.searchBody = this.searchBodyProp;
             this.users = this.usersProp;
             this.tags = this.tagsProp;
             this.perPage = this.perPageProp;
@@ -198,7 +233,8 @@ export default {
             let vm = this;
             let selected = {
                 users: this.users,
-                q: JSON.stringify(this.search)
+                title: JSON.stringify(this.searchTitle),
+                body: JSON.stringify(this.searchBody)
             };
             axios
                 .get("/api/filtertags", {
@@ -232,7 +268,8 @@ export default {
             let vm = this;
             let selected = {
                 tags: this.tags,
-                q: JSON.stringify(this.search)
+                title: JSON.stringify(this.searchTitle),
+                body: JSON.stringify(this.searchBody)
             };
             axios
                 .get("/api/auth/authors", {
