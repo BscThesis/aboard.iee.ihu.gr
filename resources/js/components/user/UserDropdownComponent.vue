@@ -40,7 +40,6 @@
 
 <script>
 import { mixin as clickaway } from "vue-clickaway";
-//import userMixin from "../mixins/userMixin";
 
 export default {
     mixins: [clickaway],

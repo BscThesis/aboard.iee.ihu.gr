@@ -71,11 +71,6 @@ return [
             'model' => App\User::class,
         ],
 
-        'my-ldap' => [
-            'driver' => 'my-ldap',
-            'model' => App\User::class,
-        ],
-
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

@@ -23,14 +23,15 @@ class Authenticate extends Middleware
 			$user = Socialite::driver('iee')->userFromToken($request->bearerToken());
 			$user1 = User::where('uid', $user['uid'])->first();
 			Auth('web')->login($user1);
+			return;			
         	} catch (\GuzzleHttp\Exception\BadResponseException $e) {
 		        Auth('web')->logout();
 			Session::flush();
-			return route('sign-in');
+			return route('login');
        		}    
 	}
 	else if (! $request->expectsJson()) {
-	    return route('sign-in');
+	    return route('login');
         }
     }
 }

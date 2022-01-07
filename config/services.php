@@ -36,15 +36,6 @@ return [
         'client_secret' => env('PASSPORT_CLIENT_SECRET'),
     ],
 
-    'ldap' => [
-        'host' => env('LDAP_HOST'),
-        'port' => env('LDAP_PORT'),
-        'base_dn' => env('LDAP_BASE_DN'),
-        'users_dn' => env('LDAP_USERS_DN'),
-        'filter_attribute' => env('LDAP_FILTER_ATTR'),
-        'search_attributes' => env('LDAP_SEARCH_ATTR'),
-    ],
-
     'no_auth_access' => [
         'single_ips' => env('DEV_IP'),
         'ip_ranges' => env('LOCAL_IP_RANGES'),

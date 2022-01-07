@@ -11,8 +11,6 @@
 |
 */
 
-// Auth::routes();
-
 Route::get('/', function () {
     return redirect('/announcements');
 });
@@ -40,11 +38,7 @@ Route::get('/documentation', function () {
     return view('pages.docs');
 })->middleware('auth');
 
-// Route::get('/login', function () {
-//     return view('user.login');
-// })->name('login');
-
-Route::get('/sign-in', 'Auth\AuthController@signIn')->name('sign-in');
+Route::get('/sign-in', 'Auth\AuthController@signIn')->name('login');
 Route::get('/sign-in/redirect', 'Auth\AuthController@redirect');
 
 Route::get('/user/preferences', function () {

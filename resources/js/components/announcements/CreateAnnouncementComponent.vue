@@ -171,7 +171,7 @@
                     <!-- Tag selector -->
                     <div class="column">
                         <label class="label is-capitalized is-unselectable">
-                            Επιλογή ετικετών (Work in progress)
+                            Επιλογή ετικετών
                         </label>
                         <!-- start -->
                         <nav class="panel">
@@ -438,8 +438,6 @@
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 import { toast } from "bulma-toast";
-import { bus } from "../../app";
-//import userMixin from "../mixins/userMixin";
 
 export default {
     //mixins: [userMixin],

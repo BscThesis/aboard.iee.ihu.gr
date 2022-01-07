@@ -114,24 +114,6 @@ Vue.component(
         .default
 );
 
-// Search tag component
-Vue.component(
-    "search-bytag-component-bulma",
-    require("./components/search/SearchByTagComponent.vue").default
-);
-
-// Search author component
-Vue.component(
-    "search-byauthor-component-bulma",
-    require("./components/search/SearchByAuthorComponent.vue").default
-);
-
-// Breadcrumb component
-Vue.component(
-    "breadcrumb-component",
-    require("./components/search/BreadcrumbComponent.vue").default
-);
-
 // Loader component
 Vue.component(
     "loader-component",
@@ -236,12 +218,6 @@ Vue.component(
 Vue.component(
     "model-item",
     require("./components/docs/ModelItemComponent.vue").default
-);
-
-// Login container
-Vue.component(
-    "login-container",
-    require("./components/user/LoginContainerComponent.vue").default
 );
 
 // User preferences

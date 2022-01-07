@@ -15,10 +15,7 @@
 </template>
 
 <script>
-//import userMixin from "../../../mixins/userMixin";
-
 export default {
-    //mixins: [userMixin],
     props: {
         announcement: {
             type: Object,

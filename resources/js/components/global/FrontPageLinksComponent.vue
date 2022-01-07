@@ -80,11 +80,9 @@
 </template>
 
 <script>
-import { bus } from "../../app";
-//import userMixin from "../mixins/userMixin";
 
 export default {
-    //mixins: [userMixin],
+
     props: {
 	user: Object,
 	required: false

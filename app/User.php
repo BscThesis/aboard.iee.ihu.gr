@@ -48,34 +48,7 @@ class User extends Authenticatable
     protected $attributes = [
         'is_admin' => false,
         'is_author' => false
-    ];
-
-    /**
-     * Find the user instance for the given username.
-     *
-     * @param  string  $username
-     * @return \App\User
-     */
-    // public function findForPassport($username)
-    // {
-    //     return $this->where('uid', $username)->first();
-    // }
-
-    /**
-     * Bypass Laravel Passport's default auth logic.
-     *
-     * @var array
-     */
-    public function findAndValidateForPassport($username, $password)
-    {
-        
-        // Set attributes for Laravel
-        $attributes = [
-            'id' => $user->id
-        ];
-
-        return new static($attributes);
-    }
+    ]; 
 
     /**
      * Get the user's subscribed tags.

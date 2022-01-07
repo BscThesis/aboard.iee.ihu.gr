@@ -8,7 +8,7 @@
         <a>{{ updated_at }}</a>
       </li>
       <li>
-        <a :href="'/search/author/' + author.id">{{ author.name }}</a>
+        <a>{{ author.name }}</a>
       </li>
     </ul>
   </nav>
