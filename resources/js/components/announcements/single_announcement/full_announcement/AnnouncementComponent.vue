@@ -57,7 +57,7 @@
             <announcement-buttons-component
                 v-if="announcement"
                 v-bind:announcement="announcement"
-		:user="user"
+                :user="user"
             ></announcement-buttons-component>
         </div>
         <loader-component v-else></loader-component>
@@ -74,10 +74,10 @@ export default {
             type: Number,
             required: true
         },
-	user: {
-	    type: Object,
-	    required: false
-	}
+        user: {
+            type: Object,
+            required: false
+        }
     },
     data: function() {
         return {
@@ -85,6 +85,7 @@ export default {
             displayEnglish: false
         };
     },
+    // When created is triggered during Vue Instance LifeCycle, get single announcement and if an object is removed redirect to /announcements
     created: function() {
         this.getSingle();
         bus.$on("objectRemoved", data => {

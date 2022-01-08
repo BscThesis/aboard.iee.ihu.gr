@@ -41,10 +41,11 @@ return [
         'ip_ranges' => env('LOCAL_IP_RANGES'),
     ],
 
+    // Add our own Driver
     'iee' => [
         'client_id' => env('CLIENT_ID'),
         'redirect' => env('REDIRECT_URI'),
-	'response_type' => env('RESPONSE_TYPE'),
-	'client_secret' => env('CLIENT_SECRET'),
+	    'response_type' => env('RESPONSE_TYPE'),
+	    'client_secret' => env('CLIENT_SECRET'),
     ],
 ];

@@ -35,6 +35,7 @@ export default {
             search: ""
         };
     },
+    // Watch for searchProp changes
     watch: {
         searchProp: {
             handler: function() {
@@ -43,9 +44,11 @@ export default {
         }
     },
     methods: {
+        // Update searchProp value
         searchSet: function() {
             this.$emit("update:searchProp", this.search);
         },
+        // Delete searchProp value
         deleteSearch: function() {
             this.search = "";
             this.searchSet();

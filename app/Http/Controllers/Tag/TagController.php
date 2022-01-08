@@ -37,6 +37,7 @@ class TagController extends Controller
      */
     public function index()
     {
+        // Get every tag as a Json
         $tags = Tag::orderBy('title', 'asc')->get();
         return TagResource::collection($tags);
     }
@@ -48,7 +49,7 @@ class TagController extends Controller
      */
     public function indexForFiltering(Request $request)
     {
-        $local_ip = $request->session()->get('local_ip', 0);
+        // Check if header has authorization and if user is not logged in and then try to log in from the token
         if ($request->headers->has('authorization') && !Auth::guard('web')->check()) {
             try{
                 $socialiteUser = Socialite::driver('iee')->userFromToken($request->bearerToken());
@@ -60,6 +61,9 @@ class TagController extends Controller
 		        return response()->json(['message' => 'Unauthenticated'], 401);
             }
         }
+
+        // If user is logged in or inside university's wifi return tags, filtering and then counting every announcement each one has with their children
+        $local_ip = $request->session()->get('local_ip', 0);
         if ($local_ip == 1 or Auth::guard('web')->check()) {
             $tags = Tag::with('childrenRecursive')->where('parent_id',1)->withCount(['announcements'=>function ($query) use ($request){
                 $query->withFilters(
@@ -69,7 +73,9 @@ class TagController extends Controller
                     json_decode(request()->input('body', ''))
                 );
             }])->orderBy('title', 'asc')->get();
-        } else {
+        } 
+        // Else return tags filtering and then counting every public announcement each one has with their children
+        else {
             $tags = Tag::with('childrenRecursive')->where('parent_id',1)->where('is_public',1)->withCount(['announcements'=>function ($query) use ($request){
                 $query->withFilters(
                     request()->input('users', []),
@@ -90,6 +96,7 @@ class TagController extends Controller
      */
     public function store(StoreTag $request)
     {
+        // Check if the request's params is properly form for Tag Model and create a new Tag
         $validated = $request->validated();
         return Tag::create($validated);
     }
@@ -102,6 +109,7 @@ class TagController extends Controller
      */
     public function show($id)
     {
+        // Show Tag with an id of $id
         $tag = Tag::findOrFail($id);
         return new TagResource($tag);
     }
@@ -115,7 +123,9 @@ class TagController extends Controller
      */
     public function update(StoreTag $request, $id)
     {
+        // Find a Tag with an id of $id
         $tag = Tag::find($id);
+        // Check if the request's params is properly form for Tag Model and update an existing Tag
         $validated = $request->validated();
         $tag->update($validated);
         return new TagResource($tag);
@@ -129,6 +139,7 @@ class TagController extends Controller
      */
     public function destroy($id)
     {
+        // If user is admin find the Tag with an id of $id and try to delete it then return every Tag as Json
         if (auth('web')->user()->is_admin) {
             $tag = Tag::find($id);
             if ($tag->delete()) {

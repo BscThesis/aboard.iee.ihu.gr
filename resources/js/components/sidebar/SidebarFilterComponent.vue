@@ -144,11 +144,9 @@ export default {
         searchBody: "",
         users: [],
         tags: [],
-        perPage: localStorage.getItem("per_page")
-            ? parseInt(localStorage.getItem("per_page"))
-            : 10,
-        sortId: 0,
+        // Add treeselect options and default values
         tagsOptions: [],
+        // Change treeselect option names
         tagNormalizer(node) {
             return {
                 label: "[" + node.announcements_count + "] " + node.title,
@@ -161,6 +159,7 @@ export default {
                 label: "[" + node.announcements_count + "] " + node.name
             };
         },
+        sortId: 0,
         sort: ["Pinned First", "Newest", "Oldest"].map((value, index) => ({
             id: index,
             label: value
@@ -172,6 +171,9 @@ export default {
             id: index,
             label: value
         })),
+        perPage: localStorage.getItem("per_page")
+            ? parseInt(localStorage.getItem("per_page"))
+            : 10,
         perPageOptions: [5, 10, 15, 20].map(value => ({
             id: value,
             label: value
@@ -188,6 +190,7 @@ export default {
                 this.getProfs();
             }
         },
+        // Update searchTitleProp and get tags and professors again
         searchTitle: {
             handler: function() {
                 this.$emit(
@@ -198,6 +201,7 @@ export default {
                 this.getProfs();
             }
         },
+        // Update searchBodyProp and get tags and professors again
         searchBody: {
             handler: function() {
                 this.$emit(
@@ -208,6 +212,7 @@ export default {
                 this.getProfs();
             }
         },
+        // If queryParamsProp changes and is set to true means that the url is sent by someone and initializes params
         queryParamsProp: {
             handler: function() {
                 if (this.queryParamsProp) {
@@ -216,6 +221,7 @@ export default {
             }
         }
     },
+    // When mounted is triggered during Vue Instance LifeCycle, get tags and professors
     mounted: function() {
         this.getTags();
         this.getProfs();

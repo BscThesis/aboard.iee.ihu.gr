@@ -53,7 +53,6 @@ Route::get('/tags/{id}', 'Tag\TagController@show');
 //          Auth Routes
 //----------------------------------------
 
-
 Route::prefix('auth')->group(function () {
 
     Route::get('/logout', 'Auth\AuthController@logout');

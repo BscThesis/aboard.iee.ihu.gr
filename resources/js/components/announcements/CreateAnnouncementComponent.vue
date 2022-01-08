@@ -440,16 +440,16 @@ import "flatpickr/dist/flatpickr.css";
 import { toast } from "bulma-toast";
 
 export default {
-    //mixins: [userMixin],
+    // Get user and announcement id (if edit) from blade
     props: {
         id: {
             type: Number,
             required: false
         },
-	user: {
-	    type: Object,
-	    required: false
-	}
+        user: {
+            type: Object,
+            required: false
+        }
     },
     components: {
         flatPickr
@@ -500,28 +500,31 @@ export default {
             errors: [],
             // announcement has public tag
             has_public: false,
-            search: "",
+            search: ""
         };
     },
+    // When created is triggered during Vue Instance Lifecycle, get all tags
     created: function() {
         this.getAllTags();
     },
+    // Watch if user changes and call watch immediate to detect the prop change and then if user is admin get all authors
     watch: {
-	user: {
-	    immediate:true,
-	    handler(val, oldVal) {	    
-	        if (val) {
-		    let vm = this;		    
-		    vm.is_admin = val.is_admin; 
-		    if (vm.is_admin) {
-		        this.getAuthors();
-		    }
-	    	}
-	    }
-	}
+        user: {
+            immediate: true,
+            handler(val, oldVal) {
+                if (val) {
+                    let vm = this;
+                    vm.is_admin = val.is_admin;
+                    if (vm.is_admin) {
+                        this.getAuthors();
+                    }
+                }
+            }
+        }
     },
-    mounted: function() {        
-	if (this.id) {
+    // When mounted is triggered during Vue Instance Lifecycle, get the announcement with an id of this.id
+    mounted: function() {
+        if (this.id) {
             this.getSingle();
         } else {
             this.loading = false;

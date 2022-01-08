@@ -41,6 +41,7 @@ class Announcement extends Model implements Feedable
     
     public function scopeWithFilters($query, $users, $tags, $title, $body)
     {
+        // Filter announcements based on users, tags, title, body. 
         return $query->when($title !== '', function ($query) use ($title) {
             $query->where(function($query) use ($title) {
                 $query->where('title', 'LIKE', '%' . $title . '%')

@@ -1,62 +1,64 @@
 <template>
-  <div>
-    <section class="section" id="addTagButton">
-      <a class="button is-link is-capitalized" @click="openCreateEditModal()"
-        >Προσθήκη επικέτας</a
-      >
-    </section>
+    <div>
+        <section class="section" id="addTagButton">
+            <a
+                class="button is-link is-capitalized"
+                @click="openCreateEditModal()"
+                >Προσθήκη επικέτας</a
+            >
+        </section>
 
-    <!-- Tags Table -->
-    <table
-      v-if="tags.length >= 0"
-      class="table is-fullwidth is-bordered is-hoverable"
-    >
-      <thead>
-        <tr>
-          <th class="has-text-centered sixty-percent">Όνομα</th>
-          <th class="has-text-centered forty-percent">Διαχείριση</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="tag in tags" v-bind:key="tag.id">
-          <td class="has-text-centered" v-bind:title="tag.title">
-            {{ tag.title }}
-          </td>
-          <td class="has-text-centered">
-            <div class="buttons is-centered">
-              <button
-                class="button is-success is-light"
-                title="Επεξεργασία"
-                v-on:click="openCreateEditModal(tag, true)"
-              >
-                <span class="icon is-small">
-                  <i class="fas fa-edit"></i>
-                </span>
-              </button>
-              <button
-                class="button is-danger is-light"
-                title="Διαγραφή"
-                v-on:click="openDeleteModal(tag)"
-              >
-                <span class="icon is-small">
-                  <i class="fas fa-trash"></i>
-                </span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <!-- Tags Table -->
+        <table
+            v-if="tags.length >= 0"
+            class="table is-fullwidth is-bordered is-hoverable"
+        >
+            <thead>
+                <tr>
+                    <th class="has-text-centered sixty-percent">Όνομα</th>
+                    <th class="has-text-centered forty-percent">Διαχείριση</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="tag in tags" v-bind:key="tag.id">
+                    <td class="has-text-centered" v-bind:title="tag.title">
+                        {{ tag.title }}
+                    </td>
+                    <td class="has-text-centered">
+                        <div class="buttons is-centered">
+                            <button
+                                class="button is-success is-light"
+                                title="Επεξεργασία"
+                                v-on:click="openCreateEditModal(tag, true)"
+                            >
+                                <span class="icon is-small">
+                                    <i class="fas fa-edit"></i>
+                                </span>
+                            </button>
+                            <button
+                                class="button is-danger is-light"
+                                title="Διαγραφή"
+                                v-on:click="openDeleteModal(tag)"
+                            >
+                                <span class="icon is-small">
+                                    <i class="fas fa-trash"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <!-- Loader -->
-    <loader-component v-else></loader-component>
+        <!-- Loader -->
+        <loader-component v-else></loader-component>
 
-    <!-- Add/Edit Modal -->
-    <add-tag-component></add-tag-component>
+        <!-- Add/Edit Modal -->
+        <add-tag-component></add-tag-component>
 
-    <!-- Delete Modal -->
-    <delete-modal-component></delete-modal-component>
-  </div>
+        <!-- Delete Modal -->
+        <delete-modal-component></delete-modal-component>
+    </div>
 </template>
 
 <script>
@@ -64,83 +66,86 @@ import { toast } from "bulma-toast";
 import { bus } from "../../app";
 
 export default {
-  data: function () {
-    return {
-      tags: {},
-    };
-  },
-  created: function () {
-    this.getAllTags();
-    bus.$on("objectCreated", (data) => {
-      if (data) {
+    data: function() {
+        return {
+            tags: {}
+        };
+    },
+    // When created is triggered during Vue Instance Lifecycle get all tags, and when an object is created or removed get all tags again
+    created: function() {
         this.getAllTags();
-      }
-    });
-    bus.$on("objectRemoved", (data) => {
-      if (data) {
-        this.getAllTags();
-      }
-    });
-  },
-  methods: {
-    getAllTags() {
-      let vm = this;
-      axios
-        .get("/api/tags")
-        .then(function (response) {
-          vm.tags = response.data.data;
-        })
-        .catch(function (error) {
-          toast({
-            message: "Συνέβη κάποιο σφάλμα",
-            type: "is-danger",
-            position: "bottom-right",
-          });
-          console.log(error);
+        bus.$on("objectCreated", data => {
+            if (data) {
+                this.getAllTags();
+            }
+        });
+        bus.$on("objectRemoved", data => {
+            if (data) {
+                this.getAllTags();
+            }
         });
     },
-    openCreateEditModal(tag = null, edit = false) {
-      let data = {
-        edit: edit,
-        tags: this.tags,
-        tag: tag,
-      };
-      bus.$emit("openCreateEditModal", data);
-    },
-    openDeleteModal(tag) {
-      let vm = this;
-      let forDeletion = {
-        type: "tag",
-        data: tag,
-      };
-      bus.$emit("openModal", forDeletion);
-    },
-  },
+    methods: {
+        // Get all tags from database and initialize tag variable
+        getAllTags() {
+            let vm = this;
+            axios
+                .get("/api/tags")
+                .then(function(response) {
+                    vm.tags = response.data.data;
+                })
+                .catch(function(error) {
+                    toast({
+                        message: "Συνέβη κάποιο σφάλμα",
+                        type: "is-danger",
+                        position: "bottom-right"
+                    });
+                    console.log(error);
+                });
+        },
+        // Functions to open a modal
+        openCreateEditModal(tag = null, edit = false) {
+            let data = {
+                edit: edit,
+                tags: this.tags,
+                tag: tag
+            };
+            bus.$emit("openCreateEditModal", data);
+        },
+        openDeleteModal(tag) {
+            let vm = this;
+            let forDeletion = {
+                type: "tag",
+                data: tag
+            };
+            bus.$emit("openModal", forDeletion);
+        }
+    }
 };
 </script>
 
 <style scoped>
 table {
-  table-layout: fixed;
+    table-layout: fixed;
 }
 
 td {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 td:hover {
-  white-space: unset;
-  overflow: unset;
-  text-overflow: unset;
+    white-space: unset;
+    overflow: unset;
+    text-overflow: unset;
 }
 
 .sixty-percent {
-  width: 60%;
+    width: 60%;
 }
 
 .forty-percent {
-  width: 40%;
+    width: 40%;
 }
 </style>

@@ -173,8 +173,9 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-	App\Providers\RouteServiceProvider::class,
-	App\Providers\SocialitePlusServiceProvider::class,
+	    App\Providers\RouteServiceProvider::class,
+	    // Add our own Provider
+        App\Providers\SocialitePlusServiceProvider::class,
 
     ],
 
