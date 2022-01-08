@@ -14,10 +14,12 @@
         "guzzlehttp/guzzle": "~6.0",
         "laravel/framework": "^6.2",
         "laravel/passport": "^8.2",
+        "laravel/socialite": "^5.2",
         "laravel/tinker": "^2.0",
         "spatie/laravel-feed": "^2.6"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.6",
         "facade/ignition": "^1.4",
         "fzaninotto/faker": "^1.4",
         "laravel/ui": "^1.1",

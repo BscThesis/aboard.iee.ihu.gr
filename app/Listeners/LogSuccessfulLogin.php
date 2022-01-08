@@ -30,7 +30,7 @@ class LogSuccessfulLogin
     {
         Activity::create([
             'type' => 'user.login',
-            'user_id' => auth('api')->user()
+            'user_id' => auth('web')->user()
         ]);
     }
 }

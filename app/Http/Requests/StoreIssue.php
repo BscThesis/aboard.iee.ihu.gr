@@ -14,7 +14,7 @@ class StoreIssue extends FormRequest
      */
     public function authorize()
     {
-        return Auth::guard('api')->check();
+        return Auth::guard('web')->check();
     }
 
     /**

@@ -43,7 +43,7 @@ return [
 
         'api' => [
             'driver' => 'passport',
-            'provider' => 'my-ldap',
+            'provider' => 'users',
             'hash' => false,
         ],
     ],
@@ -68,11 +68,6 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
-        ],
-
-        'my-ldap' => [
-            'driver' => 'my-ldap',
             'model' => App\User::class,
         ],
 

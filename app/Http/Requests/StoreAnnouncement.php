@@ -15,7 +15,7 @@ class StoreAnnouncement extends FormRequest
     public function authorize()
     {
         // return true;
-        return Auth::guard('api')->check()  && Auth::guard('api')->user()->is_author;
+        return Auth::guard('web')->check()  && Auth::guard('web')->user()->is_author;
     }
 
     /**

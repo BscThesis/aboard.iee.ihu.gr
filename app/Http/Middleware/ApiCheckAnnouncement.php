@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Announcement;
+use App\Models\Announcement;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -35,13 +35,13 @@ class ApiCheckAnnouncement
             $query->where('is_public', '=', 1);
         }])->where('id', $id)->get();
 
-        if (($announcement[0]->tags_count > 0 && $local_ip == 0) || Auth::guard('api')->check()) {
+        if (($announcement[0]->tags_count > 0 && $local_ip == 0) || Auth::guard('web')->check()) {
             // if we have at least one public tag, continue
             return $next($request);
         } else if ($announcement[0]->tags_count == 0 && $local_ip == 0) {
             // if we don't, 401 unauthorized
             return response()->json([
-                'error' => 'Unauthorized'
+                'error' => 'Unauthorized 2'
             ], 401);
         }
 

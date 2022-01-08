@@ -18,7 +18,7 @@ class Tag extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'parent_id' => $this->parent_id,
-            'is_public' => $this->is_public
+            'is_public' => $this->is_public,
         ];
     }
 }

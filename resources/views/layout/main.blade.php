@@ -16,9 +16,9 @@
 
 <body>
     <div id="app">
-        <navbar-component-bulma></navbar-component-bulma>
+        <navbar-component-bulma :user="{{  json_encode(Auth::user())  }}"></navbar-component-bulma>
 
-        <div class="container block">
+        <div class="container is-fluid block">
             @yield('content')
         </div>
 

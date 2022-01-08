@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Announcement;
+use App\Models\Announcement;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -49,7 +49,7 @@ class ApiCheckAnnIdAttId
             return $next($request);
         } else if (!$announcement->hasPublicTags() && $local_ip == 0) {
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => 'Unauthorized 1'
             ], 401);
         }
 

@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Announcement;
+use App\Models\Announcement;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\AnnouncementCreated;
 use App\User;
@@ -13,7 +13,7 @@ class AnnouncementObserver
     /**
      * Handle the announcement "saved" event.
      *
-     * @param  \App\Announcement  $announcement
+     * @param  \App\Models\Announcement  $announcement
      * @return void
      */
     public function saved(Announcement $announcement)
@@ -26,7 +26,7 @@ class AnnouncementObserver
     /**
      * Handle the announcement "updated" event.
      *
-     * @param  \App\Announcement  $announcement
+     * @param  \App\Models\Announcement  $announcement
      * @return void
      */
     public function updated(Announcement $announcement)
@@ -37,7 +37,7 @@ class AnnouncementObserver
     /**
      * Handle the announcement "deleted" event.
      *
-     * @param  \App\Announcement  $announcement
+     * @param  \App\Models\Announcement  $announcement
      * @return void
      */
     public function deleted(Announcement $announcement)
@@ -48,7 +48,7 @@ class AnnouncementObserver
     /**
      * Handle the announcement "restored" event.
      *
-     * @param  \App\Announcement  $announcement
+     * @param  \App\Models\Announcement  $announcement
      * @return void
      */
     public function restored(Announcement $announcement)
@@ -59,7 +59,7 @@ class AnnouncementObserver
     /**
      * Handle the announcement "force deleted" event.
      *
-     * @param  \App\Announcement  $announcement
+     * @param  \App\Models\Announcement  $announcement
      * @return void
      */
     public function forceDeleted(Announcement $announcement)

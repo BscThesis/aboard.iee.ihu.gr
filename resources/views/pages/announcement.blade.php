@@ -3,5 +3,5 @@
 @section('title', 'Ανακοίνωση')
 
 @section('content')
-<announcement-component-bulma :id="{{ $id }}"></announcement-component-bulma>
+<announcement-component-bulma :id="{{ $id }}" :user="{{ json_encode(Auth::user()) }}"></announcement-component-bulma>
 @endsection

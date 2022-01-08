@@ -17,45 +17,37 @@ use Illuminate\Http\Request;
 //          Announcements Routes
 //----------------------------------------
 
-Route::post('/announcements', 'AnnouncementController@store');
+Route::post('/announcements', 'Announcement\AnnouncementController@store');
 
-Route::put('/announcements/{id}', 'AnnouncementController@update');
+Route::put('/announcements/{id}', 'Announcement\AnnouncementController@update');
 
-Route::delete('/announcements/{id}', 'AnnouncementController@destroy');
+Route::delete('/announcements/{id}', 'Announcement\AnnouncementController@destroy');
 
-Route::get('/announcements', 'AnnouncementController@index');
+Route::get('/announcements', 'Announcement\AnnouncementController@index');
 
-Route::get('/announcements/{id}', 'AnnouncementController@show');
-
-Route::get('/events', 'AnnouncementController@events');
-
-Route::get('/pinned', 'AnnouncementController@pinned');
-
-Route::get('/search/tag/{id}', 'AnnouncementController@searchByTag');
-
-Route::get('/search/author/{id}', 'AnnouncementController@searchByAuthor');
-
-Route::get('/search', 'AnnouncementController@customSearch');
+Route::get('/announcements/{id}', 'Announcement\AnnouncementController@show');
 
 //----------------------------------------
 //          Attachments Routes
 //----------------------------------------
 
-Route::get('/announcements/{an_id}/attachments/{at_id}', 'AttachmentController@show');
+Route::get('/announcements/{an_id}/attachments/{at_id}', 'Attachment\AttachmentController@show');
 
 //----------------------------------------
 //          Tags Routes
 //----------------------------------------
 
-Route::post('/tags', 'TagController@store');
+Route::post('/tags', 'Tag\TagController@store');
 
-Route::put('/tags/{id}', 'TagController@update');
+Route::put('/tags/{id}', 'Tag\TagController@update');
 
-Route::delete('/tags/{id}', 'TagController@destroy');
+Route::delete('/tags/{id}', 'Tag\TagController@destroy');
 
-Route::get('/tags', 'TagController@index');
+Route::get('/tags', 'Tag\TagController@index');
 
-Route::get('/tags/{id}', 'TagController@show');
+Route::get('/filtertags', 'Tag\TagController@indexForFiltering');
+
+Route::get('/tags/{id}', 'Tag\TagController@show');
 
 //----------------------------------------
 //          Auth Routes
@@ -64,32 +56,30 @@ Route::get('/tags/{id}', 'TagController@show');
 
 Route::prefix('auth')->group(function () {
 
-    Route::post('/login', 'AuthController@login');
+    Route::get('/logout', 'Auth\AuthController@logout');
 
-    Route::post('/refresh', 'AuthController@refresh');
+    Route::get('/user', 'Auth\AuthController@user');
 
-    Route::get('/logout', 'AuthController@logout');
+    Route::get('/user/notifications', 'Auth\AuthController@notifications');
 
-    Route::get('/user', 'AuthController@user');
+    Route::get('/user/notifications/read', 'Auth\AuthController@readNotifications');
 
-    Route::get('/user/notifications', 'AuthController@notifications');
+    Route::post('/subscribe', 'Auth\AuthController@subscribe');
 
-    Route::get('/user/notifications/read', 'AuthController@readNotifications');
+    Route::get('/authors', 'Auth\AuthController@authors');
 
-    Route::post('/subscribe', 'AuthController@subscribe');
-
-    Route::get('/authors', 'AuthController@authors');
+    Route::get('/subscriptions', 'Auth\AuthController@getSubscriptions');
 });
 
 //----------------------------------------
 //          Issues Routes
 //----------------------------------------
 
-Route::post('/issues', 'IssueController@store');
+Route::post('/issues', 'Issue\IssueController@store');
 
-Route::get('/issues', 'IssueController@index');
+Route::get('/issues', 'Issue\IssueController@index');
 
-Route::delete('/issues/{id}', 'IssueController@destroy');
+Route::delete('/issues/{id}', 'Issue\IssueController@destroy');
 
 //----------------------------------------
 //          Fallback route
