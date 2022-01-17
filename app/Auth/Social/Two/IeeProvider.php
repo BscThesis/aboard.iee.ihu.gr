@@ -72,7 +72,7 @@ class IeeProvider extends AbstractProvider implements ProviderInterface  {
     protected function mapUserToObject(array $user)
     {
         $group = $user['eduPersonAffiliation'];
-        $name_gr = $group === "staff" ? $user['cn;lang-el'] : Str::upper($user['cn;lang-el']);
+        $name_gr = $group === "staff" ? $user['sn;lang-el'] . " " . $user['givenName;lang-el'] : Str::upper($user['sn;lang-el'] . " " . $user['givenName;lang-el']);
         $name_eng = !empty(Str::title($user['cn'])) ? Str::title($user['cn']) : Str::ascii($user['cn;lang-el']);
         $is_author = $group === "staff";
         $email = $user['mail'];
