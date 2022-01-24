@@ -107,6 +107,21 @@ class TagController extends Controller
     }
 
     /**
+     * Returns all users that subed to specific tag
+     *
+     * @return void
+     */
+    public function returnUsers($id)
+    {
+        $tag = Tag::findOrFail($id);
+        if($tag === null){
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }else{
+            return $tag->users()->get();
+        }
+
+    }
+    /**
      * Update the specified resource in storage.
      *
      * @param  App\Http\Requests\StoreTag  $request
