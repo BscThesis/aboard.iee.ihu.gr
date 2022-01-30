@@ -23,6 +23,8 @@ class TagController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('admin.ip.check')->only('returnUsers');
+
         $this->middleware('auth:web')->only('store', 'update', 'destroy');
 
         $this->middleware('api.id.check')->only('show', 'update', 'destroy');
@@ -113,13 +115,17 @@ class TagController extends Controller
      */
     public function returnUsers($id)
     {
-        $tag = Tag::findOrFail($id);
-        if($tag === null){
-            return response()->json(['message' => 'Unauthenticated'], 401);
+        $admin_ip = $request->session()->get('admin_ip', 0);
+        if($admin_ip){
+            $tag = Tag::findOrFail($id);
+            if($tag === null){
+                return response()->json(['message' => 'No tag was found ..'], 404);
+            }else{
+                return $tag->users()->get();
+            }
         }else{
-            return $tag->users()->get();
+            return response()->json(['message' => 'Unauthorized'], 401);
         }
-
     }
     /**
      * Update the specified resource in storage.
