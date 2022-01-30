@@ -50,7 +50,7 @@ class Tag extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('App\User');
+        return $this->belongsToMany('App\User')->select('id', 'name', 'name_eng', 'email');
     }
 
     /**
@@ -58,5 +58,5 @@ class Tag extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'is_public', 'parent_id'];
+    protected $fillable = ['title', 'is_public', 'parent_id', 'maillist_name'];
 }

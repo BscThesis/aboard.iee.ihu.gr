@@ -93,7 +93,7 @@ class TagController extends Controller
     public function store(StoreTag $request)
     {
         $validated = $request->validated();
-        return Tag::create($validated);
+	return Tag::create($validated);
     }
 
     /**
@@ -113,7 +113,7 @@ class TagController extends Controller
      *
      * @return void
      */
-    public function returnUsers($id)
+    public function returnUsers($id, Request $request)
     {
         $admin_ip = $request->session()->get('admin_ip', 0);
         if($admin_ip){
@@ -121,7 +121,7 @@ class TagController extends Controller
             if($tag === null){
                 return response()->json(['message' => 'No tag was found ..'], 404);
             }else{
-                return $tag->users()->get();
+		return $tag->users()->get();
             }
         }else{
             return response()->json(['message' => 'Unauthorized'], 401);
@@ -135,10 +135,10 @@ class TagController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(StoreTag $request, $id)
-    {
+    {	
         $tag = Tag::find($id);
         $validated = $request->validated();
-        $tag->update($validated);
+	$tag->update($validated);
         return new TagResource($tag);
     }
 

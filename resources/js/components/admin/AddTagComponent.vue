@@ -47,6 +47,22 @@
             </div>
           </div>
 
+          <!-- Maillist Name -->
+          <div class="field">
+            <label class="label">Όνομα λίστας mail</label>
+            <div class="control has-icons-left">
+              <input
+                class="input"
+                type="text"
+                placeholder="Όνομα λίστας mail"
+                v-model="tag.maillist_name"                
+              />
+              <span class="icon is-small is-left">
+                <i class="fas fa-tag"></i>
+              </span>
+            </div>
+          </div>
+
           <!-- Tag Public -->
           <div class="field is-horizontal">
             <div class="field-label">
@@ -72,6 +88,7 @@
                 <select v-model="tag.parent_id">
                   <option
                     v-for="_tag in tags"
+		    v-bind:key="_tag.id"
                     v-if="_tag.id != tag.id"
                     v-bind:value="_tag.id"
                   >
@@ -106,6 +123,7 @@ export default {
         title: "",
         is_public: false,
         parent_id: null,
+	maillist_name: null
       },
       modalActive: false,
       edit: false,
@@ -128,6 +146,7 @@ export default {
           title: "",
           is_public: false,
           parent_id: null,
+	  maillist_name: null
         };
         this.edit = false;
       }
@@ -167,6 +186,7 @@ export default {
               title: this.tag.title,
               parent_id: this.tag.parent_id,
               is_public: this.tag.is_public,
+	      maillist_name: this.tag.maillist_name
             })
             .then(function (response) {
               bus.$emit("objectCreated", true);
@@ -194,6 +214,7 @@ export default {
               title: this.tag.title,
               parent_id: this.tag.parent_id,
               is_public: this.tag.is_public,
+	      maillist_name: this.tag.maillist_name
             })
             .then(function (response) {
               bus.$emit("objectCreated", true);
