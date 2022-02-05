@@ -78,6 +78,7 @@ class Kernel extends HttpKernel
         'announcement.attachment.check' => \App\Http\Middleware\ApiCheckAnnIdAttId::class,
         'api.announcement.attachment.check' => \App\Http\Middleware\ApiCheckAnIdAtId::class,
         'android.app' => \App\Http\Middleware\AddTokenToRequestForAndroidApp::class,
+        'admin.ip.check' => \App\Http\Middleware\CheckForAdminIPAddresses::class,
     ];
 
 

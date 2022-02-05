@@ -33,7 +33,8 @@ class StoreTag extends FormRequest
                 Rule::unique('tags')->ignore($this->id, 'id')
             ],
             'is_public' => 'boolean',
-            'parent_id' => 'nullable'
+	    'parent_id' => 'nullable',
+	    'maillist_name' => 'nullable'
         ];
     }
 

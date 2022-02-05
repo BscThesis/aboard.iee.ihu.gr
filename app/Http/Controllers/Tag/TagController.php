@@ -23,6 +23,8 @@ class TagController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('admin.ip.check')->only('returnUsers');
+
         $this->middleware('auth:web')->only('store', 'update', 'destroy');
 
         $this->middleware('api.id.check')->only('show', 'update', 'destroy');
@@ -98,7 +100,7 @@ class TagController extends Controller
     {
         // Check if the request's params is properly form for Tag Model and create a new Tag
         $validated = $request->validated();
-        return Tag::create($validated);
+	return Tag::create($validated);
     }
 
     /**
@@ -115,6 +117,25 @@ class TagController extends Controller
     }
 
     /**
+     * Returns all users that subed to specific tag
+     *
+     * @return void
+     */
+    public function returnUsers($id, Request $request)
+    {
+        $admin_ip = $request->session()->get('admin_ip', 0);
+        if($admin_ip){
+            $tag = Tag::findOrFail($id);
+            if($tag === null){
+                return response()->json(['message' => 'No tag was found ..'], 404);
+            }else{
+		return $tag->users()->get();
+            }
+        }else{
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+    }
+    /**
      * Update the specified resource in storage.
      *
      * @param  App\Http\Requests\StoreTag  $request
@@ -127,7 +148,7 @@ class TagController extends Controller
         $tag = Tag::find($id);
         // Check if the request's params is properly form for Tag Model and update an existing Tag
         $validated = $request->validated();
-        $tag->update($validated);
+	      $tag->update($validated);
         return new TagResource($tag);
     }
 
