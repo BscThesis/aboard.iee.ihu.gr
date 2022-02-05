@@ -21,10 +21,10 @@ export default {
             type: Object,
             required: true
         },
-	user: {
-	    type: Object,
-	    required: false
-	}
+        user: {
+            type: Object,
+            required: false
+        }
     },
     data: function() {
         return {
@@ -32,16 +32,17 @@ export default {
             is_the_author: false
         };
     },
+    // Watch if user changes and call watch immediate to detect the prop change
     watch: {
-	user: {
-	    immediate: true,
-	    handler (val, oldVal) {
-		if (val) {
-		    this.is_admin = val.is_admin;
-		    this.is_the_author = val.id == this.announcement.author.id;
-		}
-	    }
-	}
+        user: {
+            immediate: true,
+            handler(val, oldVal) {
+                if (val) {
+                    this.is_admin = val.is_admin;
+                    this.is_the_author = val.id == this.announcement.author.id;
+                }
+            }
+        }
     }
 };
 </script>

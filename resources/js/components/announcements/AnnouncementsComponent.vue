@@ -63,6 +63,7 @@ import { bus } from "../../app";
 import { toast } from "bulma-toast";
 
 export default {
+    // Get user from blade, null if none is sent
     props: {
         user: Object,
         required: false
@@ -88,10 +89,12 @@ export default {
                 : 0
         };
     },
+    // When mounted is triggered during Vue Instance Lifecycle, get all announcements and call setParamsToValues method
     mounted: function() {
         this.getAnnouncements();
         this.setParamsToValues();
     },
+    // Watch for any change in selected array and get all announcements again and update the url
     watch: {
         selected: {
             handler: function() {
@@ -109,6 +112,7 @@ export default {
         // }
     },
     methods: {
+        // Function to hide or show the filters on the left
         filtersShow() {
             this.showFilters = !this.showFilters;
         },
@@ -131,6 +135,7 @@ export default {
                     });
                 });
         },
+        // If href contains search then set the in selected array
         setParamsToValues() {
             var href = window.location.search;
             if (href.length > 0) {

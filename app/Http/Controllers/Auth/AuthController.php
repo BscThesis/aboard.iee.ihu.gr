@@ -91,7 +91,7 @@ class AuthController extends Controller
             $user = User::where('uid', $socialiteUser->uid)->first();	    
             $attributes = ['id' => $user->id];
             Auth::login($user);
-            Notification::send($user, new UserLoggedIn());
+            //Notification::send($user, new UserLoggedIn());
             $user->update([
                 'last_login_at' => Carbon::now()->toDateTimeString(),
 	        ]);
@@ -216,7 +216,7 @@ class AuthController extends Controller
                 return response()->json(['message' => 'Unauthenticated'], 401);
             }
         }
-        // If user is logged in or inside university's wifi return authors filtering and then counting every announcement each one has
+        // If user is logged in or inside university's wifi return authors, filtering and then counting every announcement each one has
         $local_ip = $request->session()->get('local_ip', 0);                
         if ($local_ip == 1 or Auth::guard()->check()) {
             return User::select('id', 'name')->where('is_author', 1)

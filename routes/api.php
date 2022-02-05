@@ -55,7 +55,6 @@ Route::get('/tags/{id}/users', 'Tag\TagController@returnUsers');
 //          Auth Routes
 //----------------------------------------
 
-
 Route::prefix('auth')->group(function () {
 
     Route::get('/logout', 'Auth\AuthController@logout');

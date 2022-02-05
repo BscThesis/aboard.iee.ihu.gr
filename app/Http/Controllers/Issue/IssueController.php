@@ -28,6 +28,7 @@ class IssueController extends Controller
      */
     public function index()
     {
+        // If user is admin get every Issue
         if (auth('web')->user()->is_admin) {
             $issues = Issue::orderBy('created_at')->get();
             return IssueResource::collection($issues);
@@ -42,6 +43,7 @@ class IssueController extends Controller
      */
     public function store(StoreIssue $request)
     {
+        // Check if the request's params is properly form for Issue Model and create a new Issue
         $validated = $request->validated();
         return auth('web')->user()->issues()->create($validated);
     }
@@ -54,6 +56,7 @@ class IssueController extends Controller
      */
     public function destroy($id)
     {
+        // If user is admin find the Issue with an id of $id and try to delete it then return every Issue as Json
         if (auth('web')->user()->is_admin) {
             $issue = Issue::findOrFail($id);
             if ($issue->delete()) {

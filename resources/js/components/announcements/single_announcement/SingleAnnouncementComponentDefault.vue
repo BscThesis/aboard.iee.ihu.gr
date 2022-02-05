@@ -104,6 +104,7 @@ export default {
         };
     },
     methods: {
+        // Check if is pinned is still active
         checkIfActive(date) {
             return moment(date).isAfter(moment().clone());
         }

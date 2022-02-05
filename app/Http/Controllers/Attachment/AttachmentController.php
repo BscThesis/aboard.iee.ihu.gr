@@ -31,8 +31,10 @@ class AttachmentController extends Controller
      */
     public function show($an_id, $at_id, Request $request)
     {
+        // Find the announcement with an id of $an_id
         $announcement = Announcement::findOrFail($an_id);
 
+        // If the announcement has attachments get the attachment with an id of $at_id
         if ($announcement->hasAttachment($at_id)) {
             $attachment = Attachment::findOrFail($at_id);
 
@@ -41,6 +43,7 @@ class AttachmentController extends Controller
                 'Content-Length' => $attachment->filesize,
             ];
 
+            // If user requests to download it download the attachment
             if ($request->input('action') == 'download') {
                 $headers['Content-Disposition'] = "attachment; filename=" . $attachment->filename;
             }

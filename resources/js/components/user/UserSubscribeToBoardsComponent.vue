@@ -64,8 +64,7 @@
                                 v-for="tag in selectedTagsNames"
                                 v-bind:key="tag.id"
                             >
-                                <a>{{ tag.title }}</a
-                                >
+                                <a>{{ tag.title }}</a>
                             </li>
                         </ul>
                     </aside>
@@ -85,7 +84,7 @@ export default {
             selectedTags: [],
             search: "",
             btnLoading: false,
-	    subscriptions: []
+            subscriptions: []
         };
     },
     mounted: function() {
@@ -111,25 +110,25 @@ export default {
         },
         getSelectedTags: function() {
             let vm = this;
-	    axios
-		.get("/api/auth/subscriptions")
-		.then(function(response) {
-		    let tagArray = [];
-		    vm.subscriptions = response.data;
-		    if (vm.subscriptions.length > 0) {
-			vm.subscriptions.forEach(element => {
-			    tagArray.push(element.id);
-			});
-		    }
-		    vm.selectedTags = tagArray;		    
-		})
-		.catch(function(error) {
+            axios
+                .get("/api/auth/subscriptions")
+                .then(function(response) {
+                    let tagArray = [];
+                    vm.subscriptions = response.data;
+                    if (vm.subscriptions.length > 0) {
+                        vm.subscriptions.forEach(element => {
+                            tagArray.push(element.id);
+                        });
+                    }
+                    vm.selectedTags = tagArray;
+                })
+                .catch(function(error) {
                     toast({
                         message: "Συνέβη κάποιο σφάλμα",
                         type: "is-danger",
                         position: "bottom-right"
-                    });                    
-                });	    
+                    });
+                });
         },
         savePreferences: function() {
             let vm = this;
@@ -141,7 +140,7 @@ export default {
                     })
                     .then(function(response) {
                         vm.btnLoading = false;
-			vm.getSelectedTags();
+                        vm.getSelectedTags();
                         toast({
                             message: "Αποθηκεύτηκε",
                             type: "is-success",
@@ -167,12 +166,12 @@ export default {
         }
     },
     computed: {
-	 filteredTags: function() {
+        filteredTags: function() {
             let vm = this;
             if (vm.search == "") {
                 return vm.tags.filter(function(el) {
                     return el.parent_id != null;
-                });               
+                });
             } else {
                 return vm.tags.filter(function(el) {
                     return (
@@ -185,7 +184,7 @@ export default {
             }
         },
         selectedTagsNames: function() {
-            let vm = this;            
+            let vm = this;
             let tagArray = [];
             if (vm.subscriptions.length > 0) {
                 vm.subscriptions.forEach(element => {

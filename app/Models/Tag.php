@@ -35,6 +35,7 @@ class Tag extends Model
 
     public function childrenRecursive()
     {
+        // Return each Tag children counting every announcement each one has
         return $this->children()->withCount(['announcements'=>function ($query){
             $query->withFilters(
                 request()->input('users', []),

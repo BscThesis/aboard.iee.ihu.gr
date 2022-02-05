@@ -43,9 +43,7 @@ class AnnouncementController extends Controller
      */
     public function index(Request $request)
     {
-        $local_ip = $request->session()->get('local_ip', 0);
-        $per_page = request()->input('perPage',10);
-        $sort_id = request()->input('sortId',0);
+        // Check if header has authorization and if user is not logged in and then try to log in from the token
         if ($request->headers->has('authorization') && !Auth::guard('web')->check()) {
             try{
                 $socialiteUser = Socialite::driver('iee')->userFromToken($request->bearerToken());
@@ -57,16 +55,22 @@ class AnnouncementController extends Controller
                 return response()->json(['message' => 'Unauthenticated'], 401);
             }
         }
+        $per_page = request()->input('perPage',10);
+        $sort_id = request()->input('sortId',0);
+        // If user is logged in or inside university's wifi return all filtered announcements
+        $local_ip = $request->session()->get('local_ip', 0);
         if ($local_ip == 1 or Auth::guard('web')->check()) {
             $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]),json_decode(request()->input('title', '')),json_decode(request()->input('body', '')))
             ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at');
-        } else {
+        } 
+        // Else return only public filtered announcements
+        else {
             $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]),json_decode(request()->input('title', '')),json_decode(request()->input('body', '')))
             ->whereHas('tags', function (Builder $query) {
                 $query->where('is_public', 1);
             })->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at');
         }    
-        // Return announcements as a json
+        // Return announcements as a json and paginated by $per_page value
         $announcements = $announcements->distinct()->paginate($per_page);
         return AnnouncementResource::collection($announcements);
     }
@@ -79,6 +83,7 @@ class AnnouncementController extends Controller
      */
     public function store(StoreAnnouncement $request)
     {
+        // If user is logged in create a new Announcement Instance
         if (Auth::guard('web')->check()) {
             $announcement = new Announcement;
             $announcement->title = $request->input('title');
@@ -94,17 +99,22 @@ class AnnouncementController extends Controller
             $announcement->event_end_time = $request->input('event_end_time');
             $announcement->gmaps = $request->input('gmaps');
 
+            // If a user_id exists in request set it as the author only if the logged in user is an admin
             if (isset($request->user_id)) {
                 if (auth('web')->user()->is_admin) {
                     $announcement->user_id = $request->user_id;
                 } else {
                     return response()->json(['message' => 'Not permitted to upload as other person'], 401);
                 }
-            } else {
+            } 
+            // Else just set the user as the author.
+            else {
                 $announcement->user_id = auth('web')->user()->id;
             }
 
+            // If saving the Announcement Instance completes successfully
             if ($announcement->save()) {
+                // Set Announcement's Tags if they exist.
                 // Array of tags
                 $tags = array();
                 foreach ($request->input('tags') as $id) {
@@ -118,6 +128,7 @@ class AnnouncementController extends Controller
                 }
                 $announcement->tags()->sync($tags);
 
+                // If the request has attachments create new Attachment instance and save them
                 // Array of files
                 if ($request->hasfile('attachments')) {
                     foreach ($request->file('attachments') as $order => $attachment) {
@@ -135,10 +146,10 @@ class AnnouncementController extends Controller
                 }
             }
 
-            // Raise an event
+            // Raise an event that a new Announcement was created
             event(new NewAnnouncementWasCreatedEvent($announcement));
 
-            // Return the attachment
+            // Return the announcement
             return new AnnouncementResource($announcement);
         } else {
             return response()->json(['message' => 'Unauthenticated'], 401);
@@ -169,7 +180,9 @@ class AnnouncementController extends Controller
      */
     public function update(StoreAnnouncement $request, $id)
     {
+        // If user is logged in
         if (Auth::guard('web')->check()) {
+            // Find the announcement and set the request params
             $announcement = Announcement::findOrFail($id);
 
             $announcement->title = $request->input('title');
@@ -186,7 +199,9 @@ class AnnouncementController extends Controller
             $announcement->gmaps = $request->input('gmaps');
             $announcement->touch();
 
+            // If update is successful
             if ($announcement->update()) {
+                // Add tags to announcement
                 // Array of tags []
                 $tags = array();
                 foreach ($request->input('tags') as $id) {
@@ -248,11 +263,12 @@ class AnnouncementController extends Controller
      */
     public function destroy($id)
     {
+        // If user is logged in 
         if (Auth::guard('web')->check()) {
             // Get single announcement
             $announcement = Announcement::findOrFail($id);
 
-            // Return announcements
+            // Return announcements after deleting the announcement with an id of $id
             if ($announcement->delete() && $announcement->attachments()->delete()) {
                 $announcements = Announcement::orderBy('updated_at', 'desc')->paginate(10);
                 return AnnouncementResource::collection($announcements);
@@ -263,7 +279,7 @@ class AnnouncementController extends Controller
     }
 
     /**
-     * FSS feed.
+     * RSS feed.
      *
      * @return \Illuminate\Http\Response
      */

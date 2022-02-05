@@ -29,6 +29,7 @@ export default {
         return {};
     },
     methods: {
+        // Open modal to ask if you are sure deleting the announcement
         openDeleteModal(announcement) {
             let vm = this;
             let forDeletion = {

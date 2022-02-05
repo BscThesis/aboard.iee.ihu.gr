@@ -5,6 +5,7 @@ use Laravel\Socialite\SocialiteServiceProvider;
 
 class SocialitePlusServiceProvider extends SocialiteServiceProvider {
     public function register() {
+        // Register our own custom Socialite Provider
         $this->app->singleton('Laravel\Socialite\Contracts\Factory', function ($app) {
             $socialiteManager = new SocialiteManager($app);
  
