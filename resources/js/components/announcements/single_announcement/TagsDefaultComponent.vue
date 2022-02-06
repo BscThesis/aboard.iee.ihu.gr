@@ -6,6 +6,7 @@
                     class="tag is-dark is-clickable"
                     v-for="tag in filteredTags"
                     v-bind:key="tag.id"
+                    @click="updateSearchURL(tag.id)"
                     >{{ tag.title }}</span
                 >
             </div>
@@ -19,6 +20,14 @@ export default {
         tags: {
             type: Array,
             required: true
+        },
+        tagFilterProp: {
+            type: Array,
+            required: false
+        },
+        queryParamsFilterProp: {
+            type: Boolean,
+            required: false
         }
     },
     computed: {
@@ -27,6 +36,19 @@ export default {
             return vm.tags.filter(function(el) {
                 return el.parent_id;
             });
+        }
+    },
+    methods: {
+        updateSearchURL(id) {
+            if (this.tagFilterProp) {
+                this.$emit("update:tagsProp", this.updateTags(id));
+                if (!this.queryParamsFilterProp) {
+                    this.$emit("update:queryParamsFilterProp", true);
+                }
+            }
+        },
+        updateTags: function(id) {
+            if (!this.tagFilterProp.includes(id)) this.tagFilterProp.push(id);
         }
     }
 };

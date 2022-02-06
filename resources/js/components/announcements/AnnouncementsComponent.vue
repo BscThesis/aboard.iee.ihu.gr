@@ -35,6 +35,9 @@
                     v-bind:key="announcement.id"
                     v-bind:announcement="announcement"
                     v-bind:layout="layout"
+                    v-bind:usersProp.sync="selected.users"
+                    v-bind:tagsProp.sync="selected.tags"
+                    v-bind:queryParamsProp.sync="queryParams"
                 ></single-announcement-component-default>
             </div>
 

@@ -78,6 +78,9 @@
                     v-bind:attachments="announcement.attachments"
                     v-bind:updated_at="announcement.updated_at"
                     v-bind:author="announcement.author"
+                    v-bind:usersChildProp.sync="usersProp"
+                    v-bind:tagsChildProp.sync="tagsProp"
+                    v-bind:queryParamsChildProp.sync="queryParams"
                 ></single-announcement-info-component>
             </div>
         </article>
@@ -95,13 +98,33 @@ export default {
         layout: {
             type: Number,
             required: true
+        },
+        usersProp: {
+            type: Array,
+            required: true
+        },
+        tagsProp: {
+            type: Array,
+            required: true
+        },
+        queryParamsProp: {
+            type: Boolean,
+            required: true
         }
     },
     data() {
         return {
             displayEnglish: false,
-            open: false
+            open: false,
+            queryParams: false
         };
+    },
+    watch: {
+        queryParams: {
+            handler: function() {
+                this.$emit("update:queryParamsProp", this.queryParams);
+            }
+        }
     },
     methods: {
         // Check if is pinned is still active
