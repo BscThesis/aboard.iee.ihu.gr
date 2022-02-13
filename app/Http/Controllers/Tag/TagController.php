@@ -90,6 +90,17 @@ class TagController extends Controller
         return $tags;
     }
 
+     /*
+     * 
+     * Display all listing tags.
+     * 
+     */
+    public function basicIndexing(Request $request)
+    {
+        $tags = Tag::with('childrensubRecursive')->where('parent_id', null)->orderBy('title','asc')->get();
+        return $tags;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
