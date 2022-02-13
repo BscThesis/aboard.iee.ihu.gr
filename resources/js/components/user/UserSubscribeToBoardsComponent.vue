@@ -1,57 +1,22 @@
 <template>
     <div class="block">
-        <loader-component v-if="tags.length == 0"></loader-component>
-        <div class="block" v-if="tags.length > 0">
+        <loader-component v-if="tagsOptions.length == 0"></loader-component>
+        <div class="block" v-if="tagsOptions.length > 0">
             <div class="columns is-centered">
                 <div class="column is-half">
                     <nav class="panel">
                         <p class="panel-heading">Ετικέτες</p>
-                        <div class="panel-block">
-                            <p class="control has-icons-left has-icons-right">
-                                <input
-                                    class="input"
-                                    type="text"
-                                    placeholder="Αναζήτηση..."
-                                    v-model="search"
-                                />
-                                <span class="icon is-left">
-                                    <i
-                                        class="fas fa-search"
-                                        aria-hidden="true"
-                                    ></i>
-                                </span>
-                                <span
-                                    v-show="search"
-                                    class="icon is-small is-right"
-                                >
-                                    <a class="delete" @click="search = ''"></a>
-                                </span>
-                            </p>
-                        </div>
-                        <div class="tags-list">
-                            <label
-                                v-for="tag in filteredTags"
-                                v-bind:key="tag.id"
-                                class="panel-block"
-                            >
-                                <input
-                                    type="checkbox"
-                                    v-bind:value="tag.id"
-                                    v-model="selectedTags"
-                                />
-                                {{ tag.title }}
-                            </label>
-                        </div>
-                        <div class="panel-block">
-                            <button
-                                class="button is-link is-outline is-fullwidth"
-                                @click="savePreferences()"
-                                v-bind:class="{ 'is-loading': btnLoading }"
-                                v-bind:disabled="btnLoading"
-                            >
-                                Αποθήκευση
-                            </button>
-                        </div>
+			<!-- Tags -->
+                        <treeselect
+                            id="tags"
+			    :value-consists-of="valueConsistsOf"
+                            :multiple="true"                            
+                            :options="tagsOptions"
+                            :normalizer="tagNormalizer"
+                            placeholder="Επιλέξτε ετικέτες..."
+                            v-model="tags"
+                            v-on:input="tagValueChange"
+                        />                     
                     </nav>
                 </div>
                 <div class="column is-half">
@@ -76,13 +41,21 @@
 
 <script>
 import { toast } from "bulma-toast";
+import Treeselect from "@riophae/vue-treeselect";
 
 export default {
+    components: { Treeselect },
     data: function() {
         return {
+	    valueConsistsOf: "ALL",
             tags: [],
-            selectedTags: [],
-            search: "",
+	    tagsOptions: [],
+            tagNormalizer(node) {
+                return {
+                    label: node.title,
+                    children: node.childrensub_recursive
+                };
+            },
             btnLoading: false,
             subscriptions: []
         };
@@ -95,9 +68,10 @@ export default {
         getAllTags: function() {
             let vm = this;
             axios
-                .get("/api/tags")
+                .get("/api/subscribetags")
                 .then(function(response) {
-                    vm.tags = response.data.data;
+                    let apiTags = response.data;
+                    vm.tagsOptions = vm.removeEmptyChildrenTags(apiTags);
                 })
                 .catch(function(error) {
                     toast({
@@ -107,6 +81,18 @@ export default {
                     });
                     console.log(error);
                 });
+        },
+	removeEmptyChildrenTags(data) {	   
+            for (let index = 0; index < data.length; index++) {		
+                if (data[index].childrensub_recursive.length != 0) {
+                    this.removeEmptyChildrenTags(
+                        data[index].childrensub_recursive
+                    );
+                } else {
+                    delete data[index]["childrensub_recursive"];
+                }
+            }
+            return data;
         },
         getSelectedTags: function() {
             let vm = this;
@@ -120,7 +106,7 @@ export default {
                             tagArray.push(element.id);
                         });
                     }
-                    vm.selectedTags = tagArray;
+                    vm.tags = tagArray;
                 })
                 .catch(function(error) {
                     toast({
@@ -132,11 +118,11 @@ export default {
         },
         savePreferences: function() {
             let vm = this;
-            if (vm.selectedTags.length >= 0) {
+            if (vm.tags.length >= 0) {
                 vm.btnLoading = true;
                 axios
                     .post("/api/auth/subscribe", {
-                        tags: JSON.stringify(vm.selectedTags)
+                        tags: JSON.stringify(vm.tags)
                     })
                     .then(function(response) {
                         vm.btnLoading = false;
@@ -163,26 +149,12 @@ export default {
                     position: "bottom-right"
                 });
             }
+        },
+	tagValueChange: function() {
+            this.savePreferences();
         }
     },
     computed: {
-        filteredTags: function() {
-            let vm = this;
-            if (vm.search == "") {
-                return vm.tags.filter(function(el) {
-                    return el.parent_id != null;
-                });
-            } else {
-                return vm.tags.filter(function(el) {
-                    return (
-                        el.title
-                            .toLowerCase()
-                            .includes(vm.search.toLowerCase()) &&
-                        el.parent_id != null
-                    );
-                });
-            }
-        },
         selectedTagsNames: function() {
             let vm = this;
             let tagArray = [];
