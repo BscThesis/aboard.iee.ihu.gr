@@ -51,6 +51,9 @@ Route::get('/tags/{id}', 'Tag\TagController@show');
 
 Route::get('/tags/{id}/users', 'Tag\TagController@returnUsers');
 
+Route::get('/subscribetags', 'Tag\TagController@basicIndexing');
+
+
 //----------------------------------------
 //          Auth Routes
 //----------------------------------------

@@ -46,6 +46,11 @@ class Tag extends Model
         }])->with('childrenRecursive');        
     }
 
+    public function childrensubRecursive()
+    {
+        return $this->children()->with('childrensubRecursive');
+    }
+
     /**
      * The users that belong to the role.
      */

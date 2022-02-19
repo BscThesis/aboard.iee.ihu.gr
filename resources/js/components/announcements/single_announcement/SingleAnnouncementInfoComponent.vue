@@ -12,12 +12,14 @@
                     <a>{{ updated_at }}</a>
                 </li>
                 <li class="mx-2">
-                    <a>{{ author.name }}</a>
+                    <a @click="updateSearchURL()">{{ author.name }}</a>
                 </li>
                 <li v-if="tags.length > 0" class="mx-2">
                     <!-- Tags -->
                     <tags-default-component
                         v-bind:tags="tags"
+                        v-bind:tagFilterProp.sync="tagsChildProp"
+                        v-bind:queryParamsFilterProp.sync="queryParams"
                     ></tags-default-component>
                 </li>
             </ul>
@@ -54,6 +56,36 @@ export default {
         author: {
             type: Object,
             required: true
+        },
+        usersChildProp: {
+            type: Array,
+            required: true
+        },
+        tagsChildProp: {
+            type: Array,
+            required: true
+        },
+        queryParamsChildProp: {
+            type: Boolean,
+            required: true
+        }
+    },
+    data() {
+        return {
+            queryParams: false
+        };
+    },
+    computed: {
+        updateAuthor: function() {
+            if (!this.usersChildProp.includes(this.author.id))
+                this.usersChildProp.push(this.author.id);
+        }
+    },
+    watch: {
+        queryParams: {
+            handler: function() {
+                this.$emit("update:queryParamsChildProp", this.queryParams);
+            }
         }
     },
     methods: {
@@ -68,6 +100,11 @@ export default {
                 counter++;
             });
             return title;
+        },
+        updateSearchURL() {
+            this.$emit("update:usersProp", this.updateAuthor);
+            if (!this.queryParamsChildProp)
+                this.$emit("update:queryParamsChildProp", true);
         }
     }
 };

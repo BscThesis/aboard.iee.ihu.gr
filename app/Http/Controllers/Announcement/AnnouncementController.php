@@ -118,12 +118,15 @@ class AnnouncementController extends Controller
                 // Array of tags
                 $tags = array();
                 foreach ($request->input('tags') as $id) {
-                    $tag = Tag::findOrFail($id);
-                    while (!is_null($tag->parent_id)) {
-                        if (!is_null($tag->parent_id)) {
-                            array_push($tags, $tag->id);
-                        }
-                        $tag = Tag::findOrFail($tag->parent_id);
+		    $tag = Tag::findOrFail($id);
+		    array_push($tags, $tag->id);
+		    $parent = $tag->parent_id;
+
+                    while (!is_null($parent)) {
+                        // if (!is_null($tag->parent_id)) {}
+			    $tag = Tag::findOrFail($parent);    
+			    array_push($tags, $tag->id);
+                            $parent = $tag->parent_id;                            
                     }
                 }
                 $announcement->tags()->sync($tags);
@@ -206,13 +209,15 @@ class AnnouncementController extends Controller
                 $tags = array();
                 foreach ($request->input('tags') as $id) {
                     $tag = Tag::findOrFail($id);
-
-                    while (!is_null($tag->parent_id)) {
-                        if (!is_null($tag->parent_id)) {
-                            array_push($tags, $tag->id);
-                        }
-                        $tag = Tag::findOrFail($tag->parent_id);
-                    }
+		    array_push($tags, $tag->id);
+		    $parent = $tag->parent_id;	    
+		     
+		    while (!is_null($parent)) {
+                        // if (!is_null($tag->parent_id)) {}
+			   $tag = Tag::findOrFail($parent); 
+			   array_push($tags, $tag->id);
+                           $parent = $tag->parent_id;			  
+		    }		   		    
                 }
 
                 $announcement->tags()->sync($tags);

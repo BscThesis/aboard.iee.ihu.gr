@@ -90,6 +90,17 @@ class TagController extends Controller
         return $tags;
     }
 
+     /*
+     * 
+     * Display all listing tags.
+     * 
+     */
+    public function basicIndexing(Request $request)
+    {
+        $tags = Tag::with('childrensubRecursive')->where('parent_id', null)->orderBy('title','asc')->get();
+        return $tags;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -99,8 +110,14 @@ class TagController extends Controller
     public function store(StoreTag $request)
     {
         // Check if the request's params is properly form for Tag Model and create a new Tag
-        $validated = $request->validated();
-	return Tag::create($validated);
+    	try {
+	    $validated = $request->validated();
+	    $tag = Tag::create($validated);
+	}
+	catch (\Exception $exception) {
+	    return response()->json(["error" => "Record not created successfully!"], 406);
+	}
+	return $tag;
     }
 
     /**
