@@ -194,11 +194,20 @@ export default {
               document
                 .getElementsByTagName("html")[0]
                 .classList.remove("is-clipped");
-              toast({
-                message: "Αποθηκεύτηκε επιτυχώς",
-                type: "is-success",
-                position: "bottom-right",
-              });
+              if (response.data.errors) {
+	      	toast({
+                  message: "Συνέβη κάποιο σφάλμα",
+                  type: "is-danger",
+                  position: "bottom-right",
+                });
+	      }
+	      else {
+                toast({
+                  message: "Αποθηκεύτηκε επιτυχώς",
+                  type: "is-success",
+                  position: "bottom-right",
+                });
+              }
             })
             .catch(function (error) {
               toast({

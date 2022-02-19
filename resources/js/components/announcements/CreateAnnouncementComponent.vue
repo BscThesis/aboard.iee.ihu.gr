@@ -819,9 +819,9 @@ export default {
                             vm.has_public = true;
                         }
 
-                        if (tag.parent_id != null) {
-                            selected.add(tag.title);
-                        }
+                        //if (tag.parent_id != null) {
+                        selected.add(tag.title);
+                        //}
                         parent = tag.parent_id;
                     }
                 });

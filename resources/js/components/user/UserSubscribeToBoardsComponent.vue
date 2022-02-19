@@ -8,8 +8,7 @@
                         <p class="panel-heading">Ετικέτες</p>
 			<!-- Tags -->
                         <treeselect
-                            id="tags"
-			    :value-consists-of="valueConsistsOf"
+                            id="tags"			    
                             :multiple="true"                            
                             :options="tagsOptions"
                             :normalizer="tagNormalizer"
@@ -47,7 +46,6 @@ export default {
     components: { Treeselect },
     data: function() {
         return {
-	    valueConsistsOf: "ALL",
             tags: [],
 	    tagsOptions: [],
             tagNormalizer(node) {

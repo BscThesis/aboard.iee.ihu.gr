@@ -34,7 +34,10 @@ class StoreTag extends FormRequest
             ],
             'is_public' => 'boolean',
 	    'parent_id' => 'nullable',
-	    'maillist_name' => 'nullable'
+	    'maillist_name' => [
+		 'nullable',
+		 Rule::unique('tags')->ignore($this->id, 'id')
+	    ],
         ];
     }
 
@@ -47,7 +50,8 @@ class StoreTag extends FormRequest
     {
         return [
             'title.required' => 'Title is required',
-            'title.unique' => 'Title must be unique',
+	    'title.unique' => 'Title must be unique',
+	    'maillist_name' => 'Maillist name must be unique',
             'is_public.boolean' => 'Only boolean values are acceepted'
         ];
     }
