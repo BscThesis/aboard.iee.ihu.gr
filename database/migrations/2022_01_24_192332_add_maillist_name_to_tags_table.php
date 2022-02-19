@@ -14,7 +14,7 @@ class AddMaillistNameToTagsTable extends Migration
     public function up()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->string('maillist_name')->nullable();
+            $table->string('maillist_name')->nullable()->unique();
         });
     }
 
