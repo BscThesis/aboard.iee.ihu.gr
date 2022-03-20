@@ -19,7 +19,9 @@ class Attachment extends JsonResource
             'announcement_id' => $this->announcement_id,
             'filename' => $this->filename,
             'filesize' => $this->filesize,
-            'mime_type' => $this->mime_type
+            'mime_type' => $this->mime_type,
+            'attachment_url' => env("APP_URL")."/announcements/". $this->announcement_id."/attachments/". $this->id."?action=download",
+            'attachment_url_view' => env("APP_URL")."/announcements/". $this->announcement_id."/attachments/". $this->id
         ];
     }
 }

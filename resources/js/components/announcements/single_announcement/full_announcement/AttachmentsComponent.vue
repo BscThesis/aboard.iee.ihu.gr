@@ -22,7 +22,7 @@
                             <a
                                 class="tag is-info is-light"
                                 v-bind:href="
-                                    `/announcements/${attachment.announcement_id}/attachments/${attachment.id}?action=download`
+                                    attachment.attachment_url
                                 "
                                 target="_blank"
                                 title="Download"
@@ -32,7 +32,7 @@
                             <a
                                 class="tag"
                                 v-bind:href="
-                                    `/announcements/${attachment.announcement_id}/attachments/${attachment.id}`
+                                    attachment.attachment_url_view
                                 "
                                 target="_blank"
                                 v-if="attachment.filename.endsWith('.pdf')"
