@@ -11,11 +11,11 @@
             </div>
 
             <doc-item
-                title="/api/announcements?users[]=userId1&amp;users[]=userId2&amp;tags[]=tagId1&amp;tags[]=tagId2&amp;perPage=5&amp;sortId=0&amp;q=%22words+words%22"
+                title="/api/announcements?users[]=userId1&amp;users[]=userId2&amp;tags[]=tagId1&amp;tags[]=tagId2&amp;perPage=5&amp;sortId=0&amp;title=%22words+words%22&amp;body=%22words%22&amp;updatedAfter=%22last_week%22&amp;updatedBefore=%222022-03-01+00:00%22"
                 requestType="GET"
                 description="/api/announcements - Retrieves all annnouncements paginated by 10 and sorted with pinned first without any params.                
                  /api/announcements?params - Retrieves filtered announcements with params. Param example can be seen in the title.
-                 Every param is optional and doesn't require to be added."
+                 Every param is optional and doesn't require to be added. For updatedAfter there are default values or insert a valid timestamp."
                 :response="announcementsResponse"
             ></doc-item>
 
@@ -81,11 +81,11 @@
             ></doc-item>
 
             <doc-item
-                title="/api/filtertags?users[]=userId1&amp;users[]=userId2&amp;q=%22words+words%22"
+                title="/api/filtertags?users[]=userId1&amp;users[]=userId2&amp;title=%22words+words%22&amp;body=%22words%22&amp;updatedAfter=%22last_week%22&amp;updatedBefore=%222022-03-01+00:00%22"
                 requestType="GET"
                 description="/api/filtertags - Retrieves all tags with announcement count for all the announcements and all of their children without any params. 
                 /api/filtertags?params - Retrieves all tags with announcement count for filtered announcements and all of their children. Param example can be seen in the title.
-                 Every param is optional and doesn't require to be added."
+                 Every param is optional and doesn't require to be added. For updatedAfter there are default values or insert a valid timestamp."
                 :response="filtertagResponse"
             ></doc-item>
 
@@ -94,6 +94,13 @@
                 requestType="GET"
                 description="Retrieves info of tag with id of {id}"
                 :response="tagResponseSingle"
+            ></doc-item>
+
+            <doc-item
+                title="/api/subscribetags"
+                requestType="GET"
+                description="Retrieves tags with their children for subscription page"
+                :response="subscribeTagRepsonse"
             ></doc-item>
 
             <doc-item
@@ -182,11 +189,11 @@
                 auth
             ></doc-item>
             <doc-item
-                title="/api/auth/authors?tags[]=tagId1&amp;tags[]=tagId2&amp;q=%22words+words%22"
+                title="/api/auth/authors?tags[]=tagId1&amp;tags[]=tagId2&amp;title=%22words+words%22&amp;body=%22words%22&amp;updatedAfter=%22last_week%22&amp;updatedBefore=%222022-03-01+00:00%22"
                 requestType="GET"
                 description="/api/auth/authors - Retrieves list of authors with announcement count for all the announcements without any params.
                 /api/auth/authors?params - Retrieves list of authors with announcement count for filtered announcements. Param example can be seen in the title.
-                 Every param is optional and doesn't require to be added."
+                 Every param is optional and doesn't require to be added. For updatedAfter there are default values or insert a valid timestamp."
                 :response="authAuthorsResponse"
             ></doc-item>
         </div>
@@ -259,6 +266,7 @@ export default {
                 title: "varchar(255)",
                 is_public: "tinyint(1)",
                 parent_id: "bigint(20) f_key",
+                maillist_name: "varchar(255)",
                 created_at: "timestamp",
                 updated_at: "timestamp",
                 deleted_at: "timestamp"
@@ -326,6 +334,7 @@ export default {
             attachmentResponse: `{ "data": "Attachment's file" }`,
             tagResponseAll: `{ "data": [ { "id": 6, "title": "1102 Δομημένος Προγραμματισμός Εργαστήριο", "parent_id": 4, "is_public": 0 }, { "id": 5, "title": "1102 Δομημένος Προγραμματισμός Θεωρία", "parent_id": 4, "is_public": 0 }, { "id": 4, "title": "1102 Δομημένος Προγραμματισμός", "parent_id": 2, "is_public": 0 }, { "id": 3, "title": "Εκδηλώσεις", "parent_id": 1, "is_public": 1 }, { "id": 2, "title": "Εξάμηνο Α", "parent_id": 1, "is_public": 0 }, { "id": 1, "title": "Όλες οι ανακοινώσεις", "parent_id": null, "is_public": 0 } ] }`,
             filtertagResponse: `[{"id":163,"title":"1ο Έτος","parent_id":1,"is_public":false,"created_at":"2021-03-30 16:46:26","updated_at":"null","deleted_at":null,"announcements_count":785,"children_recursive":[{"id":163,"title":"1ο Εξάμηνο","parent_id":163,"is_public":false,"created_at":"2020-05-11 21:15:15","updated_at":"2020-05-11 21:15:15","deleted_at":null,"announcements_count":34,"children_recursive":[]}]},{"id":18748,"title":"ImseLab","parent_id":1,"is_public":true,"created_at":"2021-07-19 09:11:04","updated_at":"2021-07-19 09:11:04","deleted_at":null,"announcements_count":0,"children_recursive":[]},{"id":160,"title":"Test board","parent_id":1,"is_public":true,"created_at":"2021-03-30 16:45:13","updated_at":"2021-03-30 16:45:13","deleted_at":null,"announcements_count":0,"children_recursive":[]},{"id":19,"title":"\u0386\u03bb\u03bb\u03b1 \u03b4\u03b7\u03bc\u03cc\u03c3\u03b9\u03b1 \u03bd\u03ad\u03b1","parent_id":1,"is_public":true,"created_at":"2020-05-11 21:15:15","updated_at":"2020-05-11 21:15:15","deleted_at":null,"announcements_count":19,"children_recursive":[]}]`,
+            subscribeTagRepsonse: `[{"id":163,"title":"1ο Έτος","parent_id":1,"is_public":false,"created_at":"2021-03-30 16:46:26","updated_at":"null","deleted_at":null,"children_recursive":[{"id":163,"title":"1ο Εξάμηνο","parent_id":163,"is_public":false,"created_at":"2020-05-11 21:15:15","updated_at":"2020-05-11 21:15:15","deleted_at":null,"children_recursive":[]}]},{"id":18748,"title":"ImseLab","parent_id":1,"is_public":true,"created_at":"2021-07-19 09:11:04","updated_at":"2021-07-19 09:11:04","deleted_at":null,"children_recursive":[]},{"id":160,"title":"Test board","parent_id":1,"is_public":true,"created_at":"2021-03-30 16:45:13","updated_at":"2021-03-30 16:45:13","deleted_at":null,"children_recursive":[]},{"id":19,"title":"\u0386\u03bb\u03bb\u03b1 \u03b4\u03b7\u03bc\u03cc\u03c3\u03b9\u03b1 \u03bd\u03ad\u03b1","parent_id":1,"is_public":true,"created_at":"2020-05-11 21:15:15","updated_at":"2020-05-11 21:15:15","deleted_at":null,"children_recursive":[]}]`,
             tagResponseSingle: `{ "data": { "id": 2, "title": "Εξάμηνο Α", "parent_id": 1, "is_public": 0 } }`,
             announcementsResponse: `{"data":[{"id":5,"title":"\u0391\u03bd\u03b1\u03ba\u03bf\u03af\u03bd\u03c9\u03c3\u03b7","eng_title":null,"body":"<p>\u0394\u03b7\u03bc\u03cc\u03c3\u03b9\u03b1 \u03b1\u03bd\u03b1\u03ba\u03bf\u03af\u03bd\u03c9\u03c3\u03b7<\/p>","eng_body":null,"has_eng":0,"created_at":"2020-04-13 20:37","updated_at":"2020-04-17 18:57","is_pinned":0,"pinned_until":null,"is_event":1,"event_start_time":"2020-04-29 00:00","event_end_time":"2020-04-30 00:00","event_location":"\u0394\u0399\u03a0\u0391\u0395 \u03a3\u03af\u03bd\u03b4\u03bf\u03c2","gmaps":1,"tags":[{"id":19,"title":"\u0386\u03bb\u03bb\u03b1 \u03b4\u03b7\u03bc\u03cc\u03c3\u03b9\u03b1 \u03bd\u03ad\u03b1","parent_id":1,"is_public":1}],"attachments":[],"author":{"name":"Nikolaos Christos Nikolaidis","id":2}}],"links":{"first":"https:\/\/aboard.iee.ihu.gr\/api\/announcements?page=1","last":"https:\/\/aboard.iee.ihu.gr\/api\/announcements?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"path":"https:\/\/aboard.iee.ihu.gr\/api\/announcements","per_page":10,"to":1,"total":1}}`,
             singleAnnouncementResponse: `{"data":{"id":5,"title":"\u0391\u03bd\u03b1\u03ba\u03bf\u03af\u03bd\u03c9\u03c3\u03b7","eng_title":null,"body":"<p>\u0394\u03b7\u03bc\u03cc\u03c3\u03b9\u03b1 \u03b1\u03bd\u03b1\u03ba\u03bf\u03af\u03bd\u03c9\u03c3\u03b7<\/p>","eng_body":null,"has_eng":0,"created_at":"2020-04-13 20:37","updated_at":"2020-04-17 18:57","is_pinned":0,"pinned_until":null,"is_event":1,"event_start_time":"2020-04-29 00:00","event_end_time":"2020-04-30 00:00","event_location":"\u0394\u0399\u03a0\u0391\u0395 \u03a3\u03af\u03bd\u03b4\u03bf\u03c2","gmaps":1,"tags":[{"id":19,"title":"\u0386\u03bb\u03bb\u03b1 \u03b4\u03b7\u03bc\u03cc\u03c3\u03b9\u03b1 \u03bd\u03ad\u03b1","parent_id":1,"is_public":1}],"attachments":[],"author":{"name":"Nikolaos Christos Nikolaidis","id":2}}}`,

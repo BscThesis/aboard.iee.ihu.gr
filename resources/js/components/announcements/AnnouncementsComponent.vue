@@ -12,6 +12,8 @@
             v-bind:searchBodyProp.sync="selected.body"
             v-bind:layoutProp.sync="layout"
             v-bind:queryParamsProp.sync="queryParams"
+            v-bind:updatedAfterProp.sync="selected.updatedAfter"
+            v-bind:updatedBeforeProp.sync="selected.updatedBefore"
         ></sidebar>
         <div
             v-bind:class="{ noDisplay: showFilters }"
@@ -85,7 +87,9 @@ export default {
                     : 10,
                 sortId: 0,
                 title: "",
-                body: ""
+                body: "",
+                updatedAfter: JSON.stringify("last_6months"),
+                updatedBefore: ""
             },
             layout: localStorage.getItem("layout")
                 ? parseInt(localStorage.getItem("layout"))

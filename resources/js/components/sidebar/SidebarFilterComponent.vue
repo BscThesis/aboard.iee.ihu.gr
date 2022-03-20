@@ -51,6 +51,44 @@
             />
         </section>
 
+        <!-- Announcements created at -->
+        <section class="mb-4">
+            <label for="updatedAt">Επιλογή διαστήματος ανακοινώσεων:</label>
+            <treeselect
+                id="updatedAt"
+                :multiple="false"
+                :options="updatedAtOptions"
+                placeholder="Updated At:"
+                :clearable="false"
+                v-model="updatedAt"
+                v-on:input="updatedAtChange"
+            />
+        </section>
+
+        <template v-if="updatedAt === 5">
+            <section class="mb-4">
+                <label for="updatedAfter">
+                    Εμφάνιση ανακοινώσεων από
+                </label>
+                <flat-pickr
+                    id="updatedAfter"
+                    v-model="updatedAfter"
+                    :config="config"
+                ></flat-pickr>
+            </section>
+
+            <section class="mb-4">
+                <label for="updatedBefore">
+                    Εμφάνιση ανακοινώσεων μέχρι
+                </label>
+                <flat-pickr
+                    id="updatedBefore"
+                    v-model="updatedBefore"
+                    :config="config"
+                ></flat-pickr>
+            </section>
+        </template>
+
         <!-- Sort -->
         <section class="mb-4">
             <label for="sort">Επιλογή ταξινόμησης</label>
@@ -98,9 +136,19 @@
 <script>
 import Treeselect from "@riophae/vue-treeselect";
 import { toast } from "bulma-toast";
+import flatPickr from "vue-flatpickr-component";
+import "flatpickr/dist/flatpickr.css";
 
 export default {
     props: {
+        updatedAfterProp: {
+            type: String,
+            required: true
+        },
+        updatedBeforeProp: {
+            type: String,
+            required: true
+        },
         showFilters: {
             type: Boolean,
             required: true
@@ -138,8 +186,19 @@ export default {
             required: true
         }
     },
-    components: { Treeselect },
+    components: { Treeselect, flatPickr },
     data: () => ({
+        updatedBefore: "",
+        updatedAfter: "",
+        config: {
+            altInput: true,
+            enableTime: true,
+            defaultHour: 0,
+            minuteIncrement: 1,
+            time_24hr: true,
+            // minDate: new Date().fp_incr(1),
+            dateFormat: "Y-m-d H:i"
+        },
         searchTitle: "",
         searchBody: "",
         users: [],
@@ -177,9 +236,56 @@ export default {
         perPageOptions: [5, 10, 15, 20].map(value => ({
             id: value,
             label: value
+        })),
+        updatedAt: 4,
+        updatedAtOptions: [
+            "Last hour",
+            "Last day",
+            "Last week",
+            "Last month",
+            "Last 6 months",
+            "Custom"
+        ].map((value, index) => ({
+            id: index,
+            label: value
         }))
     }),
     watch: {
+        updatedAfter: {
+            handler: function() {
+                if (this.updatedAt === 5) {
+                    this.$emit(
+                        "update:updatedAfterProp",
+                        JSON.stringify(this.updatedAfter)
+                    );
+                    this.getTags();
+                    this.getProfs();
+                }
+            }
+        },
+        updatedBefore: {
+            handler: function() {
+                this.$emit(
+                    "update:updatedBeforeProp",
+                    JSON.stringify(this.updatedBefore)
+                );
+
+                if (this.updatedAt === 5) {
+                    this.getTags();
+                    this.getProfs();
+                }
+            }
+        },
+        updatedAt: {
+            handler: function() {
+                if (this.updatedAt !== 5) {
+                    this.updatedBefore = "";
+                    this.updatedAfter = "";
+                    this.getTags();
+                    this.getProfs();
+                }
+            }
+        },
         users: {
             handler: function() {
                 this.getTags();
@@ -226,6 +332,24 @@ export default {
         this.getTags();
         this.getProfs();
     },
+    computed: {
+        updated: function() {
+            switch (this.updatedAt) {
+                case 0:
+                    return "last_hour";
+                case 1:
+                    return "last_day";
+                case 2:
+                    return "last_week";
+                case 3:
+                    return "last_month";
+                case 4:
+                    return "last_6months";
+                default:
+                    break;
+            }
+        }
+    },
     methods: {
         setParams() {
             this.searchTitle = this.searchTitleProp;
@@ -240,7 +364,11 @@ export default {
             let selected = {
                 users: this.users,
                 title: JSON.stringify(this.searchTitle),
-                body: JSON.stringify(this.searchBody)
+                body: JSON.stringify(this.searchBody),
+                updatedAfter: JSON.stringify(
+                    this.updatedAt !== 5 ? this.updated : this.updatedAfter
+                ),
+                updatedBefore: JSON.stringify(this.updatedBefore)
             };
             axios
                 .get("/api/filtertags", {
@@ -275,7 +403,11 @@ export default {
             let selected = {
                 tags: this.tags,
                 title: JSON.stringify(this.searchTitle),
-                body: JSON.stringify(this.searchBody)
+                body: JSON.stringify(this.searchBody),
+                updatedAfter: JSON.stringify(
+                    this.updatedAt !== 5 ? this.updated : this.updatedAfter
+                ),
+                updatedBefore: JSON.stringify(this.updatedBefore)
             };
             axios
                 .get("/api/auth/authors", {
@@ -308,6 +440,13 @@ export default {
         },
         sortIdChange: function() {
             this.$emit("update:sortProp", this.sortId);
+        },
+        updatedAtChange: function() {
+            if (this.updatedAt !== 5)
+                this.$emit(
+                    "update:updatedAfterProp",
+                    JSON.stringify(this.updated)
+                );
         }
     }
 };

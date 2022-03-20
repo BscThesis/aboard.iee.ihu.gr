@@ -63,12 +63,12 @@ class Announcement extends Model implements Feedable
             }
         }
         
-        return $query->when($title !== null, function ($query) use ($title) {
+        return $query->when($title !== '' && $title !== null, function ($query) use ($title) {
             $query->where(function($query) use ($title) {
                 $query->where('title', 'LIKE', '%' . $title . '%')
                 ->orWhere('eng_title', 'LIKE', '%' . $title . '%');
             });            
-        })->when($body !== null, function ($query) use ($body){
+        })->when($body !== '' && $body !== null, function ($query) use ($body){
             $query->where(function($query) use ($body) {
                 $query->where('body', 'LIKE', '%' . $body . '%')
                 ->orWhere('eng_body', 'LIKE', '%' . $body . '%');
@@ -79,9 +79,9 @@ class Announcement extends Model implements Feedable
            $query->whereHas('tags', function ($query) use ($tags) {
                 $query->whereIn('id', $tags);
             });
-        })->when($updated_before !== null, function ($query) use ($updated_before) {
+        })->when($updated_before !== '' && $updated_before !== null, function ($query) use ($updated_before) {
             $query->where('updated_at','<=',$updated_before);
-        })->when($updated_after !== null, function ($query) use ($updated_after) {
+        })->when($updated_after !== '' && $updated_after !== null, function ($query) use ($updated_after) {
             $query->where('updated_at','>=',$updated_after);
         });
     }
