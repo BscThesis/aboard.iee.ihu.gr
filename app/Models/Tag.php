@@ -41,7 +41,9 @@ class Tag extends Model
                 request()->input('users', []),
                 request()->input('tags', []),
                 json_decode(request()->input('title', '')),
-                json_decode(request()->input('body', ''))
+                json_decode(request()->input('body', '')),
+                json_decode(request()->input('updatedAfter', '')),
+                json_decode(request()->input('updatedBefore', '')),
             );
         }])->with('childrenRecursive');        
     }

@@ -39,15 +39,36 @@ class Announcement extends Model implements Feedable
         ]);
     }
     
-    public function scopeWithFilters($query, $users, $tags, $title, $body)
+    public function scopeWithFilters($query, $users, $tags, $title, $body, $updated_after, $updated_before)
     {
         // Filter announcements based on users, tags, title, body. 
-        return $query->when($title !== '', function ($query) use ($title) {
+       
+        if (in_array($updated_after,["last_hour","last_day","last_week","last_month","last_6months"])) {
+            switch ($updated_after) {
+                case 'last_hour':
+                    $updated_after = Carbon::now()->subHour(1);
+                    break;
+                case 'last_day':
+                    $updated_after = Carbon::today()->subDays(1);
+                    break;    
+                case 'last_week':
+                    $updated_after = Carbon::today()->subDays(7);
+                    break;  
+                case 'last_month':
+                    $updated_after = Carbon::today()->subMonths(1);
+                    break;     
+                default:
+                    $updated_after = Carbon::today()->subMonths(6);
+                    break;
+            }
+        }
+        
+        return $query->when($title !== null, function ($query) use ($title) {
             $query->where(function($query) use ($title) {
                 $query->where('title', 'LIKE', '%' . $title . '%')
                 ->orWhere('eng_title', 'LIKE', '%' . $title . '%');
             });            
-        })->when($body !== '', function ($query) use ($body){
+        })->when($body !== null, function ($query) use ($body){
             $query->where(function($query) use ($body) {
                 $query->where('body', 'LIKE', '%' . $body . '%')
                 ->orWhere('eng_body', 'LIKE', '%' . $body . '%');
@@ -58,6 +79,10 @@ class Announcement extends Model implements Feedable
            $query->whereHas('tags', function ($query) use ($tags) {
                 $query->whereIn('id', $tags);
             });
+        })->when($updated_before !== null, function ($query) use ($updated_before) {
+            $query->where('updated_at','<=',$updated_before);
+        })->when($updated_after !== null, function ($query) use ($updated_after) {
+            $query->where('updated_at','>=',$updated_after);
         });
     }
 

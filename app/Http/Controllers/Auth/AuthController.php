@@ -225,7 +225,9 @@ class AuthController extends Controller
                     request()->input('users', []),
                     request()->input('tags', []),
                     json_decode(request()->input('title', '')),
-                    json_decode(request()->input('body', ''))
+                    json_decode(request()->input('body', '')),
+                    json_decode(request()->input('updatedAfter', '')),
+                    json_decode(request()->input('updatedBefore', '')),
                 );
             }])->orderBy('name', 'asc')->get();
 	    } 
@@ -240,7 +242,9 @@ class AuthController extends Controller
                     request()->input('users', []),
                     request()->input('tags', []),
                     json_decode(request()->input('title', '')),
-                    json_decode(request()->input('body', '')) 
+                    json_decode(request()->input('body', '')),
+                    json_decode(request()->input('updatedAfter', '')),
+                    json_decode(request()->input('updatedBefore', '')),
                 );
             }])->orderBy('name', 'asc')->get();            
         }           

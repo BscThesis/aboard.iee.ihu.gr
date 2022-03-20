@@ -60,12 +60,12 @@ class AnnouncementController extends Controller
         // If user is logged in or inside university's wifi return all filtered announcements
         $local_ip = $request->session()->get('local_ip', 0);
         if ($local_ip == 1 or Auth::guard('web')->check()) {
-            $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]),json_decode(request()->input('title', '')),json_decode(request()->input('body', '')))
+            $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]),json_decode(request()->input('title', '')),json_decode(request()->input('body', '')),json_decode(request()->input('updatedAfter','')),json_decode(request()->input('updatedBefore','')))
             ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at');
         } 
         // Else return only public filtered announcements
         else {
-            $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]),json_decode(request()->input('title', '')),json_decode(request()->input('body', '')))
+            $announcements = Announcement::withFilters( request()->input('users', []),request()->input('tags',[]),json_decode(request()->input('title', '')),json_decode(request()->input('body','')),json_decode(request()->input('updatedAfter','')),json_decode(request()->input('updatedBefore','')))
             ->whereHas('tags', function (Builder $query) {
                 $query->where('is_public', 1);
             })->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('deleted_at');
