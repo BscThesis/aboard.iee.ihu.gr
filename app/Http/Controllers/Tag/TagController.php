@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Tag;
 use App\User;
 use App\Http\Resources\Tag as TagResource;
+use Illuminate\Support\Facades\DB;
 
 class TagController extends Controller
 {
@@ -38,8 +39,22 @@ class TagController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {   
         // Get every tag as a Json
+
+        $extra_fields = json_decode(request()->input('extra_fields', ''));
+       
+        if(Auth::guard('web')->check() && auth()->user()->is_author && $extra_fields == 'self_stats'){
+            $results = DB::select( DB::raw(
+                "SELECT announcementCounter, T.id, T.is_public, T.maillist_name, T.parent_id, T.title
+                 FROM tags T
+                 LEFT JOIN (SELECT tag_id, COUNT(*) AS announcementCounter
+                 FROM announcement_tag INNER JOIN (SELECT id AS announcement_id FROM `announcements`  WHERE user_id=30 ORDER BY updated_at DESC LIMIT 20) AS A USING(announcement_id)
+                 GROUP BY tag_id ) AS Tag_stats ON T.id=Tag_stats.`tag_id`
+                 ORDER BY announcementCounter DESC, title"
+                 ) );
+            return $results;
+        }
         $tags = Tag::orderBy('title', 'asc')->get();
         return TagResource::collection($tags);
     }
@@ -63,7 +78,6 @@ class TagController extends Controller
 		        return response()->json(['message' => 'Unauthenticated'], 401);
             }
         }
-
         // If user is logged in or inside university's wifi return tags, filtering and then counting every announcement each one has with their children
         $local_ip = $request->session()->get('local_ip', 0);
         if ($local_ip == 1 or Auth::guard('web')->check()) {
@@ -76,11 +90,11 @@ class TagController extends Controller
                     json_decode(request()->input('updatedAfter', '')),
                     json_decode(request()->input('updatedBefore', '')),
                 );
-            }])->orderBy('title', 'asc')->get();
+            }])->having('announcements_count','>',0)->orderBy('title', 'asc')->get();
         } 
         // Else return tags filtering and then counting every public announcement each one has with their children
         else {
-            $tags = Tag::with('childrenRecursive')->where('parent_id',1)->where('is_public',1)->withCount(['announcements'=>function ($query) use ($request){
+            $tags = Tag::with('childrenRecursive')->where([['parent_id',1],['is_public',1]])->withCount(['announcements'=>function ($query) use ($request){
                 $query->withFilters(
                     request()->input('users', []),
                     request()->input('tags', []),
@@ -89,7 +103,7 @@ class TagController extends Controller
                     json_decode(request()->input('updatedAfter', '')),
                     json_decode(request()->input('updatedBefore', '')),
                 );
-            }])->orderBy('title', 'asc')->get();
+            }])->having('announcements_count','>',0)->orderBy('title', 'asc')->get();
         }    
         return $tags;
     }

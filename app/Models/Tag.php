@@ -45,7 +45,7 @@ class Tag extends Model
                 json_decode(request()->input('updatedAfter', '')),
                 json_decode(request()->input('updatedBefore', '')),
             );
-        }])->with('childrenRecursive');        
+        }])->having('announcements_count','>',0)->with('childrenRecursive');        
     }
 
     public function childrensubRecursive()

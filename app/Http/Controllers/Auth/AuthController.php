@@ -229,7 +229,7 @@ class AuthController extends Controller
                     json_decode(request()->input('updatedAfter', '')),
                     json_decode(request()->input('updatedBefore', '')),
                 );
-            }])->orderBy('name', 'asc')->get();
+            }])->having('announcements_count','>',0)->orderBy('name', 'asc')->get();
 	    } 
         // Else return authors filtering and then counting every public announcement each one has
         else {
@@ -246,7 +246,7 @@ class AuthController extends Controller
                     json_decode(request()->input('updatedAfter', '')),
                     json_decode(request()->input('updatedBefore', '')),
                 );
-            }])->orderBy('name', 'asc')->get();            
+            }])->having('announcements_count','>',0)->orderBy('name', 'asc')->get();            
         }           
     }
 }
