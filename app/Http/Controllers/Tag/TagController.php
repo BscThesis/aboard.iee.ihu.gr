@@ -49,8 +49,9 @@ class TagController extends Controller
                 "SELECT announcementCounter, T.id, T.is_public, T.maillist_name, T.parent_id, T.title
                  FROM tags T
                  LEFT JOIN (SELECT tag_id, COUNT(*) AS announcementCounter
-                 FROM announcement_tag INNER JOIN (SELECT id AS announcement_id FROM `announcements`  WHERE user_id=30 ORDER BY updated_at DESC LIMIT 20) AS A USING(announcement_id)
+                 FROM announcement_tag INNER JOIN (SELECT id AS announcement_id FROM `announcements`  WHERE user_id=".auth()->user()->id." ORDER BY updated_at DESC LIMIT 20) AS A USING(announcement_id)                  
                  GROUP BY tag_id ) AS Tag_stats ON T.id=Tag_stats.`tag_id`
+                 WHERE T.deleted_at IS NULL
                  ORDER BY announcementCounter DESC, title"
                  ) );
             return $results;

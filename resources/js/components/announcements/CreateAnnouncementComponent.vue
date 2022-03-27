@@ -568,10 +568,15 @@ export default {
         },
         getAllTags: function() {
             let vm = this;
+            let extra_fields = JSON.stringify("self_stats");
             axios
-                .get("/api/tags")
+                .get("/api/tags", {
+                    params: {
+                        extra_fields: extra_fields
+                    }
+                })
                 .then(function(response) {
-                    vm.tags = response.data.data;
+                    vm.tags = response.data;
                 })
                 .catch(function(error) {
                     toast({
