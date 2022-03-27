@@ -2,37 +2,38 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use App\User;
 use Session;
+use Closure;
 
-class Authenticate extends Middleware
+class Authenticate
 {
-    /**
-     * Get the path the user should be redirected to when they are not authenticated.
+	/**
+     * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return string|null
+     * @param  \Closure  $next
+     * @return mixed
      */
-    protected function redirectTo($request)
+    public function handle($request, Closure $next)
     {
-		// Try to log user in if request contains a token otherwise redirect to login route
 		if (!empty($request->bearerToken()) && !Auth::guard()->check()){
 			try{
 				$user = Socialite::driver('iee')->userFromToken($request->bearerToken());
 				$user1 = User::where('uid', $user['uid'])->first();
 				Auth('web')->login($user1);
-				return;			
-        	} catch (\GuzzleHttp\Exception\BadResponseException $e) {
-		        Auth('web')->logout();
+				return $next($request);		
+			} catch (\GuzzleHttp\Exception\BadResponseException $e) {
+				Auth('web')->logout();
 				Session::flush();
-				return route('login');
-       		}    
+				return redirect(route('login'));
+			}    
+		}    
+		else if (!$request->expectsJson() && !Auth::guard()->check()) {
+			return redirect(route('login'));
 		}
-		else if (! $request->expectsJson()) {
-			return route('login');
-			}
-		}
+        return $next($request);
+    }
 }
