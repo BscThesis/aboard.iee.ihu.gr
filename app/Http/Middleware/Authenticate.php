@@ -28,11 +28,11 @@ class Authenticate
 			} catch (\GuzzleHttp\Exception\BadResponseException $e) {
 				Auth('web')->logout();
 				Session::flush();
-				return redirect(route('login'));
+				return response()->json('Invalid Token', 401);
 			}    
 		}    
 		else if (!$request->expectsJson() && !Auth::guard()->check()) {
-			return redirect(route('login'));
+			return response()->json('Unauthorized', 401);
 		}
         return $next($request);
     }

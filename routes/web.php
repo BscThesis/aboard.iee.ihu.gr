@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 Route::get('/announcements/create', function () {
     return view('pages.create-announcement');
-})->middleware('auth', 'is.author');
+})->middleware('auth.fe', 'is.author');
 
 Route::get('/announcements', function () {
     return view('pages.announcements');
@@ -29,21 +29,21 @@ Route::get('/announcements/{id}', function ($id) {
 
 Route::get('/announcements/{id}/edit', function ($id) {
     return view('pages.edit-announcement')->with('id', $id);
-})->middleware('auth', 'web.id.check', 'is.the.author', 'web.announcement.check')->name('announcement.edit');
+})->middleware('auth.fe', 'web.id.check', 'is.the.author', 'web.announcement.check')->name('announcement.edit');
 
 Route::get('/announcements/{an_id}/attachments/{at_id}', 'Attachment\AttachmentController@show')
     ->middleware('android.app', 'announcement.attachment.check');
 
 Route::get('/documentation', function () {
     return view('pages.docs');
-})->middleware('auth');
+})->middleware('auth.fe');
 
 Route::get('/sign-in', 'Auth\AuthController@signIn')->name('login');
 Route::get('/sign-in/redirect', 'Auth\AuthController@redirect');
 
 Route::get('/user/preferences', function () {
     return view('user.preferences');
-})->middleware('auth')->name('preferences');
+})->middleware('auth.fe')->name('preferences');
 
 Route::prefix('errors')->group(function () {
     Route::get('400', function () {
