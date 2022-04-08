@@ -7,6 +7,9 @@ use App\Models\Announcement;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Session;
+use App\User;
+use Laravel\Socialite\Facades\Socialite;
 
 class ApiCheckAnnouncement
 {
@@ -34,8 +37,23 @@ class ApiCheckAnnouncement
         $announcement = Announcement::withCount(['tags' => function (Builder $query) {
             $query->where('is_public', '=', 1);
         }])->where('id', $id)->get();
+	
+	if (!empty($request->bearerToken()) && !Auth::guard()->check()) {
+	    try {
+		$user = Socialite::driver('iee')->userFromToken($request->bearerToken());
+		$user1 = User::where('uid', $user['uid'])->first();
+		Auth('web')->login($user1);
+	    } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+		Auth('web')->logout();
+		Session::flush();
+		return response()->json([
+		    'error' => 'Unauthorized 2'
+		], 401);
+	    }
+	}
 
-        if (($announcement[0]->tags_count > 0 && $local_ip == 0) || Auth::guard('web')->check()) {
+
+  	if (($announcement[0]->tags_count > 0 && $local_ip == 0) || Auth::guard('web')->check()) {
             // if we have at least one public tag, continue
             return $next($request);
         } else if ($announcement[0]->tags_count == 0 && $local_ip == 0) {

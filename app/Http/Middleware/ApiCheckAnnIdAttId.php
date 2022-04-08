@@ -6,6 +6,9 @@ use Closure;
 use App\Models\Announcement;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\User;
+use Session;
+use Laravel\Socialite\Facades\Socialite;
 
 class ApiCheckAnnIdAttId
 {
@@ -43,7 +46,21 @@ class ApiCheckAnnIdAttId
             return response()->json([
                 'error' => 'Unprocessable Entity'
             ], 422);
-        }
+	}
+
+	if (!empty($request->bearerToken()) && !Auth::guard()->check()) {
+	    try {
+		$user = Socialite::driver('iee')->userFromToken($request->bearerToken());
+		$user1 = User::where('uid', $user['uid'])->first();
+		Auth('web')->login($user1);
+	    } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+		Auth('web')->logout();
+		Session::flush();
+		return response()->json([
+		    'error' => 'Unauthorized 2'
+		], 401);
+	    }
+	}
 
         if (($announcement->hasPublicTags() && $local_ip == 0) || Auth::guard('api')->check() || Auth::check()) {
             return $next($request);
