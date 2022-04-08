@@ -28,6 +28,7 @@
             <label for="tags">Ετικέτες</label>
             <treeselect
                 id="tags"
+		:flat="true"
                 :multiple="true"
                 :options="tagsOptions"
                 :normalizer="tagNormalizer"
