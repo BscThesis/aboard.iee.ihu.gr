@@ -35,7 +35,8 @@ class Announcement extends JsonResource
             'gmaps' => $this->gmaps,
             'tags' => TagResource::collection($this->tags),
             'attachments' => AttachmentResource::collection($this->attachments),
-            'author' => $this->user->only('name', 'id')
+	    'author' => $this->user->only('name', 'id'),
+	    'announcement_url' => env("APP_URL")."/announcements/".$this->id
         ];
     }
 }
