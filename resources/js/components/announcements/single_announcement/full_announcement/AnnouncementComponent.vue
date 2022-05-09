@@ -100,6 +100,8 @@ export default {
             axios
                 .get("/api/announcements/" + vm.id)
                 .then(function(response) {
+                    if(response.status === 401)
+                        window.location.href = "/sign-in";
                     vm.announcement = response.data.data;
                 })
                 .catch(function(error) {
