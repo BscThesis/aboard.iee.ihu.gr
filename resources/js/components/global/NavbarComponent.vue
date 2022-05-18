@@ -37,6 +37,7 @@
             <div class="navbar-start">
                 <span class="navbar-divider is-hidden-touch"></span>
                 <a class="navbar-item" href="/">Αρχική</a>
+                <a class="navbar-item" href="/about">About</a>
             </div>
 
             <div class="navbar-end">

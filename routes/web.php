@@ -15,6 +15,10 @@ Route::get('/', function () {
     return redirect('/announcements');
 });
 
+Route::get('/about', function () {
+    return view('pages.about');
+});
+
 Route::get('/announcements/create', function () {
     return view('pages.create-announcement');
 })->middleware('auth.fe', 'is.author');

@@ -94,6 +94,12 @@ Vue.component(
     require("./components/announcements/AnnouncementsComponent.vue").default
 );
 
+// About component
+Vue.component(
+    "about-component-bulma",
+    require("./components/about/AboutComponent.vue").default
+);
+
 // WYSIWYG editor component
 Vue.component(
     "editor-component",
