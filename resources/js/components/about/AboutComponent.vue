@@ -1,11 +1,9 @@
 <template>
     <section
-        class="main-content is-justify-content-center columns is-mobile is-fullheight"
-    >
+        class="main-content is-justify-content-center columns is-mobile is-fullheight">
         <div id="content" class="column is-9 block">
             <!-- Title -->
             <page-title title="About"></page-title>
-	    <h2>aboard</h2>
 <p>Το παρών σύστημα είναι αποτέλσμα συνεργασίας πολλών φοιτητών στα πλαίσια εκπόνησης πτυχιακής ή και διπλωματικής εργασίας. Κατά χρονική σειρά (συν-)εργάστηκαν οι:</p>
 <ul>
 <li>Σιδηρόπουλος Αντώνης: Αρχική ιδέα, σχεδιασμός και επίβλεψη.
