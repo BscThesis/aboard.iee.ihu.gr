@@ -29,7 +29,13 @@ class Authenticate
 				Auth('web')->logout();
 				Session::flush();
 				return response()->json('Invalid Token', 401);
-			}    
+			} catch (\Throwable $e) {
+                Auth('web')->logout();
+                Session::flush();
+                if ($user == null)
+                    return response()->json(['message' => 'User not found! Login to our website first in order to activate your account.'], 404);
+                return response()->json(['message' => $e->getMessage()], 401);
+            }   
 		}    
 		else if (!$request->expectsJson() && !Auth::guard()->check()) {
 			return response()->json('Unauthorized', 401);

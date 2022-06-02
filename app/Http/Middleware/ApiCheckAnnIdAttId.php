@@ -59,7 +59,13 @@ class ApiCheckAnnIdAttId
 		return response()->json([
 		    'error' => 'Unauthorized 2'
 		], 401);
-	    }
+	    } catch (\Throwable $e) {
+            Auth('web')->logout();
+            Session::flush();
+            if ($user == null)
+                return response()->json(['message' => 'User not found! Login to our website first in order to activate your account.'], 404);
+            return response()->json(['message' => $e->getMessage()], 401);
+        }
 	}
 
         if (($announcement->hasPublicTags() && $local_ip == 0) || Auth::guard('api')->check() || Auth::check()) {
