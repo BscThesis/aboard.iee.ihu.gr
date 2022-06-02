@@ -28,7 +28,13 @@ class AuthenticateFE extends Middleware
                 Auth('web')->logout();
                 Session::flush();
                 return route('login');
-            }    
+            } catch (\Throwable $e) {
+                Auth('web')->logout();
+                Session::flush();
+                if ($user == null)
+                    return response()->json(['message' => 'User not found! Login to our website first in order to activate your account.'], 404);
+                return response()->json(['message' => $e->getMessage()], 401);
+            }   
         }
         else if (! $request->expectsJson()) {
             return route('login');

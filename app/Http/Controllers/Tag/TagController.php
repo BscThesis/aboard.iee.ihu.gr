@@ -77,6 +77,12 @@ class TagController extends Controller
                 Auth('web')->logout();
 		        Session::flush();
 		        return response()->json(['message' => 'Unauthenticated'], 401);
+            } catch (\Throwable $e) {
+                Auth('web')->logout();
+                Session::flush();
+                if ($user == null)
+                    return response()->json(['message' => 'User not found! Login to our website first in order to activate your account.'], 404);
+                return response()->json(['message' => $e->getMessage()], 401);
             }
         }
         // If user is logged in or inside university's wifi return tags, filtering and then counting every announcement each one has with their children
