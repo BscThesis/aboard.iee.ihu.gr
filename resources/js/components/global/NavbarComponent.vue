@@ -38,6 +38,7 @@
                 <span class="navbar-divider is-hidden-touch"></span>
                 <a class="navbar-item" href="/">Αρχική</a>
                 <a class="navbar-item" href="/about">About</a>
+                <a class="navbar-item" href="https://apps.iee.ihu.gr/">apps</a>
             </div>
 
             <div class="navbar-end">
