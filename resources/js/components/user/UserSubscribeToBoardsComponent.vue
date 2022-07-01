@@ -12,6 +12,7 @@
                             :multiple="true"                            
                             :options="tagsOptions"
                             :normalizer="tagNormalizer"
+			    :always-open="true"
                             placeholder="Επιλέξτε ετικέτες..."
                             v-model="tags"
                             v-on:input="tagValueChange"
