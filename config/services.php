@@ -52,4 +52,10 @@ return [
         'response_type' => env('RESPONSE_TYPE'),
         'client_secret' => env('CLIENT_SECRET'),
     ],
+    'iee_api' => [
+        'client_id' => env('V2_CLIENT_ID'),
+        'redirect' => env('V2_REDIRECT_URI'),
+        'response_type' => env('V2_RESPONSE_TYPE'),
+        'client_secret' => env('V2_CLIENT_SECRET'),
+    ],
 ];

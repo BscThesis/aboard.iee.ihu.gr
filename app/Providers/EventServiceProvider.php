@@ -7,8 +7,8 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Events\AccessTokenCreated;
-use App\Events\NewAnnouncementWasCreatedEvent;
-use \App\Listeners\SendNotificationsToSubscribedUsersListener;
+// use App\Events\NewAnnouncementWasCreatedEvent;
+// use App\Listeners\SendNotificationsToSubscribedUsersListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -18,8 +18,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        NewAnnouncementWasCreatedEvent::class => [
-            SendNotificationsToSubscribedUsersListener::class,
+        \App\Events\NewAnnouncementWasCreatedEvent::class => [
+            \App\Listeners\SendNotificationsToSubscribedUsersListener::class,
+        ],
+        \App\Events\V2\NewAnnouncementWasCreatedEvent::class => [
+            \App\Listeners\V2\SendNotificationsToSubscribedUsersListener::class,
         ],
     ];
 

@@ -55,7 +55,7 @@ class User extends Authenticatable
      */
     public function subscriptions()
     {
-        return $this->belongsToMany('App\Models\Tag');
+        return $this->belongsToMany('App\Models\V1\Tag');
     }
 
     /**
@@ -63,7 +63,7 @@ class User extends Authenticatable
      */
     public function announcements()
     {
-        return $this->hasMany('App\Models\Announcement');
+        return $this->hasMany('App\Models\V1\Announcement');
     }
 
     /**
@@ -71,7 +71,7 @@ class User extends Authenticatable
      */
     public function activities()
     {
-        return $this->hasMany('App\Models\Notification', 'notifiable_id', 'id');
+        return $this->hasMany('App\Models\V1\Notification', 'notifiable_id', 'id');
     }
 
     /**
@@ -79,6 +79,6 @@ class User extends Authenticatable
      */
     public function issues()
     {
-        return $this->hasMany('App\Models\Issue');
+        return $this->hasMany('App\Models\V1\Issue');
     }
 }

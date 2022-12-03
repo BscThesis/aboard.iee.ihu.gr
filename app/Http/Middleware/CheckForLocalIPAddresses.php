@@ -6,6 +6,11 @@ use Closure;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\IpUtils;
 
+/**
+ * MUST RESEARCH HOW LARAVEL GETS THE IP
+ * MUST NOT GET SPOOFED IN ANY WAY
+ */
+
 class CheckForLocalIPAddresses
 {
 

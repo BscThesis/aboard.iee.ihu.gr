@@ -22,6 +22,7 @@ class Kernel extends HttpKernel
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         \App\Http\Middleware\CheckForLocalIPAddresses::class,
+        \App\Http\Middleware\Cors::class,
     ];
 
     /**
@@ -47,6 +48,10 @@ class Kernel extends HttpKernel
             // 'throttle:60,1',
             'bindings',
         ],
+        'api_v2' => [
+            // 'throttle:60,1',
+            'bindings',
+        ],
     ];
 
     /**
@@ -57,29 +62,32 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \App\Http\Middleware\Authenticate::class,
-        'auth.fe' => \App\Http\Middleware\AuthenticateFE::class,
+        'auth' => \App\Http\Middleware\V1\Authenticate::class,
+        'auth.fe' => \App\Http\Middleware\V1\AuthenticateFE::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'guest' => \App\Http\Middleware\V1\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'web.tag.check' => \App\Http\Middleware\WebCheckTag::class,
-        'web.announcement.check' => \App\Http\Middleware\WebCheckAnnouncement::class,
-        'web.id.check' => \App\Http\Middleware\WebCheckId::class,
-        'api.announcement.check' => \App\Http\Middleware\ApiCheckAnnouncement::class,
-        'api.id.check' => \App\Http\Middleware\ApiCheckId::class,
-        'api.tag.check' => \App\Http\Middleware\ApiCheckTag::class,
-        'is.author' => \App\Http\Middleware\UserIsAuthor::class,
-        'is.the.author' => \App\Http\Middleware\UserIsTheAuthor::class,
-        'announcement.attachment.check' => \App\Http\Middleware\ApiCheckAnnIdAttId::class,
-        'api.announcement.attachment.check' => \App\Http\Middleware\ApiCheckAnIdAtId::class,
-        'android.app' => \App\Http\Middleware\AddTokenToRequestForAndroidApp::class,
-        'admin.ip.check' => \App\Http\Middleware\CheckForAdminIPAddresses::class,
+        'web.tag.check' => \App\Http\Middleware\V1\WebCheckTag::class,
+        'web.announcement.check' => \App\Http\Middleware\V1\WebCheckAnnouncement::class,
+        'web.id.check' => \App\Http\Middleware\V1\WebCheckId::class,
+        'api.announcement.check' => \App\Http\Middleware\V1\ApiCheckAnnouncement::class,
+        'api.id.check' => \App\Http\Middleware\V1\ApiCheckId::class,
+        'api.tag.check' => \App\Http\Middleware\V1\ApiCheckTag::class,
+        'is.author' => \App\Http\Middleware\V1\UserIsAuthor::class,
+        'is.the.author' => \App\Http\Middleware\V1\UserIsTheAuthor::class,
+        'announcement.attachment.check' => \App\Http\Middleware\V1\ApiCheckAnnIdAttId::class,
+        'api.announcement.attachment.check' => \App\Http\Middleware\V1\ApiCheckAnIdAtId::class,
+        'android.app' => \App\Http\Middleware\V1\AddTokenToRequestForAndroidApp::class,
+        'admin.ip.check' => \App\Http\Middleware\V1\CheckForAdminIPAddresses::class,
+        'auth.master' => \App\Http\Middleware\V2\AuthenticateJWT::class,
+        'auth.admin' => \App\Http\Middleware\V2\AuthenticateAdmin::class,
+        'auth.author' => \App\Http\Middleware\V2\AuthenticateAuthor::class,
     ];
 
 
@@ -93,7 +101,7 @@ class Kernel extends HttpKernel
     protected $middlewarePriority = [
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        \App\Http\Middleware\Authenticate::class,
+        \App\Http\Middleware\V1\Authenticate::class,
         \Illuminate\Routing\Middleware\ThrottleRequests::class,
         \Illuminate\Session\Middleware\AuthenticateSession::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,

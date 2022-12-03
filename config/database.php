@@ -1,9 +1,21 @@
 <?php
 
 use Illuminate\Support\Str;
+use Illuminate\Database\DBAL\TimestampType;
+
 
 return [
-
+    /*
+    |--------------------------------------------------------------------------
+    | Set timestamp data type for doctrine/dbal
+    |--------------------------------------------------------------------------
+    |
+    */
+    'dbal' => [
+        'types' => [
+            'timestamp' => TimestampType::class,
+        ],
+    ],
     /*
     |--------------------------------------------------------------------------
     | Default Database Connection Name

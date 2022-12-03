@@ -175,7 +175,8 @@ return [
         App\Providers\EventServiceProvider::class,
 	    App\Providers\RouteServiceProvider::class,
 	    // Add our own Provider
-        App\Providers\SocialitePlusServiceProvider::class,
+        // App\Providers\SocialitePlusServiceProvider::class,
+        // App\Providers\SocialitePlusServiceProviderApi::class,
 
     ],
 

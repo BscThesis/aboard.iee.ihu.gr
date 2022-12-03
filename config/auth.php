@@ -46,6 +46,14 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        'api_v2' => [
+            'driver' => 'jwt',
+            'provider' => 'api_users'
+        ],
+        'generate_token' => [
+            'driver' => 'jwt',
+            'provider' => 'api_users'
+        ],
     ],
 
     /*
@@ -70,7 +78,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\User::class,
         ],
-
+        'api_users' => [
+            'driver' => 'eloquent',
+            // 'table' => 'users',
+            'model' => App\ApiUser::class,
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

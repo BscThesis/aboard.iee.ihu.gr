@@ -48,9 +48,9 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if ($exception instanceof OAuthServerException) {
-		Auth('web')->logout();
-		Session::flush();
-	}
+            Auth('web')->logout();
+            Session::flush();
+        }
 
         return parent::render($request, $exception);
     }

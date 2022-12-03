@@ -2,9 +2,9 @@
 
 namespace App\Observers;
 
-use App\Models\Announcement;
+use App\Models\V1\Announcement;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\AnnouncementCreated;
+use App\Notifications\V1\AnnouncementCreated;
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
 
