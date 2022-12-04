@@ -61,6 +61,12 @@ Route::prefix('v2')->group(function () {
     Route::get('/subscribetags', 'Tag\TagController@basicIndexing');
 
     /**
+     * Tags Routes
+     * TODO::Rename routes in order to comply with the rest of the router naming logic
+     */
+    Route::get('/authors', 'Authors\AuthorsController@index');
+
+    /**
      * Auth Routes
      */
     
@@ -71,6 +77,7 @@ Route::prefix('v2')->group(function () {
         Route::get('/login', 'Auth\AuthJWTController@signIn');
         Route::get('/logout', 'Auth\AuthJWTController@logout');
         Route::get('/user', 'Auth\AuthJWTController@user');
+        Route::get('/whoami', 'Auth\AuthJWTController@me');
         Route::get('/user/notifications', 'Auth\AuthJWTController@notifications');
         Route::get('/user/notifications/read', 'Auth\AuthJWTController@readNotifications');
         Route::post('/subscribe', 'Auth\AuthJWTController@subscribe');

@@ -45,10 +45,10 @@ class AnnouncementController extends AuthorController
             $announcements = Announcement::withFilters( 
                 request()->input('users', []),
                 request()->input('tags',[]),
-                json_decode(request()->input('title', '')),
-                json_decode(request()->input('body', '')),
-                json_decode(request()->input('updatedAfter','')),
-                json_decode(request()->input('updatedBefore',''))
+                (request()->input('title', '')),
+                (request()->input('body', '')),
+                (request()->input('updatedAfter','')),
+                (request()->input('updatedBefore',''))
             )
             ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('announcements.deleted_at');
         } 
@@ -56,10 +56,10 @@ class AnnouncementController extends AuthorController
             $announcements = Announcement::withFilters( 
                 request()->input('users', []),
                 request()->input('tags',[]),
-                json_decode(request()->input('title', '')),
-                json_decode(request()->input('body','')),
-                json_decode(request()->input('updatedAfter','')),
-                json_decode(request()->input('updatedBefore',''))
+                (request()->input('title', '')),
+                (request()->input('body','')),
+                (request()->input('updatedAfter','')),
+                (request()->input('updatedBefore',''))
             )
             ->where('tags.is_public', 1)
             ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('announcements.deleted_at');

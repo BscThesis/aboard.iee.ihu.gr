@@ -192,7 +192,13 @@ class AuthJWTController extends Controller
      */
     public function me()
     {
-        return response()->json(auth('api_v2')->user());
+        try {
+            $user = auth('api_v2')->userOrFail();
+        } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['message' => 'You are not logged in'], 401);
+        }
+
+        return response()->json($user);
     }
 
     /**

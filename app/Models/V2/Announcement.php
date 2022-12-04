@@ -71,6 +71,7 @@ class Announcement extends Model implements Feedable
         })
         ->groupBy('announcements.id');
         
+        // die('title is ' . $title );
         return $query->when($title !== '' && $title !== null, function ($query) use ($title) {
             $query->where(function($query) use ($title) {
                 $query->where('announcements.title', 'LIKE', '%' . $title . '%')
