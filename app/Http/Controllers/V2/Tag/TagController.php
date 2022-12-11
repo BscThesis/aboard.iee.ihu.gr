@@ -68,10 +68,10 @@ class TagController extends Controller
                 $query->withFilters(
                     request()->input('users', []),
                     request()->input('tags', []),
-                    json_decode(request()->input('title', '')),
-                    json_decode(request()->input('body', '')),
-                    json_decode(request()->input('updatedAfter', '')),
-                    json_decode(request()->input('updatedBefore', '')),
+                    (request()->input('title', '')),
+                    (request()->input('body', '')),
+                    (request()->input('updatedAfter', '')),
+                    (request()->input('updatedBefore', '')),
                 );
             }])->having('announcements_count','>',0)->orderBy('title', 'asc')->get();
         } 
@@ -81,10 +81,10 @@ class TagController extends Controller
                 $query->withFilters(
                     request()->input('users', []),
                     request()->input('tags', []),
-                    json_decode(request()->input('title', '')),
-                    json_decode(request()->input('body', '')),
-                    json_decode(request()->input('updatedAfter', '')),
-                    json_decode(request()->input('updatedBefore', '')),
+                    (request()->input('title', '')),
+                    (request()->input('body', '')),
+                    (request()->input('updatedAfter', '')),
+                    (request()->input('updatedBefore', '')),
                 );
             }])->having('announcements_count','>',0)->orderBy('title', 'asc')->get();
         }    

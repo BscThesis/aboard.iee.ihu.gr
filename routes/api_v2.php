@@ -21,6 +21,8 @@ Route::prefix('v2')->group(function () {
      */
     Route::prefix('announcements')->group(function () {
         Route::middleware(['auth.author'])->group(function () {
+            Route::get('/my_announcements', 'Announcement\AnnouncementController@user_announcements');
+            Route::get('/edit_view/{id}', 'Announcement\AnnouncementController@showForEdit');
             Route::post('/', 'Announcement\AnnouncementController@store');
             // Route::post('/', function (Request $request) {
             //     // dd(\Input::all());  // returns an empty array

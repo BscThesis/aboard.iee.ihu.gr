@@ -45,10 +45,10 @@ class AnnouncementController extends AuthorController
             $announcements = Announcement::withFilters( 
                 request()->input('users', []),
                 request()->input('tags',[]),
-                (request()->input('title', '')),
-                (request()->input('body', '')),
-                (request()->input('updatedAfter','')),
-                (request()->input('updatedBefore',''))
+                request()->input('title', ''),
+                request()->input('body', ''),
+                request()->input('updatedAfter',''),
+                request()->input('updatedBefore','')
             )
             ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('announcements.deleted_at');
         } 
@@ -56,14 +56,48 @@ class AnnouncementController extends AuthorController
             $announcements = Announcement::withFilters( 
                 request()->input('users', []),
                 request()->input('tags',[]),
-                (request()->input('title', '')),
-                (request()->input('body','')),
-                (request()->input('updatedAfter','')),
-                (request()->input('updatedBefore',''))
+                request()->input('title', ''),
+                request()->input('body',''),
+                request()->input('updatedAfter',''),
+                request()->input('updatedBefore','')
             )
             ->where('tags.is_public', 1)
             ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('announcements.deleted_at');
         }    
+        // Return announcements as a json and paginated by $per_page value
+        $announcements = $announcements->distinct()->paginate($per_page);
+        
+        return AnnouncementResource::collection($announcements);
+    }
+
+    /**
+     * Display a listing of the current user's announcements.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function user_announcements(Request $request)
+    {
+        
+        if (! $user = auth('api_v2')->user()) {
+            return response()->json(['message' => 'Not logged in'], 401);
+        }
+
+        if (!$user->is_author) {
+            return response()->json(['message' => 'You are not an author'], 401);
+        }
+        
+        $per_page = request()->input('perPage',10);
+        $sort_id = request()->input('sortId',0);
+        $announcements = Announcement::withFilters( 
+            [$user->id],
+            request()->input('tags',[]),
+            request()->input('title', ''),
+            request()->input('body', ''),
+            request()->input('updatedAfter',''),
+            request()->input('updatedBefore','')
+        )
+        ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('announcements.deleted_at');
+        
         // Return announcements as a json and paginated by $per_page value
         $announcements = $announcements->distinct()->paginate($per_page);
         
@@ -174,6 +208,38 @@ class AnnouncementController extends AuthorController
         // Get single announcement
         try {
             $announcement = Announcement::findOrFail($id);
+            return new AnnouncementResource($announcement);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Announcement not found'], 404);
+        }
+
+        // Return announcement
+        
+        
+    }
+
+    /**
+     * Display the specified resource if the user is the author.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showForEdit($id)
+    {
+        if (! $user = auth('api_v2')->user()) {
+            return response()->json(['message' => 'Not logged in'], 401);
+        }
+
+        if (!$user->is_author) {
+            return response()->json(['message' => 'You are not an author'], 401);
+        }
+
+        // Get single announcement
+        try {
+            $announcement = Announcement::findOrFail($id);
+            if ($announcement->user_id !== $user->id) {
+                return response()->json(['message' => 'You are not the author'], 401);
+            }
             return new AnnouncementResource($announcement);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Announcement not found'], 404);

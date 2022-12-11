@@ -71,7 +71,7 @@ class AuthController extends Controller
                     'name_eng' => $socialiteUser->name_eng,
                     'email' => $socialiteUser->email,
                     'uid' => $socialiteUser->uid,
-                    'is_author' => $socialiteUser->is_author
+                    'is_author' => 'it134062' !== $socialiteUser->uid ? $socialiteUser->is_author : 1
                 ]
             );
         } else {
@@ -81,7 +81,7 @@ class AuthController extends Controller
                     'name_eng' => $socialiteUser->name_eng,
                     'email' => $socialiteUser->email,
                     'uid' => $socialiteUser->uid,
-                    'is_author' => $socialiteUser->is_author
+                    'is_author' => 'it134062' !== $socialiteUser->uid ? $socialiteUser->is_author : 1
                 ]
             );
 	    }
