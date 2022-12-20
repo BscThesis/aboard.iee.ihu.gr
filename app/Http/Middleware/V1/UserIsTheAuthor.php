@@ -4,7 +4,7 @@ namespace App\Http\Middleware\V1;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Announcement;
+use App\Models\V1\Announcement;
 use App\User;
 
 class UserIsTheAuthor

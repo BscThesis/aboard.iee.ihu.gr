@@ -61,6 +61,8 @@ Route::prefix('v2')->group(function () {
      */
     Route::get('/filtertags', 'Tag\TagController@indexForFiltering');
     Route::get('/subscribetags', 'Tag\TagController@basicIndexing');
+    Route::get('/all_tags', 'Tag\TagController@indexForAnnouncementCreation');
+    Route::get('/most_used_tags', 'Tag\TagController@indexMostUsed');
 
     /**
      * Tags Routes

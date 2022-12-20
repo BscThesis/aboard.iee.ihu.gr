@@ -19,7 +19,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         \App\Events\NewAnnouncementWasCreatedEvent::class => [
-            \App\Listeners\SendNotificationsToSubscribedUsersListener::class,
+            \App\Listeners\V1\SendNotificationsToSubscribedUsersListener::class,
         ],
         \App\Events\V2\NewAnnouncementWasCreatedEvent::class => [
             \App\Listeners\V2\SendNotificationsToSubscribedUsersListener::class,

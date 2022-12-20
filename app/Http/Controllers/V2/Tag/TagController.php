@@ -59,6 +59,32 @@ class TagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function indexMostUsed()
+    {   
+        // Get every tag as a Json
+       
+        if(auth('api_v2')->check() && auth('api_v2')->user()->is_author){
+            $results = DB::select( DB::raw(
+                "SELECT tags.*, SUM(UNIX_TIMESTAMP(announcements.created_at) / 100000000) AS weight FROM abroad.tags 
+                JOIN announcement_tag ON announcement_tag.tag_id = tags.id
+                JOIN abroad.announcements ON announcements.id  = announcement_tag.announcement_id
+                WHERE announcements.user_id = 1
+                AND tag_id != tags.parent_id
+                GROUP BY tags.id
+                ORDER BY weight DESC
+                LIMIT 5"
+                 ) );
+            return $results;
+        }
+        
+        return [];
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function indexForFiltering(Request $request)
     {
         // If user is logged in or inside university's wifi return tags, filtering and then counting every announcement each one has with their children
@@ -88,6 +114,31 @@ class TagController extends Controller
                 );
             }])->having('announcements_count','>',0)->orderBy('title', 'asc')->get();
         }    
+        return $tags;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexForAnnouncementCreation(Request $request)
+    {
+        // If user is logged in or inside university's wifi return tags, filtering and then counting every announcement each one has with their children
+        $tags = [];
+        if (auth('api_v2')->check()) {
+            $tags = Tag::with('childrenRecursive')->where('parent_id',1)->withCount(['announcements'=>function ($query) use ($request){
+                $query->withFilters(
+                    request()->input('users', []),
+                    request()->input('tags', []),
+                    (request()->input('title', '')),
+                    (request()->input('body', '')),
+                    (request()->input('updatedAfter', '')),
+                    (request()->input('updatedBefore', '')),
+                );
+            }])->orderBy('title', 'asc')->get();
+        } 
+
         return $tags;
     }
 
