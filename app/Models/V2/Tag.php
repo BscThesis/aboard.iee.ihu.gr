@@ -58,7 +58,7 @@ class Tag extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('App\User')->select('id', 'name', 'name_eng', 'email');
+        return $this->belongsToMany('App\User')->select('id', 'name', 'name_eng', 'email')->whereNull('deleted_at');
     }
 
     /**

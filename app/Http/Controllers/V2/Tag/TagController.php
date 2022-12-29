@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\V1;
 use App\Http\Requests\V1\StoreTag;
 use Illuminate\Support\Facades\Auth;
-use App\Models\V1\Tag;
+use App\Models\V2\Tag;
 use App\User;
 use App\Http\Resources\Tag as TagResource;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +24,7 @@ class TagController extends Controller
      */
     public function __construct()
     {
-
+        $this->middleware('admin.ip.check')->only('returnUsers');
     }
 
     /**
@@ -192,6 +192,7 @@ class TagController extends Controller
      */
     public function returnUsers($id, Request $request)
     {
+
         $admin_ip = $request->session()->get('admin_ip', 0);
         if($admin_ip){
             $tag = Tag::findOrFail($id);
