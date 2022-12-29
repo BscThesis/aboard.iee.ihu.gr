@@ -62,14 +62,14 @@ class Announcement extends Model implements Feedable
                     break;
             }
         }
-        $query->select('announcements.*');
-        $query->join('announcement_tag', function ($join) {
-            $join->on('announcements.id', '=', 'announcement_tag.announcement_id');
-        })
-        ->join('tags', function ($join) {
-            $join->on('announcement_tag.tag_id', '=', 'tags.id');
-        })
-        ->groupBy('announcements.id');
+        // $query->select('announcements.*')->groupBy('announcements.id');
+        // $query->join('announcement_tag as atags', function ($join) {
+        //     $join->on('announcements.id', '=', 'atags.announcement_id');
+        // })
+        // ->join('tags', function ($join) {
+        //     $join->on('atags.tag_id', '=', 'tags.id');
+        // })
+        // ->groupBy('announcements.id');
         
         // die('title is ' . $title );
         return $query->when($title !== '' && $title !== null, function ($query) use ($title) {
@@ -85,7 +85,13 @@ class Announcement extends Model implements Feedable
         })->when(count($users), function ($query) use ($users) {
             $query->whereIn('announcements.user_id', $users);
         })->when(count($tags), function ($query) use ($tags){
-            $query->whereIn('tags.id', $tags);
+            $query->join('announcement_tag as ann_tag', function ($join) {
+                $join->on('announcements.id', '=', 'ann_tag.announcement_id');
+            })
+            ->join('tags as filter_tags', function ($join) {
+                $join->on('ann_tag.tag_id', '=', 'filter_tags.id');
+            });
+            $query->whereIn('filter_tags.id', $tags);
         //    $query->whereHas('tags', function ($query) use ($tags) {
         //         $query->whereIn('id', $tags);
         //     });

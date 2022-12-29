@@ -64,16 +64,15 @@ class TagController extends Controller
         // Get every tag as a Json
        
         if(auth('api_v2')->check() && auth('api_v2')->user()->is_author){
-            $results = DB::select( DB::raw(
-                "SELECT tags.*, SUM(UNIX_TIMESTAMP(announcements.created_at) / 100000000) AS weight FROM abroad.tags 
-                JOIN announcement_tag ON announcement_tag.tag_id = tags.id
-                JOIN abroad.announcements ON announcements.id  = announcement_tag.announcement_id
-                WHERE announcements.user_id = 1
-                AND tag_id != tags.parent_id
-                GROUP BY tags.id
-                ORDER BY weight DESC
-                LIMIT 5"
-                 ) );
+            $results = DB::select( 
+                "SELECT L.*, SUM((   L.is_leaf*10 +1) * 100000/(UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(A.created_at) )) AS weight
+                FROM      tags_leafs L
+                                 INNER JOIN announcement_tag ANT ON ANT.tag_id = L.id
+                                 INNER JOIN announcements A ON A.id  = ANT.announcement_id
+                                 WHERE A.user_id = ? AND L.id<>1
+                                 GROUP BY L.id
+                                 ORDER BY weight DESC
+                                LIMIT 5", [auth('api_v2')->user()->id]);
             return $results;
         }
         
@@ -124,7 +123,7 @@ class TagController extends Controller
      */
     public function indexForAnnouncementCreation(Request $request)
     {
-        // If user is logged in or inside university's wifi return tags, filtering and then counting every announcement each one has with their children
+        // If user is logged in return tags, filtering and then counting every announcement each one has with their children
         $tags = [];
         if (auth('api_v2')->check()) {
             $tags = Tag::with('childrenRecursive')->where('parent_id',1)->withCount(['announcements'=>function ($query) use ($request){
