@@ -50,6 +50,7 @@ class AnnouncementController extends AuthorController
                 request()->input('updatedAfter',''),
                 request()->input('updatedBefore','')
             )
+            ->select('announcements.*')
             ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('announcements.deleted_at');
         } 
         else { // Else return only public filtered announcements
@@ -61,6 +62,7 @@ class AnnouncementController extends AuthorController
                 request()->input('updatedAfter',''),
                 request()->input('updatedBefore','')
             )
+            ->select('announcements.*')
             ->where('tags.is_public', 1)
             ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('announcements.deleted_at');
         }    
@@ -260,7 +262,6 @@ class AnnouncementController extends AuthorController
     public function update(StoreAnnouncement $request, $id)
     {
         
-            
         $announcement = $this->get_user_announcement($id);
 
         $announcement->title = $request->input('title');

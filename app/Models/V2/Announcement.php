@@ -92,6 +92,7 @@ class Announcement extends Model implements Feedable
                 $join->on('ann_tag.tag_id', '=', 'filter_tags.id');
             });
             $query->whereIn('filter_tags.id', $tags);
+            $query->groupBy('announcements.id');
         //    $query->whereHas('tags', function ($query) use ($tags) {
         //         $query->whereIn('id', $tags);
         //     });

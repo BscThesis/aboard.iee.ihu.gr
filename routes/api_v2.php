@@ -85,8 +85,8 @@ Route::prefix('v2')->group(function () {
         Route::get('/user/notifications', 'Auth\AuthJWTController@notifications');
         Route::get('/user/notifications/read', 'Auth\AuthJWTController@readNotifications');
         Route::post('/subscribe', 'Auth\AuthJWTController@subscribe');
-        Route::get('/authors', 'Auth\AuthController@authors');
-        Route::get('/subscriptions', 'Auth\AuthController@getSubscriptions');
+        Route::get('/authors', 'Auth\AuthJWTController@authors');
+        Route::get('/subscriptions', 'Auth\AuthJWTController@getSubscriptions');
     });
 
     /**

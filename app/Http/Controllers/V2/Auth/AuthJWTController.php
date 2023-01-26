@@ -224,6 +224,45 @@ class AuthJWTController extends Controller
     }
 
     /**
+     * Subscribes user to tags
+     *
+     * @return void
+     */
+    public function subscribe(Request $request)
+    {
+        // Get logged in user and tags from the request and updated user's subscriptions table
+        $user = auth('api_v2')->user();
+        $tags = ($request->input('tags'));
+        $user->subscriptions()->sync($tags);
+        // Return user's id and subscriptions
+        return $user->only('id', 'subscriptions');
+    }
+
+    /**
+     * Returns users subscriptions
+     *
+     * @return void
+     */
+    public function getSubscriptions(Request $request)
+    {
+
+        try {
+            $user = auth('api_v2')->userOrFail();
+        } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['message' => 'You are not logged in'], 401);
+        }
+
+        return $user->subscriptions()->get();
+        // Check if user is logged in and return subscription otherwise return message
+        // $user = auth('api_v2')->userOrFail();
+        // if($user === null){
+        //     return response()->json(['message' => 'Unauthenticated'], 401);
+        // }else{
+        //     return $user->subscriptions()->get();
+        // }
+    }
+
+    /**
      * Get the token array structure.
      *
      * @param  string $token

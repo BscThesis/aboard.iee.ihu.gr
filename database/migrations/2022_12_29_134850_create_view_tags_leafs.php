@@ -15,8 +15,8 @@ class CreateViewTagsLeafs extends Migration
     {
         $query = 'CREATE    VIEW `tags_leafs`
                     AS
-                    (SELECT T.*, 1-COUNT( DISTINCT C.parent_id)  AS is_leaf
-                    FROM tags T LEFT JOIN tags C ON T.id=C.`parent_id`
+                    (SELECT T.*, 1-COUNT( DISTINCT C.parent_id) AS is_leaf
+                    FROM tags T LEFT JOIN tags C ON T.id = C.`parent_id`
                     GROUP BY T.id)';
 
         DB::statement($query);

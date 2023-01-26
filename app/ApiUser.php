@@ -59,7 +59,7 @@ class ApiUser extends Authenticatable implements JWTSubject
      */
     public function subscriptions()
     {
-        return $this->belongsToMany('App\Models\V2\Tag');
+        return $this->belongsToMany('App\Models\V2\Tag', 'tag_user', 'user_id', 'tag_id');
     }
 
     /**
