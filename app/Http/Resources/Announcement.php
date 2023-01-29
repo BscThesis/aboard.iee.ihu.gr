@@ -23,6 +23,8 @@ class Announcement extends JsonResource
             'eng_title' => $this->eng_title,
             'body' => $this->body,
             'eng_body' => $this->eng_body,
+            'preview' => mb_substr(strip_tags($this->body), 0, 150, 'utf8'),
+            'eng_preview' => mb_substr(strip_tags($this->eng_body), 0, 150, 'utf8'),
             'has_eng' => $this->has_eng,
             'created_at' => $this->created_at->format('Y-m-d H:i'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i'),

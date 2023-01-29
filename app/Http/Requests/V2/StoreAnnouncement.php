@@ -39,7 +39,7 @@ class StoreAnnouncement extends FormRequest
             'is_pinned' => $this->is_pinned,
             'pinned_until' => $this->pinned_until,
             'tags' => $this->tags,
-            'attachments_old' => $this->attachments_old,
+            'attachments_old' => json_decode($this->attachments_old),
             'attachments' => $this->attachments,
             'user_id' => $this->user_id
         ]);
