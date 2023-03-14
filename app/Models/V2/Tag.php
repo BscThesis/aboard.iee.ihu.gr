@@ -37,7 +37,7 @@ class Tag extends Model
     {
         // Return each Tag children counting every announcement each one has
         return $this->children()->withCount(['announcements'=>function ($query){
-            $query->withFilters(
+            $query->tags(
                 request()->input('users', []),
                 request()->input('tags', []),
                 json_decode(request()->input('title', '')),

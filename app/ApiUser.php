@@ -67,7 +67,7 @@ class ApiUser extends Authenticatable implements JWTSubject
      */
     public function announcements()
     {
-        return $this->hasMany('App\Models\V2\Announcement');
+        return $this->hasMany('App\Models\V2\Announcement', 'user_id', 'id');
     }
 
     /**

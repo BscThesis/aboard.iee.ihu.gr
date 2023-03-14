@@ -15,6 +15,7 @@ use App\Models\V2\Tag;
 use App\Http\Resources\Announcement as AnnouncementResource;
 use App\Events\V2\NewAnnouncementWasCreatedEvent;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 
 class AnnouncementController extends AuthorController
 {
@@ -38,38 +39,143 @@ class AnnouncementController extends AuthorController
         
         $per_page = request()->input('perPage',10);
         $sort_id = request()->input('sortId',0);
+        $page = request()->input('page', 1);
+
+        $content_type = request()->header('Content-Type', '');
+        $is_ical = $content_type == 'text/calendar';
 
         // If user is logged in or inside university's wifi return all filtered announcements
         $local_ip = $request->session()->get('local_ip', 0);
+
         if ($local_ip == 1 or auth('api_v2')->check()) {
-            $announcements = Announcement::withFilters( 
-                request()->input('users', []),
-                request()->input('tags',[]),
-                request()->input('title', ''),
-                request()->input('body', ''),
-                request()->input('updatedAfter',''),
-                request()->input('updatedBefore','')
-            )
-            ->select('announcements.*')
-            ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('announcements.deleted_at');
+
+            list($announcements, $count_total) = $this->create_announcements_query_build(
+                [
+                    'users' => request()->input('users', []),
+                    'tags' => request()->input('tags',[]),
+                    'title' => request()->input('title', ''),
+                    'body' => request()->input('body', ''),
+                    'updatedAfter' => request()->input('updatedAfter',''),
+                    'updatedBefore' => request()->input('updatedBefore',''),
+                    'is_ical' => $is_ical,
+                    'fetch_public' => false
+                ],
+                $page, $per_page, $sort_id
+            );
+            
         } 
         else { // Else return only public filtered announcements
-            $announcements = Announcement::withFilters( 
-                request()->input('users', []),
-                request()->input('tags',[]),
-                request()->input('title', ''),
-                request()->input('body',''),
-                request()->input('updatedAfter',''),
-                request()->input('updatedBefore','')
-            )
-            ->select('announcements.*')
-            ->where('tags.is_public', 1)
-            ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('announcements.deleted_at');
+            list($announcements, $count_total) = $this->create_announcements_query_build(
+                [
+                    'users' => request()->input('users', []),
+                    'tags' => request()->input('tags',[]),
+                    'title' => request()->input('title', ''),
+                    'body' => request()->input('body', ''),
+                    'updatedAfter' => request()->input('updatedAfter',''),
+                    'updatedBefore' => request()->input('updatedBefore',''),
+                    'is_ical' => $is_ical,
+                    'fetch_public' => true
+                ],
+                $page, $per_page, $sort_id
+            );
         }    
-        // Return announcements as a json and paginated by $per_page value
-        $announcements = $announcements->distinct()->paginate($per_page);
         
-        return AnnouncementResource::collection($announcements);
+        $announcements = $announcements->get();
+        $announcements_collection = AnnouncementResource::collection($announcements);
+        
+        
+        if ($is_ical) {
+            header('Content-type: text/calendar; charset=utf-8');
+            echo $this->collection_to_ical($announcements_collection);
+            exit;
+        }
+
+        
+        return $this->create_paginate_collection($announcements_collection, $page, $per_page, $count_total);
+    }
+
+    protected function create_paginate_collection($collection, $page, $per_page, $count_total) 
+    {
+        $total_pages = ceil($count_total / $per_page);
+        $ret = collect([
+            'data' => $collection,
+            'meta' => [
+                "current_page" => $page,
+                "from" => 1,
+                "last_page" => $total_pages,
+                "path" => env("APP_URL") ."/api/v2/announcements",
+                "per_page" => $per_page,
+                "to" => $count_total,
+                "total" => $count_total
+            ]
+        ]);
+
+        return $ret;
+    }
+    protected function create_announcements_query_build($args, $page, $per_page, $sort_id) 
+    {
+        extract($args);
+
+        $offset = $per_page * ($page - 1);
+
+        $announcements = Announcement::withFilters(
+            $users,
+            $tags,
+            $title,
+            $body,
+            $updatedAfter,
+            $updatedBefore,
+            $is_ical,
+        )
+        ->select('announcements.*')
+        ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('announcements.deleted_at')
+        ->skip($offset)->take($per_page);
+
+        $count_total = Announcement::withFilters(
+            $users,
+            $tags,
+            $title,
+            $body,
+            $updatedAfter,
+            $updatedBefore,
+            $is_ical,
+        )
+        ->select(DB::raw('distinct count(announcements.id) OVER() as total'))
+        ->whereNull('announcements.deleted_at')
+        ->get(0)
+        ->first()->total;
+
+        return [$announcements, $count_total];
+    }
+
+    /**
+     * Transform announcements collection to ical
+     * 
+     * @return String 
+     */
+    protected function collection_to_ical($collection) 
+    {
+        
+        $ret = "BEGIN:VCALENDAR\n";
+        $ret .= "VERSION:2.0\n";
+        $ret .= "PRODID:-//it/iee//ihu v1.0\n";
+        
+
+        foreach ($collection as $item) {
+            $DTSTAMP = date('Ymd\THis\Z', strtotime($item->created_at));
+            $DTSTART = date('Ymd\THis\Z', strtotime($item->event_start_time));
+            $DTEND = date('Ymd\THis\Z', strtotime($item->event_end_time));
+            $ret .= "BEGIN:VEVENT\n";
+            $ret .= "UID:{$item->id}-iee-ihu\n";
+            $ret .= "DTSTAMP:{$DTSTAMP}\n";
+            $ret .= "DTSTART:{$DTSTART}\n";
+            $ret .= "DTEND:{$DTEND}\n";
+            $ret .= "LOCATION:{$item->event_location}\n";
+            $ret .= "END:VEVENT\n";
+        }
+        $ret .= "END:VCALENDAR\n";
+
+        return $ret;
     }
 
     /**
@@ -87,23 +193,41 @@ class AnnouncementController extends AuthorController
         if (!$user->is_author) {
             return response()->json(['message' => 'You are not an author'], 401);
         }
-        
+
         $per_page = request()->input('perPage',10);
         $sort_id = request()->input('sortId',0);
-        $announcements = Announcement::withFilters( 
-            [$user->id],
-            request()->input('tags',[]),
-            request()->input('title', ''),
-            request()->input('body', ''),
-            request()->input('updatedAfter',''),
-            request()->input('updatedBefore','')
-        )
-        ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('announcements.deleted_at');
+        $page = request()->input('page', 1);
         
-        // Return announcements as a json and paginated by $per_page value
-        $announcements = $announcements->distinct()->paginate($per_page);
+        $content_type = request()->header('Content-Type', '');
+        $is_ical = $content_type == 'text/calendar';
+
+        $sort_id = request()->input('sortId',0);
+        list($announcements, $count_total) = $this->create_announcements_query_build(
+            [
+                'users' => [$user->id],
+                'tags' => request()->input('tags',[]),
+                'title' => request()->input('title', ''),
+                'body' => request()->input('body', ''),
+                'updatedAfter' => request()->input('updatedAfter',''),
+                'updatedBefore' => request()->input('updatedBefore',''),
+                'is_ical' => $is_ical,
+                'fetch_public' => false
+            ],
+            $page, $per_page, $sort_id
+        );
         
-        return AnnouncementResource::collection($announcements);
+        $announcements = $announcements->get();
+        $announcements_collection = AnnouncementResource::collection($announcements);
+        
+        
+        if ($is_ical) {
+            header('Content-type: text/calendar; charset=utf-8');
+            echo $this->collection_to_ical($announcements_collection);
+            exit;
+        }
+
+        
+        return $this->create_paginate_collection($announcements_collection, $page, $per_page, $count_total);
     }
 
     /**

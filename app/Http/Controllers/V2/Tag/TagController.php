@@ -90,7 +90,7 @@ class TagController extends Controller
         $local_ip = $request->session()->get('local_ip', 0);
         if ($local_ip == 1 or auth('api_v2')->check()) {
             $tags = Tag::with('childrenRecursive')->where('parent_id',1)->withCount(['announcements'=>function ($query) use ($request){
-                $query->withFilters(
+                $query->tags(
                     request()->input('users', []),
                     request()->input('tags', []),
                     (request()->input('title', '')),
@@ -103,7 +103,7 @@ class TagController extends Controller
         // Else return tags filtering and then counting every public announcement each one has with their children
         else {
             $tags = Tag::with('childrenRecursive')->where([['parent_id',1],['is_public',1]])->withCount(['announcements'=>function ($query) use ($request){
-                $query->withFilters(
+                $query->tags(
                     request()->input('users', []),
                     request()->input('tags', []),
                     (request()->input('title', '')),
@@ -127,7 +127,7 @@ class TagController extends Controller
         $tags = [];
         if (auth('api_v2')->check()) {
             $tags = Tag::with('children')->where('parent_id',1)->withCount(['announcements'=>function ($query) use ($request){
-                $query->withFilters(
+                $query->tags(
                     request()->input('users', []),
                     request()->input('tags', []),
                     (request()->input('title', '')),
