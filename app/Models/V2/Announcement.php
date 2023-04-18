@@ -112,7 +112,7 @@ class Announcement extends Model implements Feedable
             $query->where('announcements.event_start_time','!=',null);
             $query->where('announcements.event_end_time','!=',null);
         })->when($fetch_public === true, function ($query) {
-            $query->where('announcements.is_public','=',1);
+            $query->where('tags.is_public','=',1);
         });
         
     }
