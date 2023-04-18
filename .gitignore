@@ -15,3 +15,24 @@ npm-debug.log
 yarn-error.log
 .env
 foobar.vue
+/react_client/node_modules
+
+# dependencies
+/react_client/node_modules
+/react_client/.pnp
+/react_client/.pnp.js
+
+# testing
+/react_client/coverage
+
+# production
+/react_client/build
+
+/react_client/.env.local
+/react_client/.env.development.local
+/react_client/.env.test.local
+/react_client/.env.production.local
+
+/react_client/npm-debug.log*
+/react_client/yarn-debug.log*
+/react_client/yarn-error.log*

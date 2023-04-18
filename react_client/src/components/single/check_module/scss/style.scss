@@ -1,0 +1,107 @@
+
+
+.react-check-tree {
+    position: relative;
+    .tree-controller {
+        background: #fff;
+        color: #44444c;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: wrap;
+        border-radius: 4px;
+        min-height: 38px;
+
+        &.tree-opened{
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        
+        .tree-controller-container{
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-wrap: wrap;
+            width: calc(100% - 37px);
+            box-sizing: border-box;
+            padding: 0 5px;
+
+            .selected-choice {
+                font-size: 12px;
+                background: #a3a1a1;
+                color: #fff;
+                padding: 6px 5px;
+                border-radius: 10px;
+                margin: 3px;
+                transition: all .2s ease;
+                cursor: pointer;
+    
+                svg {
+                    margin-left: 5px;
+                    font-size: 10px;
+                }
+                &:hover {
+                    svg {
+                        color: red;
+                    }
+                }
+            }
+
+            input {
+                font-size: 16px;
+                margin: 0;
+                color: #44444c;
+            }
+        }
+
+        .tree-controller-indicators {
+            width: 36px;
+            height: 100%;
+            min-height: 20px;
+            border-left: 1px solid #c7c7c7;
+            color: #c7c7c7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+    }
+    .tree-root {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        padding: 10px 5px;
+        max-height: 400px;
+        overflow-x: auto;
+        z-index: 999;
+        background: #fff;
+        color: #44444c;
+        box-sizing: border-box;
+    }
+    .tree-choices {
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+
+        &.tree-choices-hide {
+            display: none !important;
+        }
+
+        .tree-choice {
+            margin-left: 15px;
+            cursor: pointer;
+
+            label {
+                cursor: pointer;
+                user-select: none; /* Standard */
+            }
+
+            .show-hide-btn {
+                margin-left: -15px;
+            }
+        }
+    }
+    
+}

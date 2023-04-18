@@ -1,0 +1,59 @@
+.editor {
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    cursor: text;
+    padding: 16px;
+    border-radius: 2px;
+    margin-bottom: 2em;
+    box-shadow: inset 0px 1px 8px -3px #ABABAB;
+    background: #fefefe;
+    color: #525252 !important;
+  }
+
+  
+  .editor :global(.public-DraftEditor-content) {
+    min-height: 140px;
+  }
+  
+  .headlineButtonWrapper {
+    display: inline-block;
+  }
+  
+  .headlineButton {
+    background: #fbfbfb;
+    color: #888;
+    font-size: 18px;
+    border: 0;
+    padding-top: 5px;
+    vertical-align: bottom;
+    height: 34px;
+    width: 36px;
+  }
+  
+  .headlineButton:hover,
+  .headlineButton:focus {
+    background: #f3f3f3;
+  }
+  .toolbar {
+    border: 1px solid #111;
+    background: #333;
+    border-radius: 4px;
+    box-shadow: 0px 1px 3px 0px rgba(220,220,220,1);
+    z-index: 2;
+    box-sizing: border-box;
+    text-align: left;
+  }
+  
+  .toolbar:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-top-color: #333;
+    border-width: 4px;
+    margin-left: -4px;
+  }
+  
+  .toolbar:before {
+    border-color: rgba(221, 221, 221, 0);
+    border-top-color: #111;
+    border-width: 6px;
+    margin-left: -6px;
+  }
