@@ -46,6 +46,14 @@ const SearchParams = (props) => {
         updatedBefore: {
             type: 'input',
             value: ''
+        },
+        sortId: {
+            type: 'input',
+            value: '0'
+        },
+        perPage: {
+            type: 'input',
+            value: '10'
         }
     })
 
@@ -115,47 +123,54 @@ const SearchParams = (props) => {
             props.onChange(didLoad)
 
             setDidLoad(true)
-        }, 1000)
+        }, 300)
         
     }, [filters])
 
     useEffect(() => {
-        
-        async function setQueryData() {
-            const temp_tags = await getTags()
-            const temp_users = await getAuthors()
-            const query_params = uriHelper.getAll()
-            
-            setFilters({
-                tags: {
-                    type: 'select-multiple',
-                    value: query_params.tags ? getSelected(temp_tags, query_params.tags, true) : []
-                },
-                users: {
-                    type: 'select-multiple',
-                    value: query_params.users ? getSelected(temp_users, query_params.users) : []
-                },
-                title: {
-                    type: 'input',
-                    value: query_params.title ? query_params.title : ''
-                },
-                body: {
-                    type: 'input',
-                    value: query_params.body ? query_params.body : ''
-                },
-                updatedAfter: {
-                    type: 'input',
-                    value: query_params.updatedAfter ? (query_params.updatedAfter) : ''
-                },
-                updatedBefore: {
-                    type: 'input',
-                    value: query_params.updatedBefore ? (query_params.updatedBefore) : ''
-                }
-            })
-        }
-
         setQueryData()
-    }, [])
+    }, [props.triggerFilterUpdate])
+
+    async function setQueryData() {
+        const temp_tags = await getTags()
+        const temp_users = await getAuthors()
+        const query_params = uriHelper.getAll()
+        
+        setFilters({
+            tags: {
+                type: 'select-multiple',
+                value: query_params.tags ? getSelected(temp_tags, query_params.tags, true) : []
+            },
+            users: {
+                type: 'select-multiple',
+                value: query_params.users ? getSelected(temp_users, query_params.users) : []
+            },
+            title: {
+                type: 'input',
+                value: query_params.title ? query_params.title : ''
+            },
+            body: {
+                type: 'input',
+                value: query_params.body ? query_params.body : ''
+            },
+            updatedAfter: {
+                type: 'input',
+                value: query_params.updatedAfter ? (query_params.updatedAfter) : ''
+            },
+            updatedBefore: {
+                type: 'input',
+                value: query_params.updatedBefore ? (query_params.updatedBefore) : ''
+            },
+            sortId: {
+                type: 'input',
+                value: query_params.sortId ? (query_params.sortId) : '0'
+            },
+            perPage: {
+                type: 'input',
+                value: query_params.perPage ? (query_params.perPage) : '10'
+            }
+        })
+    }
 
     async function getTags () {
         return new Promise((res, rej) => {
@@ -226,15 +241,7 @@ const SearchParams = (props) => {
         })
     }
 
-    const getCustomDate = (date) => {
-        const d = `${moment(date).format("YYYY-MM-DD")}`
-        
-        return d
-    }
-
     const shouldSearchClose = (e) => {
-        console.log(containerRef.current)
-        console.log(containerRef.current.contains(e.target))
         if (containerRef.current && containerRef.current === e.target && props.show === true) {
             props.setShow(false)
         }
@@ -346,6 +353,83 @@ const SearchParams = (props) => {
                             borderBottomRightRadius: 0
                         }}
                     />
+                </div>
+
+                <div className="form-control">
+                    <label htmlFor="select-sort">{i18n.t('Ταξινόμηση')}</label>
+                    <Select 
+                        className="react-select"
+                        prefix="react"
+                        id="select-sort"
+                        options={
+                            [
+                                {
+                                    label: i18n.t('Σημαντικές'),
+                                    value: '0'
+                                },
+                                {
+                                    label: i18n.t('Νεότερες'),
+                                    value: '1'
+                                },
+                                {
+                                    label: i18n.t('Παλαιότερες'),
+                                    value: '2'
+                                },
+                            ]
+                        }
+                        placeholder={i18n.t('Επιλέξτε ταξινόμηση')}
+                        theme={selectThemeColors}
+                        value={filters.sortId.value === '0' ? {
+                            label: i18n.t('Σημαντικές'),
+                            value: '0'
+                        } :filters.sortId.value === '1' ?   {
+                            label: i18n.t('Νεότερες'),
+                            value: '1'
+                        } : {
+                            label: i18n.t('Παλαιότερες'),
+                            value: '2'
+                        }}
+                        onChange={(e) => setFilterValues('sortId', e.value)}
+                    />
+                    
+                </div>
+                <div className="form-control">
+                    <label htmlFor="select-per-page">{i18n.t('Ανά σελίδα')}</label>
+                    <Select 
+                        className="react-select"
+                        prefix="react"
+                        id="select-per-page"
+                        options={
+                            [
+                                {
+                                    label: '10',
+                                    value: '10'
+                                },
+                                {
+                                    label: '20',
+                                    value: '20'
+                                },
+                                {
+                                    label: '50',
+                                    value: '50'
+                                },
+                            ]
+                        }
+                        placeholder={i18n.t('Επιλέξτε εγγραφές ανά σελίδα')}
+                        theme={selectThemeColors}
+                        value={filters.perPage.value === '10' ? {
+                            label: '10',
+                            value: '10'
+                        } :filters.perPage.value === '20' ?   {
+                            label: '20',
+                            value: '20'
+                        } : {
+                            label: '50',
+                            value: '50'
+                        }}
+                        onChange={(e) => setFilterValues('perPage', e.value)}
+                    />
+                    
                 </div>
             </div>
         </div>

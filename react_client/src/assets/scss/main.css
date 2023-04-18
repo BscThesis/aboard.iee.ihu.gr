@@ -285,6 +285,7 @@ body {
   min-width: 40px;
   min-height: 20px;
   background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
 }
 
 .announcement-wrapper {
@@ -326,6 +327,7 @@ body {
   font-size: 14px;
   color: #effaf5;
   background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
 }
 .announcement-wrapper .summary {
   text-align: left;
@@ -354,6 +356,7 @@ body {
 .announcement-wrapper .announcement-meta .author {
   text-align: left;
   font-size: 12px;
+  cursor: pointer;
 }
 
 .pagination-wrapper {

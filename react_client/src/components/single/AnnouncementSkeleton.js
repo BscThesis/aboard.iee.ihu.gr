@@ -10,8 +10,8 @@ const AnnouncementSkeleton = (props) => {
             </div>
             <div className="badges">
                 {
-                    Array.from(Array(3)).map(t => 
-                        <span key={t} className='tag-badge'></span>
+                    Array.from(Array(3)).map((t, i) => 
+                        <span key={i} className='tag-badge'></span>
                     )
                 }
             </div>

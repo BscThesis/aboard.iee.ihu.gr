@@ -188,7 +188,7 @@ class Request {
   }
 
   handleError(error, response) {
-    if (error.response.status === 401 && error.response.data.error === 'Invalid token') {
+    if (error.response && error.response.status === 401 && error.response.data.error === 'Invalid token') {
       document.cookie = 'token=; Max-Age=-99999999;';  
     }
   }

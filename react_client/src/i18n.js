@@ -6,10 +6,10 @@ class I18n {
   languageChangeFns = [];
   translations = {
     en: {
-      announcements_page_title: `Announcements - ${this.get_site_title()}`,
-      my_announcements_page_title: `My announcements - ${this.get_site_title()}`,
-      account_page_title: `My account - ${this.get_site_title()}`,
-      about_page_title: `About - ${this.get_site_title()}`,
+      announcements_page_title: `Announcements - ${config.site_title_en}`,
+      my_announcements_page_title: `My announcements - ${config.site_title_en}`,
+      account_page_title: `My account - ${config.site_title_en}`,
+      about_page_title: `About - ${config.site_title_en}`,
       'About': "About",
       'Ακολουθήστε ετικέτες': "Subscribe to tags",
       'Ακολουθώντας ετικέτες μπορείτε να ενημερώνεστε για νέες ανακοινώσεις στις ετικέτες που σας ενδιαφέρουν': "By subscribing to specific tags you can get informed about new announcements for the tags you specified",
@@ -33,8 +33,8 @@ class I18n {
       'Ετικέτες': "Tags",
       'Ημ/νία έναρξης': "Start date",
       'Ημ/νία λήξης': "End date",
-      'Ημερομηνία έως': "Date from",
-      'Ημερομηνία από': "Date to",
+      'Ημερομηνία έως': "Date to",
+      'Ημερομηνία από': "Date from",
       'Καθηγητές': "Proffesors",
       'Κείμενο': "Text in greek",
       'Κείμενο στα αγγλικά': "Text in english",
@@ -55,10 +55,10 @@ class I18n {
       'Συννημένα': 'Attachments'
     },
     el: {
-      announcements_page_title: `Ανακοινώσεις - ${this.get_site_title()}`,
-      my_announcements_page_title: `Οι ανακοινώσεις μου - ${this.get_site_title()}`,
-      account_page_title: `Λογαριασμός - ${this.get_site_title()}`,
-      about_page_title: `About - ${this.get_site_title()}`,
+      announcements_page_title: `Ανακοινώσεις - ${config.site_title}`,
+      my_announcements_page_title: `Οι ανακοινώσεις μου - ${config.site_title}`,
+      account_page_title: `Λογαριασμός - ${config.site_title}`,
+      about_page_title: `About - ${config.site_title}`,
       'About': "About",
       'Ακολουθήστε ετικέτες': "Ακολουθήστε ετικέτες",
       'Ακολουθώντας ετικέτες μπορείτε να ενημερώνεστε για νέες ανακοινώσεις στις ετικέτες που σας ενδιαφέρουν': "Ακολουθώντας ετικέτες μπορείτε να ενημερώνεστε για νέες ανακοινώσεις στις ετικέτες που σας ενδιαφέρουν",

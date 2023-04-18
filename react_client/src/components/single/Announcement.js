@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleRight, faEdit, faFileCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import history from '../../helpers/history';
 import { Link } from 'react-router-dom';
+import uriHelper from '../../helpers/uri_params';
 
 const Announcement = (props) => {
 
@@ -12,15 +13,40 @@ const Announcement = (props) => {
         
     }, [])
 
+    const onTagClick = (tag) => {
+        const tags = uriHelper.get('tags', [])
+        if (tags.indexOf(tag.id) == -1) {
+            tags.push(tag.id)
+            uriHelper.set('tags', tags)
+        }
+
+        if (typeof props.propagateFilterChange === 'function') {
+            props.propagateFilterChange()
+        }
+    }
+
+    const onAuthorClick = (author) => {
+        const authors = uriHelper.get('users', [])
+        if (authors.indexOf(author.id) == -1) {
+            authors.push(author.id)
+            uriHelper.set('users', authors)
+        }
+        
+        if (typeof props.propagateFilterChange === 'function') {
+            props.propagateFilterChange()
+        }
+    }
+
     const editAnnouncement = () => {
         history.push(`/edit_announcement/${props.announcement.id}`)
     }
+
     return (
         <div className={`announcement-wrapper`}>
             <div 
                 className={`announcement-meta`}
             >
-                <span className='author'>{props.announcement.author.name}</span>
+                <span className='author' onClick={() => onAuthorClick(props.announcement.author)}>{props.announcement.author.name}</span>
                 <span className='post-date'>{props.announcement.created_at}</span>
             </div>
             
@@ -29,8 +55,8 @@ const Announcement = (props) => {
             </div>
             <div className="badges">
                 {
-                    props.announcement.tags.map(t => 
-                        <span className='tag-badge'>{t.title}</span>
+                    props.announcement.tags.map((t, i) => 
+                        <span key={`tag-${i}`} className='tag-badge' onClick={() => onTagClick(t)}>{t.title}</span>
                     )
                 }
             </div>

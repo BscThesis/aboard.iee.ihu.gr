@@ -16,6 +16,7 @@ import cookieHelper from './helpers/cookie'
 import MyAnnouncements from './pages/MyAnnouncements'
 import AnnouncementForm from './pages/AnnouncementForm'
 import AnnouncementFormNew from './pages/AnnouncementFormNew'
+import About from './pages/About'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import './assets/scss/main.css'
@@ -143,11 +144,11 @@ function App() {
         user={user}
         />
         <Switch>
-          <Route path="/test">
-            <Test/>
-          </Route>
           <Route path="/login_success">
             <LoginSuccess checkStatus={checkLoginStatus} />
+          </Route>
+          <Route path="/about">
+            <About />
           </Route>
           <Route path="/announcements">
             <Announcements />

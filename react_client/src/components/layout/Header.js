@@ -57,6 +57,7 @@ const Header = (props) => {
                                 </>
                             }
                             <Nav.Link as={Link} to="/about">{i18n.t('About')}</Nav.Link>
+                            <Nav.Link href="https://apps.iee.ihu.gr/">Apps</Nav.Link>
                             <NavDropdown title={<img src={i18n.language === 'el' ? elFlag : enFlag} />} id="collasible-nav-dropdown-locale">
                                     <Nav.Link onClick={() => i18n.setLanguage('el')}><img src={elFlag} /> Ελληνικά</Nav.Link>
                                     <Nav.Link onClick={() => i18n.setLanguage('en')}><img src={enFlag} /> English</Nav.Link>

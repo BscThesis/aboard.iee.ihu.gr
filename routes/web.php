@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::any('{any}', function () {
+    return view('init-react');
+});
 
 Route::get('/', function () {
     return redirect('/announcements');

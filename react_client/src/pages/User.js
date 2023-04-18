@@ -31,6 +31,12 @@ const User = (props) => {
                 // setTopLevelTags(t.map(t1 => parseInt(t1.value)))
             })
         })
+
+        const unmountLocaleChange = i18n.onLanguageChange(() => {
+            document.title = i18n.t('account_page_title')
+        })
+
+        return unmountLocaleChange;
         
     }, [])
 

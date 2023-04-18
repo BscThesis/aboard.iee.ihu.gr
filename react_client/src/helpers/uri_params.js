@@ -1,7 +1,7 @@
 import history from "./history"
 
 const valid_variables = [
-    'page', 'perPage', 'sort', 'users', 'tags', 'title', 'body', 'date_from', 'date_to', 'updatedAfter', 'updatedBefore'
+    'page', 'perPage', 'sortId', 'users', 'tags', 'title', 'body', 'date_from', 'date_to', 'updatedAfter', 'updatedBefore'
 ]
 
 class UriHelper {
@@ -84,6 +84,13 @@ class UriHelper {
         const uri = this.uri_to_string()
         if (!silent)
             history.push(`/${uri}`)
+    }
+
+    /**
+     * Clears mapper in case it is used from other components. e.g. Announcements and MyAnnouncements
+     */
+    clear() {
+        this.mapper = []
     }
 
     /**
