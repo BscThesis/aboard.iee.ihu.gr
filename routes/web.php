@@ -12,7 +12,7 @@
 */
 Route::any('{any}', function () {
     return view('init-react');
-});
+})->where('any', '.*');
 
 Route::get('/', function () {
     return redirect('/announcements');
