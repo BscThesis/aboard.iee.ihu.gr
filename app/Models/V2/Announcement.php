@@ -107,6 +107,7 @@ class Announcement extends Model implements Feedable
             $query->where('announcements.event_start_time','!=',null);
             $query->where('announcements.event_end_time','!=',null);
         })->when($fetch_events === true, function ($query) {
+            $query->where('announcements.is_event','=',1);
             $query->where('announcements.event_location','!=',null);
             $query->where('announcements.event_start_time','!=',null);
             $query->where('announcements.event_end_time','!=',null);

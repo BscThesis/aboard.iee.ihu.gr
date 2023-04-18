@@ -140,10 +140,17 @@ class AnnouncementController extends AuthorController
             $updatedBefore,
             $is_ical,
         )
-        ->select(DB::raw('distinct count(announcements.id) OVER() as total'))
+        ->select(DB::raw('distinct IFNULL(count(announcements.id) OVER(), 0) as total'))
         ->whereNull('announcements.deleted_at')
         ->get(0)
-        ->first()->total;
+        ->first();
+
+        if ($count_total) {
+            $count_total = $count_total->total;
+        }
+        else {
+            $count_total = 0;
+        }
 
         return [$announcements, $count_total];
     }
@@ -165,17 +172,45 @@ class AnnouncementController extends AuthorController
             $DTSTAMP = date('Ymd\THis\Z', strtotime($item->created_at));
             $DTSTART = date('Ymd\THis\Z', strtotime($item->event_start_time));
             $DTEND = date('Ymd\THis\Z', strtotime($item->event_end_time));
+            $description = $this->get_ical_complied_string($item->body);
+            
+            $preview = strip_tags($item->body);
+            $preview_complied = $this->get_ical_complied_string($preview);
+            $event_location = $this->get_ical_complied_string($item->event_location);
+
+           
             $ret .= "BEGIN:VEVENT\n";
             $ret .= "UID:{$item->id}-iee-ihu\n";
             $ret .= "DTSTAMP:{$DTSTAMP}\n";
             $ret .= "DTSTART:{$DTSTART}\n";
             $ret .= "DTEND:{$DTEND}\n";
-            $ret .= "LOCATION:{$item->event_location}\n";
+            $ret .= "NAME:{$item->title}\n";
+            $ret .= "DESCRIPTION:{$preview_complied}\n";
+            $ret .= "X-ALT-DESC;FMTTYPE=text/html:<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">
+            <HTML><BODY>\n{$description}\n</BODY></HTML>\n";
+            $ret .= "LOCATION:{$event_location}\n";
             $ret .= "END:VEVENT\n";
         }
         $ret .= "END:VCALENDAR\n";
 
         return $ret;
+    }
+
+    private function get_ical_complied_string($ogString) {
+        $compliedString = '';
+
+        for($i = 0; $i < strlen($ogString); $i += 60) {
+            $sub_str = mb_substr($ogString, $i, $i + 60, 'utf8');
+            if ($compliedString == '') {
+                $compliedString = $sub_str;
+            }
+            else {
+                $compliedString .= "\n" . $sub_str;
+            }
+            
+        }
+
+        return $compliedString;
     }
 
     /**
