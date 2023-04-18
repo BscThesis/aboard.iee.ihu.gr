@@ -126,6 +126,7 @@ class AnnouncementController extends AuthorController
             $updatedAfter,
             $updatedBefore,
             $is_ical,
+            $fetch_public
         )
         ->select('announcements.*')
         ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('announcements.deleted_at')
@@ -139,6 +140,7 @@ class AnnouncementController extends AuthorController
             $updatedAfter,
             $updatedBefore,
             $is_ical,
+            $fetch_public
         )
         ->select(DB::raw('distinct IFNULL(count(announcements.id) OVER(), 0) as total'))
         ->whereNull('announcements.deleted_at')
