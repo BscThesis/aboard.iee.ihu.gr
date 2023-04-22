@@ -20,6 +20,15 @@ const MyAnnouncements = (props) => {
     const [lastUpdatedFilters, setLastUpdatedFilters] = useState(Date.now())
 
     useEffect(() => {
+        const onPopStateChange = () => {
+            uriHelper.clear()
+            uriHelper.init()
+            uriHelper.set_component_view('announcements')
+            setLastUpdatedFilters(Date.now())
+        }
+
+        window.addEventListener("popstate", onPopStateChange)
+        uriHelper.init()
         document.title = i18n.t('my_announcements_page_title')
         uriHelper.set_component_view('my_announcements')
 
@@ -28,6 +37,7 @@ const MyAnnouncements = (props) => {
         })
 
         return () => {
+            window.removeEventListener('popstate', onPopStateChange)
             uriHelper.clear()
             unmountLocaleChange()
         };
@@ -55,10 +65,17 @@ const MyAnnouncements = (props) => {
         setFetchedAnnouncements(false)
         const uri = uriHelper.uri_to_query_string()
         request.get(`announcements/my_announcements${uri}`).then(response => {
-            setAnnouncements(response.data.data)
-            setAnnouncementsMeta(response.data.meta)
-            setFetchedAnnouncements(true)
+            if (response.status === 200) {
+                setAnnouncements(response.data.data)
+                setAnnouncementsMeta(response.data.meta)
+                setFetchedAnnouncements(true)
+            }
         })
+    }
+
+    const propagateAnnouncementFilterChange = () => {
+        changeFilters(true, true)
+        setShowSearch(true)
     }
 
     return (
@@ -96,7 +113,7 @@ const MyAnnouncements = (props) => {
                 {
                     announcements && announcements.length > 0 &&
                         announcements.map(a => {
-                            return <Announcement key={a.id} announcement={a} propagateFilterChange={() => changeFilters(true, true)} />
+                            return <Announcement key={a.id} announcement={a} propagateFilterChange={() => propagateAnnouncementFilterChange()} />
                         })
                 }
                 {

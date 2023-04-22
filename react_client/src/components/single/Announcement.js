@@ -75,7 +75,7 @@ const Announcement = (props) => {
                 </div>
                 <div className='show-more'>
                     {
-                        (user.user && user.user.id == props.announcement.author.id) &&
+                        (user.user && ((user.user.is_author === 1 && user.user.id == props.announcement.author.id) || user.user.is_admin === 1)) &&
                         <button className="btn btn-secondary" onClick={() => editAnnouncement()}><FontAwesomeIcon icon={faEdit} /></button>
                     }
                     <Link to={`/announcement/${props.announcement.id}`}className="btn btn-secondary round"><FontAwesomeIcon icon={faAngleRight} /></Link>

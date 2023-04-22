@@ -6,7 +6,10 @@ const valid_variables = [
 
 class UriHelper {
     constructor() {
-        
+        this.init()
+    }
+
+    init() {
         this.raw_uri = window.location.href
         this.pieces = this.raw_uri.split('/')
         this.url = this.pieces[2]

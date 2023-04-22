@@ -14,14 +14,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFolderPlus, faClose } from "@fortawesome/free-solid-svg-icons"
 import jsonToFormDataHelper from "../helpers/json_to_form_data"
 import CustomEditor from "../components/CustomEditor"
+import user from "../helpers/user"
+import Select from 'react-select'
 
 const AnnouncementForm = (props) => {
 
-    var timeoutEl = null
-    var timeoutEn = null
     const {announcementId} = useParams()
     const fileRef = useRef(null)
     const [tags, setTags] = useState([])
+    const [authors, setAuthors] = useState([])
+    const [showAuthors, setShowAuthors] = useState(false)
+    const [authorId, setAuthorId] = useState(null)
     const [mostUsedTags, setMostUsedTags] = useState([])
     const [isEdit, setIsEdit] = useState(false)
     const [files, setFiles] = useState([])
@@ -42,7 +45,15 @@ const AnnouncementForm = (props) => {
     })
 
     
-
+    useEffect(() => {
+        console.log(showAuthors)
+        if (!showAuthors) {
+            setAuthorId(null)
+        }
+        else if (isEdit) {
+            setAuthorId(announcement.author.id)
+        }
+    }, [showAuthors])
     useEffect(() => {
         request.get('all_tags').then(response => {
             setTags(transformTags(response.data))
@@ -50,9 +61,20 @@ const AnnouncementForm = (props) => {
         request.get('most_used_tags').then(response => {
             setMostUsedTags(response.data)
         })
+        if (user.user.is_admin === 1) {
+            request.get('/all_authors').then(response => {
+                setAuthors(response.data)
+            })
+        }
         if (announcementId) {
             request.get(`announcements/edit_view/${announcementId}`).then(response => {
-                if (response.data.data) {
+                
+                if (response.status === 401) {
+                    history.push('/')
+                    return;
+                }
+                
+                if (response.data && response.data.data) {
                     const a = response.data.data
                     a.tags = a.tags.map(t => {
                         const title = t.title ? t.title : t.name
@@ -68,7 +90,10 @@ const AnnouncementForm = (props) => {
                     a.event_end_time = a.event_end_time ? new Date(a.event_end_time) : ''
                     setAnnouncement(a)
                     setIsEdit(true)
-                    
+                    if (user.user.is_admin) {
+                        setAuthorId(a.author.id)
+                        setShowAuthors(true)
+                    }
                     
                 }
             })
@@ -153,6 +178,7 @@ const AnnouncementForm = (props) => {
                     pinned_until: announcement.pinned_until ? moment(announcement.pinned_until).format("YYYY-MM-DD 00:00") : null,
                     event_start_time: announcement.event_start_time ? moment(announcement.event_start_time).format("YYYY-MM-DD HH:ss") : null,
                     event_end_time: announcement.event_end_time ? moment(announcement.event_end_time).format("YYYY-MM-DD HH:ss") : null,
+                    user_id: authorId ? authorId : null, 
                     _method: 'PUT'
                 })
 
@@ -184,7 +210,8 @@ const AnnouncementForm = (props) => {
                     pinned_until: announcement.pinned_until ? moment(announcement.pinned_until).format("YYYY-MM-DD 00:00") : null,
                     event_start_time: announcement.event_start_time ? moment(announcement.event_start_time).format("YYYY-MM-DD 00:00") : null,
                     event_end_time: announcement.event_end_time ? moment(announcement.event_end_time).format("YYYY-MM-DD 00:00") : null,
-                    tags: announcement.tags.map(t => t.value)
+                    tags: announcement.tags.map(t => t.value),
+                    user_id: authorId ? authorId : null, 
                 })
 
                 files.forEach(f => {
@@ -265,6 +292,18 @@ const AnnouncementForm = (props) => {
         }
 
         return ''
+    }
+
+    const getAuthorValue = () => {
+        const temp_authors = authors.filter(a => a.id === authorId)
+        if (temp_authors.length > 0) {
+            return {
+                label: `[${temp_authors[0].announcements_count}] ${temp_authors[0].name}`,
+                value: temp_authors[0].id
+            }
+        }
+
+        return null
     }
 
     return (
@@ -356,6 +395,45 @@ const AnnouncementForm = (props) => {
                     </div>
                 </div>
             </div>
+            {
+                user.user.is_admin ? 
+                <div className="row">
+                    <div className="col-md-6">
+                        <div className="form-control">
+                            <Checkbox
+                                title={i18n.t('Μεταφορά ανακοίνωσης σε άλλο καθηγητή')}
+                                onChange={(e) => setShowAuthors(e === 1)}
+                                checked={showAuthors}
+                            />
+                        </div>
+                    </div>
+                    <div className={`col-md-6 ${showAuthors ? '' : 'hidden'}`}>
+                        <div className="form-control">
+                        {
+                            authors &&
+                            <Select 
+                                className="react-select"
+                                classNamePrefix="my-react-select"
+                                prefix="react"
+                                id="search-authors"
+                                options={
+                                    authors.map(t => {
+                                        return {
+                                            label: `[${t.announcements_count}] ${t.name}`,
+                                            value: t.id
+                                        }
+                                    })
+                                }
+                                placeholder={i18n.t('Επιλέξτε καθηγητή')}
+                                value={getAuthorValue()}
+                                onChange={(e) => setAuthorId(e.value)}
+                            />
+                        }
+                        </div>
+                    </div>
+                </div> : ''
+            }
+            
             <div className="row">
                 <div className="col-md-6">
                     <div className="form-control">

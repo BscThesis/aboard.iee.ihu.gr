@@ -33,7 +33,7 @@ function App() {
   const forceUpdate = useCallback(() => updateState({}), []);
 
   const [darkThemeEnabled, setDarkThemeEnabled] = useState(
-    true
+    localStorage.getItem('dark-theme') === true || localStorage.getItem('dark-theme') === 'true' 
   )
   useEffect(() => {
 
@@ -95,14 +95,26 @@ function App() {
       storage.set('me', null)
       setUser(null)
       setCookie('token', null, {path: '/'})
+      forceUpdate()
     })
   }
 
   const setThemeColors = (dark) => {
+    /**
+     navbar-dark bg-dark
+     */
+    const nav = document.querySelector('.navbar')
     if (dark) {
+      nav.classList.add('navbar-dark')
+      nav.classList.add('bg-dark')
+      document.body.classList.remove('light-theme')
       document.body.classList.add('dark-theme')
     } else {
       document.body.classList.remove('dark-theme')
+      document.body.classList.add('light-theme')
+
+      nav.classList.remove('navbar-dark')
+      nav.classList.remove('bg-dark')
     }
 
     setDarkThemeEnabled(dark)

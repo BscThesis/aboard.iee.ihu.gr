@@ -87,6 +87,7 @@ const AnnouncementForm = (props) => {
         })
         if (announcementId) {
             request.get(`announcements/edit_view/${announcementId}`).then(response => {
+                
                 if (response.data.data) {
                     const a = response.data.data
                     a.tags = a.tags.map(t => {

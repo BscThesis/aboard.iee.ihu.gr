@@ -30,7 +30,7 @@
   --modal-background: #ffffff;
   --modal-background-transparent: #232426;
   --link: #1f232a;
-  --main-color: #3d3d3d;
+  --main-color: #606060;
   --secondary-color: #eee;
   --primary-btn-background: rgb(87, 63, 225);
   --primary-btn-background-hover: rgb(122, 105, 217);
@@ -273,7 +273,7 @@ body {
 }
 
 .announcement-wrapper-skeleton {
-  min-height: 200px;
+  min-height: 270px;
 }
 .announcement-wrapper-skeleton h5 {
   background: rgba(255, 255, 255, 0.1);
@@ -313,6 +313,9 @@ body {
   text-align: left;
   padding-top: 5px;
   padding-bottom: 10px;
+}
+.announcement-wrapper .announcement-header h5 {
+  font-weight: 600;
 }
 .announcement-wrapper .badges {
   display: flex;
@@ -415,7 +418,7 @@ body {
   position: absolute;
   left: -100vh;
   transition: all 0.2s ease;
-  background: var(--modal-background);
+  background: #3a3b3d;
   padding: 10px 20px;
   min-width: 300px;
   max-width: 450px;
@@ -582,4 +585,87 @@ body {
   font-size: 13px;
   padding: 2px 6px !important;
   margin: 4px !important;
+}
+
+body.light-theme .navbar {
+  background-color: #ebebeb;
+}
+body.light-theme .pagination-wrapper {
+  background: #f5f5f5;
+}
+body.light-theme .pagination-wrapper div {
+  background: rgb(185, 181, 197);
+}
+body.light-theme .pagination-wrapper div.active {
+  background: hsl(212.86, 100%, 60.98%);
+}
+body.light-theme .badges .tag-badge {
+  background: hsl(207.69, 100%, 89.01%);
+  color: #3892ff;
+}
+body.light-theme .announcement-wrapper {
+  box-shadow: -1px -2px 13px #dfdede;
+}
+body.light-theme .announcement-wrapper .announcement-meta {
+  border-bottom: 1px solid #f1f1f1;
+}
+body.light-theme .announcement-wrapper .summary {
+  color: #363636;
+}
+body.light-theme .form-control input:not([type=checkbox]) {
+  border-bottom: 1px solid #d5d5d5;
+}
+body.light-theme .user-nav {
+  color: #b7b7b7 !important;
+}
+body.light-theme .user-nav.active {
+  color: #0e0e0e !important;
+}
+body.light-theme .announcement-wrapper-skeleton h5 {
+  background: rgba(86, 86, 86, 0.1);
+}
+body.light-theme .main-header .view-options span.active {
+  border: 2px solid #b9b9b9;
+}
+body.light-theme .search-params-wrapper {
+  background: #fff;
+}
+body.light-theme .btn-secondary {
+  background: #6da6d7;
+}
+body.light-theme .btn-secondary:hover {
+  background: #298ee5;
+}
+body.light-theme .btn-secondary:focus {
+  background: #298ee5;
+}
+body.light-theme .btn-secondary:focus-within {
+  background: #298ee5;
+}
+body.light-theme .btn-secondary:active {
+  background: #298ee5;
+}
+
+body.dark-theme .form-control {
+  background-color: #454648;
+  border: 1px solid #454648;
+  color: #ffffff;
+}
+body.dark-theme .form-control input:not([type=checkbox]) {
+  color: #fff;
+  border-bottom: 1px solid #545454;
+}
+body.dark-theme .my-react-select__control, body.dark-theme .my-react-select__menu {
+  background: #454648;
+  border-color: #454648;
+  color: #fff;
+}
+body.dark-theme .my-react-select__single-value {
+  color: #fff;
+}
+body.dark-theme .my-react-select__option--is-focused {
+  background: #818181;
+}
+body.dark-theme .my-react-select__input-container, body.dark-theme .my-react-select__input {
+  color: #fff;
 }/*# sourceMappingURL=main.css.map */

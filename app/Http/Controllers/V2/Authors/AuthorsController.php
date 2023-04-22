@@ -50,4 +50,25 @@ class AuthorsController extends Controller
         
         return $authors;
     }
+
+    public function fetch_all(Request $request)
+    {
+        $authors = [];
+                       
+        if (auth('api_v2')->check() && auth('api_v2')->user()->is_admin) {
+            $authors = ApiUser::select('id', 'name')->where('is_author', 1)
+            ->withCount(['announcements'=>function ($query) use ($request){
+                $query->tags(
+                    request()->input('users', []),
+                    request()->input('tags', []),
+                    (request()->input('title', '')),
+                    (request()->input('body', '')),
+                    (request()->input('updatedAfter', '')),
+                    (request()->input('updatedBefore', '')),
+                );
+            }])->orderBy('name', 'asc')->get();
+	    } 
+        
+        return $authors;
+    }
 }

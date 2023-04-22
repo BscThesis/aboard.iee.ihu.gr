@@ -40,7 +40,7 @@ const FullAnnouncement = (props) => {
                 <h5>{i18n.t('Συννημένα')}:</h5>
                 {
                     announcement.attachments.map(attachment => 
-                        <div className="file" onClick={() => {
+                        <div key={`file-${attachment.id}`} className="file" onClick={() => {
                             window.open(`${config.api_url}announcements/${announcementId}/attachments/${attachment.id}`);    
                         }}>
                             <span className="file-name">{attachment.filename}</span>
@@ -55,7 +55,7 @@ const FullAnnouncement = (props) => {
             <div className='announcement-footer'>
                 <div className='show-more'>
                     {
-                        (user.user && user.user.id == announcement.author.id) &&
+                        (user.user && ((user.user.is_author === 1 && user.user.id == announcement.author.id) || user.user.is_admin === 1)) &&
                         <button className="btn btn-secondary" onClick={() => editAnnouncement()}><FontAwesomeIcon icon={faEdit} />
                             <span>{i18n.t('Επεξεργασία')}</span>
                         </button>

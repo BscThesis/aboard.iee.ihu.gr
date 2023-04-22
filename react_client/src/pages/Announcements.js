@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faListDots, faMagnifyingGlassPlus } from "@fortawesome/free-solid-svg-icons";
 import { faThLarge } from "@fortawesome/free-solid-svg-icons";
 import AnnouncementSkeleton from "../components/single/AnnouncementSkeleton";
+import history from "../helpers/history";
 
 const Announcements = (props) => {
     const [boxView, setBoxView] = useState(true)
@@ -20,6 +21,16 @@ const Announcements = (props) => {
     const [lastUpdatedFilters, setLastUpdatedFilters] = useState(Date.now())
 
     useEffect(() => {
+        
+        const onPopStateChange = () => {
+            uriHelper.clear()
+            uriHelper.init()
+            uriHelper.set_component_view('announcements')
+            setLastUpdatedFilters(Date.now())
+        }
+
+        window.addEventListener("popstate", onPopStateChange)
+        uriHelper.init()
         const unmountLocaleChange = i18n.onLanguageChange(() => {
             document.title = i18n.t('announcements_page_title')
         })
@@ -27,6 +38,7 @@ const Announcements = (props) => {
         uriHelper.set_component_view('announcements')
         // getAnnouncements() will be called from within of search parameters
         return () => {
+            window.removeEventListener('popstate', onPopStateChange)
             uriHelper.clear()
             unmountLocaleChange()
         };
@@ -55,10 +67,18 @@ const Announcements = (props) => {
         setFetchedAnnouncements(false)
         const uri = uriHelper.uri_to_query_string()
         request.get(`announcements${uri}`).then(response => {
-            setAnnouncements(response.data.data)
-            setAnnouncementsMeta(response.data.meta)
-            setFetchedAnnouncements(true)
+            if (response.status === 200) {
+                setAnnouncements(response.data.data)
+                setAnnouncementsMeta(response.data.meta)
+                setFetchedAnnouncements(true)
+            }
+            
         })
+    }
+
+    const propagateAnnouncementFilterChange = () => {
+        changeFilters(true, true)
+        setShowSearch(true)
     }
 
     return (
@@ -95,7 +115,7 @@ const Announcements = (props) => {
                 {
                     announcements && announcements.length > 0 &&
                         announcements.map((a, i) => {
-                            return <Announcement key={`announcement-${i}`} announcement={a} propagateFilterChange={() => changeFilters(true, true)}/>
+                            return <Announcement key={`announcement-${i}`} announcement={a} propagateFilterChange={() => propagateAnnouncementFilterChange()}/>
                         })
                 }
 

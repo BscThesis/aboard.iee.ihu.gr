@@ -64,6 +64,7 @@ const Header = (props) => {
                             </NavDropdown>
                         </Nav>
                         <Nav>
+                            <Nav.Link onClick={() => setDarkTheme(!darkTheme)}><FontAwesomeIcon icon={darkTheme ? faLightbulb : faMoon}/></Nav.Link>
                             {
                                 !props.user ?
                                 <Nav.Link onClick={props.loginProp}>{i18n.t('Σύνδεση')}</Nav.Link> :

@@ -69,6 +69,7 @@ Route::prefix('v2')->group(function () {
      * TODO::Rename routes in order to comply with the rest of the router naming logic
      */
     Route::get('/authors', 'Authors\AuthorsController@index');
+    Route::get('/all_authors', 'Authors\AuthorsController@fetch_all');
 
     /**
      * Auth Routes

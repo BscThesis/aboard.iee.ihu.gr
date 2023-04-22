@@ -32,22 +32,26 @@ class Request {
         cancelToken: cancelToken
       });
 
-        this.axiosInstance.interceptors.request.use( (config) => {
-      
-          if( this.bearer ) {
-            config.headers["Authorization"] = `Bearer ${this.bearer}`;
-          }
+      this.axiosInstance.interceptors.request.use( (config) => {
+    
+        if( this.bearer ) {
+          config.headers["Authorization"] = `Bearer ${this.bearer}`;
+        }
 
-          if (multipart) {
-            config.headers["Content-Type"] = `multipart/form-data`;
-          }
-          
-          return config;
-        }, function (error) {
-          return Promise.reject(error);
-        });
+        if (multipart) {
+          config.headers["Content-Type"] = `multipart/form-data`;
+        }
+        
+        return config;
+      }, function (error) {
+        return (error);
+      });
       
-      
+      this.axiosInstance.interceptors.response.use((rsp) => {
+        return rsp;
+      }, (rsp) => {
+        return rsp.response;
+      })
       if(single){
         const path = url.includes("?") ? url.substr(0, url.indexOf("?")) : url;
         if(typeof this.request_instances[path] != "undefined"){
@@ -79,14 +83,8 @@ class Request {
     const httpRequest = this.createHttpRequest('GET', url, null, single);
 
     return httpRequest().then(async (httpResponse) => {
-      // write here just before response is processed
-      // await new Promise((resolve) => {
-      //   setTimeout(resolve, 1200);
-      // });
-
       return httpResponse;
     }).catch((error, response) => {
-      ////console.log(`%cHTTP GET Request error\r\n${baseURL + url}\r\n%c${error}`, 'background-color: #FFF; color: #FF0000; font-size: 18px; border: 2px solid #FF0000; padding: 8px;', 'background-color: #FFF; color: #333; font-size: 15px;');
       this.handleError(error, response)
       return {cancel: true};
     });
@@ -96,15 +94,8 @@ class Request {
     const httpRequest = this.createHttpRequest('POST', url, data, single, multipart);
 
     return httpRequest().then(async (httpResponse) => {
-      // write here just before response is processed
-    // await new Promise((resolve) => {
-    //   setTimeout(resolve, 1200);
-    // });
-
-    return httpResponse;
-    }).catch((error, response) => {
-      ////console.log(`%cHTTP GET Request error\r\n${baseURL + url}\r\n%c${error}`, 'background-color: #FFF; color: #FF0000; font-size: 18px; border: 2px solid #FF0000; padding: 8px;', 'background-color: #FFF; color: #333; font-size: 15px;');
-      this.handleError(error, response)
+      return httpResponse;
+    }).catch((error, response) => {this.handleError(error, response)
       return {cancel: true};
     });
   }
@@ -114,14 +105,8 @@ class Request {
     const httpRequest = this.createHttpRequest('PATCH', url, data);
 
     return httpRequest().then(async (httpResponse) => {
-      // write here just before response is processed
-    // await new Promise((resolve) => {
-    //   setTimeout(resolve, 1200);
-    // });
-
-    return httpResponse;
+      return httpResponse;
     }).catch((error, response) => {
-      ////console.log(`%cHTTP GET Request error\r\n${baseURL + url}\r\n%c${error}`, 'background-color: #FFF; color: #FF0000; font-size: 18px; border: 2px solid #FF0000; padding: 8px;', 'background-color: #FFF; color: #333; font-size: 15px;');
       this.handleError(error, response)
       return {cancel: true};
     });
@@ -131,15 +116,8 @@ class Request {
     const httpRequest = this.createHttpRequest('PUT', url, data, false, multipart);
 
     return httpRequest().then(async (httpResponse) => {
-      // write here just before response is processed
-    // await new Promise((resolve) => {
-    //   setTimeout(resolve, 1200);
-    // });
-
-    return httpResponse;
-    }).catch((error, response) => {
-      ////console.log(`%cHTTP GET Request error\r\n${baseURL + url}\r\n%c${error}`, 'background-color: #FFF; color: #FF0000; font-size: 18px; border: 2px solid #FF0000; padding: 8px;', 'background-color: #FFF; color: #333; font-size: 15px;');
-      this.handleError(error, response)
+      return httpResponse;
+    }).catch((error, response) => {this.handleError(error, response)
       return {cancel: true};
     });
   }
@@ -149,15 +127,8 @@ class Request {
     const httpRequest = this.createHttpRequest('PATCH', url, data);
 
     return httpRequest().then(async (httpResponse) => {
-      // write here just before response is processed
-    // await new Promise((resolve) => {
-    //   setTimeout(resolve, 1200);
-    // });
-
-    return httpResponse;
-    }).catch((error, response) => {
-      ////console.log(`%cHTTP GET Request error\r\n${baseURL + url}\r\n%c${error}`, 'background-color: #FFF; color: #FF0000; font-size: 18px; border: 2px solid #FF0000; padding: 8px;', 'background-color: #FFF; color: #333; font-size: 15px;');
-      this.handleError(error, response)
+      return httpResponse;
+    }).catch((error, response) => {this.handleError(error, response)
       return {cancel: true};
     });
   }
@@ -167,12 +138,7 @@ class Request {
     const httpRequest = this.createHttpRequest('DELETE', url, data);
 
     return httpRequest().then(async (httpResponse) => {
-      // write here just before response is processed
-    // await new Promise((resolve) => {
-    //   setTimeout(resolve, 1200);
-    // });
-
-    return httpResponse;
+      return httpResponse;
     }).catch((error, response) => {
       this.handleError(error, response)
       return {cancel: true};
@@ -197,14 +163,9 @@ class Request {
     const httpRequest = this.createHttpRequest('GET', url, null, false);
 
     return httpRequest().then(async (httpResponse) => {
-      // write here just before response is processed
-      // await new Promise((resolve) => {
-      //   setTimeout(resolve, 1200);
-      // });
+      
       return httpResponse.data.login == true;
     }).catch((error, response) => {
-      //console.log(`%cHTTP GET Request error\r\n${baseURL + url}\r\n%c${error}`, 'background-color: #FFF; color: #FF0000; font-size: 18px; border: 2px solid #FF0000; padding: 8px;', 'background-color: #FFF; color: #333; font-size: 15px;');
-
       return error;
     });
   }

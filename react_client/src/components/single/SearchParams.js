@@ -19,6 +19,7 @@ const SearchParams = (props) => {
     const [tags, setTags] = useState([])
     const [authors, setAuthors] = useState([])
     const [didLoad, setDidLoad] = useState(false)
+    const [filterUpdate, setFilterUpdate] = useState(false)
 
     const containerRef = useRef(null)
 
@@ -99,6 +100,10 @@ const SearchParams = (props) => {
     }
 
     useDidMountEffect(() => {
+        propagateFilters(!filterUpdate)
+    }, [filters])
+
+    const propagateFilters = (modify_uri = true) => {
         if (typeof wait_timeout !== 'undefined') {
             clearTimeout(wait_timeout)
         }
@@ -119,16 +124,23 @@ const SearchParams = (props) => {
                 }
                 
             })
+            
             uriHelper.set_uri(true)
-            props.onChange(didLoad)
+            props.onChange(modify_uri)
 
             setDidLoad(true)
+            setFilterUpdate(false)
         }, 300)
-        
-    }, [filters])
+    }
 
     useEffect(() => {
-        setQueryData()
+        if (filterUpdate) {
+            setQueryData()
+        }
+    }, [filterUpdate])
+
+    useEffect(() => {
+        setFilterUpdate(true)
     }, [props.triggerFilterUpdate])
 
     async function setQueryData() {
@@ -193,6 +205,7 @@ const SearchParams = (props) => {
     }
 
     const filterArray = (array, compare, children = false) => {
+        if (!array) return []
         let ret = array.filter(t => compare.filter(u => parseInt(u) === parseInt(t.id)).length > 0)
         if (children) {
             array.forEach(a => {
@@ -222,7 +235,6 @@ const SearchParams = (props) => {
                     value: r.id
                 }
             })
-            //console.log(val)
             return val
         }
 
@@ -302,6 +314,7 @@ const SearchParams = (props) => {
                         authors &&
                         <Select 
                             className="react-select"
+                            classNamePrefix="my-react-select"
                             prefix="react"
                             id="search-authors"
                             options={
@@ -359,6 +372,7 @@ const SearchParams = (props) => {
                     <label htmlFor="select-sort">{i18n.t('Ταξινόμηση')}</label>
                     <Select 
                         className="react-select"
+                        classNamePrefix="my-react-select"
                         prefix="react"
                         id="select-sort"
                         options={
@@ -397,6 +411,7 @@ const SearchParams = (props) => {
                     <label htmlFor="select-per-page">{i18n.t('Ανά σελίδα')}</label>
                     <Select 
                         className="react-select"
+                        classNamePrefix="my-react-select"
                         prefix="react"
                         id="select-per-page"
                         options={

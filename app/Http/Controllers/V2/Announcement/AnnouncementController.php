@@ -221,7 +221,7 @@ class AnnouncementController extends AuthorController
             return response()->json(['message' => 'Not logged in'], 401);
         }
 
-        if (!$user->is_author) {
+        if (!$user->is_author && !$user->is_admin) {
             return response()->json(['message' => 'You are not an author'], 401);
         }
 
@@ -273,7 +273,7 @@ class AnnouncementController extends AuthorController
         if (!auth('api_v2')->check()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
-        if (!auth('api_v2')->check() || !auth('api_v2')->user()->is_author) {
+        if (!auth('api_v2')->check() || (!auth('api_v2')->user()->is_author && !auth('api_v2')->user()->is_admin)) {
             return response()->json(['message' => 'You are not an author'], 401);
         }
         if (!$request) {
@@ -387,14 +387,14 @@ class AnnouncementController extends AuthorController
             return response()->json(['message' => 'Not logged in'], 401);
         }
 
-        if (!$user->is_author) {
+        if (!$user->is_author && !$user->is_admin) {
             return response()->json(['message' => 'You are not an author'], 401);
         }
 
         // Get single announcement
         try {
             $announcement = Announcement::findOrFail($id);
-            if ($announcement->user_id !== $user->id) {
+            if ($announcement->user_id !== $user->id && !$user->is_admin) {
                 return response()->json(['message' => 'You are not the author'], 401);
             }
             return new AnnouncementResource($announcement);
@@ -431,6 +431,16 @@ class AnnouncementController extends AuthorController
         $announcement->event_start_time = $request->input('event_start_time');
         $announcement->event_end_time = $request->input('event_end_time');
         $announcement->gmaps = $request->input('gmaps');
+
+        // If a user_id exists in request set it as the author only if the logged in user is an admin
+        if (isset($request->user_id)) {
+            if (auth('api_v2')->user()->is_admin) {
+                $announcement->user_id = $request->user_id;
+            } else {
+                return response()->json(['message' => 'Not permitted to upload as other person'], 401);
+            }
+        } 
+
         $announcement->touch();
 
         // If update is successful

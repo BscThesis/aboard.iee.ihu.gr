@@ -91,7 +91,7 @@ class Announcement extends Model implements Feedable
             });
         })->when(count($users), function ($query) use ($users) {
             $query->whereIn('announcements.user_id', $users);
-        })->when(count($tags), function ($query) use ($tags){
+        })->when(is_array($tags) && count($tags) > 0, function ($query) use ($tags){
             
             $query->whereIn('tags.id', $tags);
             // $query->groupBy('announcements.id');

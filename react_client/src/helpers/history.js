@@ -10,6 +10,10 @@ history.setCustomChangeEvent = (fn) => {
   history.customChangeEvent = fn
 }
 
+history.resetCustomChangeEvent = () => {
+  history.customChangeEvent = () => {}
+}
+
 history.listen((e) => {
   window.scroll(0, 0);
   history.last = e.pathname;
