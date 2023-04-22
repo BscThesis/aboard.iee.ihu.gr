@@ -199,20 +199,14 @@ class AnnouncementController extends AuthorController
     }
 
     private function get_ical_complied_string($ogString) {
-        $compliedString = '';
-
-        for($i = 0; $i < strlen($ogString); $i += 60) {
-            $sub_str = mb_substr($ogString, $i, $i + 60, 'utf8');
-            if ($compliedString == '') {
-                $compliedString = $sub_str;
-            }
-            else {
-                $compliedString .= "\n" . $sub_str;
-            }
-            
+        ini_set('memory_limit', '2024M');
+        $compliedArray = [];
+        $str_len = strlen($ogString);
+        for($i = 0; $i < $str_len; $i += 75) {
+            $compliedArray[] = mb_substr($ogString, $i, 75, 'utf8');
         }
 
-        return $compliedString;
+        return implode("\n", $compliedArray);
     }
 
     /**
