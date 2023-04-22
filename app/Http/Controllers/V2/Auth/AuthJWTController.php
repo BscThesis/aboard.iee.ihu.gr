@@ -95,7 +95,8 @@ class AuthJWTController extends Controller
                     'name_eng' => $socialiteUser->name_eng,
                     'email' => $socialiteUser->email,
                     'uid' => $socialiteUser->uid,
-                    'is_author' => $socialiteUser->uid === 'it134062' ? 1 : $socialiteUser->is_author
+                    'is_author' => $socialiteUser->is_author
+                    // 'is_author' => $socialiteUser->uid === 'it134062' ? 1 : $socialiteUser->is_author
                 ]
             );
         } else {
@@ -105,7 +106,8 @@ class AuthJWTController extends Controller
                     'name_eng' => $socialiteUser->name_eng,
                     'email' => $socialiteUser->email,
                     'uid' => $socialiteUser->uid,
-                    'is_author' => $socialiteUser->uid === 'it134062' ? 1 : $socialiteUser->is_author
+                    'is_author' => $socialiteUser->is_author
+                    // 'is_author' => $socialiteUser->uid === 'it134062' ? 1 : $socialiteUser->is_author
                 ]
             );
 	    }
