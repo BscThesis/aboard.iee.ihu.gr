@@ -16,6 +16,7 @@ import jsonToFormDataHelper from "../helpers/json_to_form_data"
 import CustomEditor from "../components/CustomEditor"
 import user from "../helpers/user"
 import Select from 'react-select'
+import tagsHelper from "../helpers/tags_helper"
 
 const AnnouncementForm = (props) => {
 
@@ -56,7 +57,7 @@ const AnnouncementForm = (props) => {
     }, [showAuthors])
     useEffect(() => {
         request.get('all_tags').then(response => {
-            setTags(transformTags(response.data))
+            setTags(tagsHelper.transformTags(response.data, 'childrensub_recursive'))
         })
         request.get('most_used_tags').then(response => {
             setMostUsedTags(response.data)
@@ -102,23 +103,23 @@ const AnnouncementForm = (props) => {
         
     }, [])
 
-    const transformTags = (tags) => {
-        return tags.map(t => {
-            if (t.children && t.children.length > 0) {
-                return {
-                    label: t.title,
-                    value: t.id,
-                    children: transformTags(t.children)
-                }
-            } else {
-                return {
-                    label: t.title,
-                    value: t.id
-                }
-            }
+    // const transformTags = (tags) => {
+    //     return tags.map(t => {
+    //         if (t.children && t.children.length > 0) {
+    //             return {
+    //                 label: t.title,
+    //                 value: t.id,
+    //                 children: transformTags(t.children)
+    //             }
+    //         } else {
+    //             return {
+    //                 label: t.title,
+    //                 value: t.id
+    //             }
+    //         }
             
-        })
-    }
+    //     })
+    // }
 
     const setCustomDate = (key, date) => {
         console.log(date)

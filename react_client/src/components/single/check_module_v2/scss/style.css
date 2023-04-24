@@ -97,6 +97,7 @@
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none; /* Standard */
+  font-weight: 300 !important;
 }
 .react-check-tree .tree-choices .tree-choice .show-hide-btn {
   margin-left: -15px;
