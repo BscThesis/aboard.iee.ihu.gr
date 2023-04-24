@@ -126,7 +126,7 @@ class TagController extends Controller
         // If user is logged in return tags, filtering and then counting every announcement each one has with their children
         $tags = [];
         if (auth('api_v2')->check()) {
-            $tags = Tag::with('childrensubRecursive')->where('parent_id',1)->withCount(['announcements'=>function ($query) use ($request){
+            $tags = Tag::with('childrensubRecursive')->where('parent_id',null)->withCount(['announcements'=>function ($query) use ($request){
                 $query->tags(
                     request()->input('users', []),
                     request()->input('tags', []),
