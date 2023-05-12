@@ -325,6 +325,11 @@ body {
         text-align: left;
         padding-top: 5px;
         padding-bottom: 10px;
+        a {
+            color: unset;
+            text-decoration: none;
+
+        }
         h5 {
             
             font-weight: 600;
@@ -573,6 +578,7 @@ body {
     
     span {
         margin: 5px;
+        word-break: break-word;
     }
 }
 
@@ -621,6 +627,21 @@ body {
 
     .announcement-footer {
         text-align: right;
+    }
+    .badges {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 5px;
+        row-gap: 5px;
+
+        .tag-badge {
+            padding: 4px 6px;
+            border-radius: 7px;
+            font-size: 14px;
+            color: #effaf5;
+            background: rgb(255 255 255 / 10%);
+            cursor: pointer;
+        }
     }
 
     .files {

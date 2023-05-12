@@ -154,8 +154,9 @@ class Request {
   }
 
   handleError(error, response) {
-    if (error.response && error.response.status === 401 && error.response.data.error === 'Invalid token') {
-      document.cookie = 'token=; Max-Age=-99999999;';  
+    if (error.response && error.response.status === 401) {
+      document.cookie = 'token=; Max-Age=-99999999;';
+      storage.set('token', null)
     }
   }
 

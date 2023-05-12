@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import i18n from "../i18n";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
 
 const About = (props) => {
 
@@ -52,6 +54,10 @@ const About = (props) => {
                 </div>
                 <div className="col-12 mt-4">
                     {i18n.t('Το Τμήμα Μηχανικών Πληροφορικής και Ηλεκτρονικών Συστημάτων ευχαριστεί όλους τους παραπάνω και όλους όσους συνέβαλαν άμεσα ή έμμεσα στην ανάπτυξη αυτού του συστήματος')}.
+                </div>
+                <div className="col-12 mt-4">
+                    {i18n.t('Για περισσότερες πληροφορίες σχετικά με το project επισκεφθείτε την σελίδα του project στο')} &nbsp; 
+                    <a className="btn btn-primary" href="https://github.com/BscThesis/aboard.iee.ihu.gr" target="_blank"><FontAwesomeIcon icon={faGithub} /> Github</a>.
                 </div>
             </div>
         </div>

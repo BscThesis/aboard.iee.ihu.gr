@@ -16,6 +16,8 @@ class User {
         return new Promise( (resolve, reject) => {
             request.get('whoami').then(response => {
                 if (response.data) {
+                    this.user.is_admin = response.data.is_admin
+                    this.user.is_author = response.data.is_author
                     resolve({
                         is_admin: response.data.is_admin,
                         is_author: response.data.is_author

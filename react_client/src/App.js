@@ -55,12 +55,15 @@ function App() {
     if (c && c !== '') {
       storage.set('token', c)
       request.get('auth/whoami').then(response => {
-        if (response.data) {
+        if (response.data && response.status === 200) {
           if (user === null) {
             forceUpdate()
           }
           storage.set('me', response.data)
           setUser(response.data)
+        }
+        else {
+          setUser(null)
         }
       })
     }
@@ -131,7 +134,7 @@ function App() {
           ) : (
             <Redirect
               to={{
-                pathname: "/login",
+                pathname: "/announcements",
                 state: { from: location },
               }}
             />

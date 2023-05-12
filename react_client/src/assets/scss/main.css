@@ -314,6 +314,10 @@ body {
   padding-top: 5px;
   padding-bottom: 10px;
 }
+.announcement-wrapper .announcement-header a {
+  color: unset;
+  text-decoration: none;
+}
 .announcement-wrapper .announcement-header h5 {
   font-weight: 600;
 }
@@ -531,6 +535,7 @@ body {
 }
 .file span {
   margin: 5px;
+  word-break: break-word;
 }
 
 .user-nav {
@@ -574,6 +579,21 @@ body {
 }
 .full-announcement-wrapper .announcement-footer {
   text-align: right;
+}
+.full-announcement-wrapper .badges {
+  display: flex;
+  flex-wrap: wrap;
+  -moz-column-gap: 5px;
+       column-gap: 5px;
+  row-gap: 5px;
+}
+.full-announcement-wrapper .badges .tag-badge {
+  padding: 4px 6px;
+  border-radius: 7px;
+  font-size: 14px;
+  color: #effaf5;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
 }
 .full-announcement-wrapper .files {
   display: flex;

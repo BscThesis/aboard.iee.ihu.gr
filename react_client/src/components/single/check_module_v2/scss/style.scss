@@ -72,13 +72,14 @@
         position: absolute;
         top: 100%;
         left: 0;
-        width: 100%;
+        width: calc(100% - 2px);
         padding: 10px 5px;
         max-height: 400px;
         overflow-x: auto;
         z-index: 999;
         background: #fff;
         color: #44444c;
+        border: 1px solid #bbb;
         box-sizing: border-box;
     }
     .tree-choices {

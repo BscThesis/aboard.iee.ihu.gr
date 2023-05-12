@@ -145,7 +145,9 @@ const User = (props) => {
                     <div className="row">
                         <div className="col-md-12">
                             <h3>{i18n.t('Αναφορά προβλήματος')}</h3>
-                            <p>{i18n.t('Περιγράψτε συνοπτικά το πρόβλημα καθώς και τα βήματα που ακολουθήσατε')}</p>
+                            <p>{i18n.t('Για να αναφέρετε κάποιο πρόβλημα πατήστε')} &nbsp;
+                            <a className="btn btn-primary" href="https://github.com/BscThesis/aboard.iee.ihu.gr/issues" target="_blank">{i18n.t('εδώ')}</a>
+                            </p>
                         </div>
                     </div>
                 </Tab>

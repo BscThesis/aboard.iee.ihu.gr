@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import i18n from '../../i18n';
 import user from '../../helpers/user';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleRight, faEdit, faFileCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import { faAngleRight, faEdit, faFileCirclePlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import history from '../../helpers/history';
 import { Link } from 'react-router-dom';
 import uriHelper from '../../helpers/uri_params';
+import Swal from 'sweetalert2';
+import request from '../../helpers/request';
 
 const Announcement = (props) => {
 
@@ -41,6 +43,27 @@ const Announcement = (props) => {
         history.push(`/edit_announcement/${props.announcement.id}`)
     }
 
+    const deleteAnnouncement = () => {
+        Swal.fire({
+            title: i18n.t('Πρόκειται να διαγράψετε αυτή την ανακοίνωση'),
+            text: i18n.t('Επιθυμείτε να συνεχίσετε;'),
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: i18n.t('Ακύρωση'),
+            confirmButtonText: i18n.t('Διαγραφή')
+        }).then(answer => {
+            if (answer.isConfirmed) {
+                request.delete(`announcements/${props.announcement.id}`).then(response => {
+                    if (response.status === 200) {
+                        if (props.onDelete) {
+                            props.onDelete()
+                        }
+                    }
+                })
+            }
+        })
+    }
+
     return (
         <div className={`announcement-wrapper`}>
             <div 
@@ -51,12 +74,15 @@ const Announcement = (props) => {
             </div>
             
             <div className="announcement-header">
-                <h5>{i18n.get_locale_data(props.announcement, 'title')}</h5>
+                <Link to={`/announcement/${props.announcement.id}`}><h5>{i18n.get_locale_data(props.announcement, 'title')}</h5></Link>
             </div>
             <div className="badges">
                 {
-                    props.announcement.tags.map((t, i) => 
-                        <span key={`tag-${i}`} className='tag-badge' onClick={() => onTagClick(t)}>{t.title}</span>
+                    props.announcement.tags.map((t, i) => {
+                        if (t.parent_id) return <span key={`tag-${i}`} className='tag-badge' onClick={() => onTagClick(t)}>{t.title}</span>
+                        return ''
+                    }
+                        
                     )
                 }
             </div>
@@ -70,15 +96,18 @@ const Announcement = (props) => {
                 <div>
                 {
                     (props.announcement.attachments && props.announcement.attachments.length > 0) &&
-                    <Link to={`/announcement/${props.announcement.id}`}className="btn btn-secondary round"><FontAwesomeIcon icon={faFileCirclePlus} /></Link>
+                    <Link to={`/announcement/${props.announcement.id}`} className="btn btn-secondary round"><FontAwesomeIcon icon={faFileCirclePlus} /></Link>
                 }
                 </div>
                 <div className='show-more'>
                     {
                         (user.user && ((user.user.is_author === 1 && user.user.id == props.announcement.author.id) || user.user.is_admin === 1)) &&
-                        <button className="btn btn-secondary" onClick={() => editAnnouncement()}><FontAwesomeIcon icon={faEdit} /></button>
+                        <>
+                            <button className="btn btn-danger" onClick={() => deleteAnnouncement()}><FontAwesomeIcon icon={faTrash} /></button>
+                            <button className="btn btn-secondary" onClick={() => editAnnouncement()}><FontAwesomeIcon icon={faEdit} /></button>
+                        </>
                     }
-                    <Link to={`/announcement/${props.announcement.id}`}className="btn btn-secondary round"><FontAwesomeIcon icon={faAngleRight} /></Link>
+                    <Link to={`/announcement/${props.announcement.id}`} className="btn btn-secondary round"><FontAwesomeIcon icon={faAngleRight} /></Link>
                 </div>
             </div>
             

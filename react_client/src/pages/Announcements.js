@@ -115,7 +115,7 @@ const Announcements = (props) => {
                 {
                     announcements && announcements.length > 0 &&
                         announcements.map((a, i) => {
-                            return <Announcement key={`announcement-${i}`} announcement={a} propagateFilterChange={() => propagateAnnouncementFilterChange()}/>
+                            return <Announcement key={`announcement-${i}`} announcement={a} propagateFilterChange={() => propagateAnnouncementFilterChange()} onDelete={() => getAnnouncements()}/>
                         })
                 }
 

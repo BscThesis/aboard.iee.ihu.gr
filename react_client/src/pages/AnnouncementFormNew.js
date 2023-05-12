@@ -77,7 +77,7 @@ const AnnouncementForm = (props) => {
                 
                 if (response.data && response.data.data) {
                     const a = response.data.data
-                    a.tags = a.tags.map(t => {
+                    a.tags = a.tags.filter(t => t.parent_id).map(t => {
                         const title = t.title ? t.title : t.name
                         return {
                             label: title,
@@ -126,24 +126,24 @@ const AnnouncementForm = (props) => {
         // const d = `${moment(date).format("YYYY-MM-DDThh:mm:00.000")}Z`
         
         const d = `${moment(date).format("YYYY-MM-DDThh:mm:00.000")}`
-        setAnnouncement({
-            ...announcement,
+        setAnnouncement(an => ({
+            ...an,
             [key]: date
-        })
+        }))
     }
 
     const changeAnnouncement = (key, value) => {
-        setAnnouncement({
-            ...announcement,
+        setAnnouncement(an => ({
+            ...an,
             [key]: value
-        })
+        }))
     }
 
     const checkChange = (checked, tag) => {
         if (checked) {
             if (announcement.tags.filter(t => t.value === tag.id).length === 0) {
-                setAnnouncement({
-                    ...announcement,
+                setAnnouncement(an => ({
+                    ...an,
                     tags: [
                         ...announcement.tags,
                         {
@@ -151,15 +151,15 @@ const AnnouncementForm = (props) => {
                             value: tag.id
                         }
                     ]
-                })
+                }))
             }
         } 
         else {
             if (announcement.tags.filter(t => t.value === tag.id).length > 0) {
-                setAnnouncement({
-                    ...announcement,
+                setAnnouncement(an => ({
+                    ...an,
                     tags: announcement.tags.filter(t => t.value !== tag.id)
-                })
+                }))
             }
         }
     }
@@ -261,10 +261,10 @@ const AnnouncementForm = (props) => {
             if (tag) 
                 tag.checked = true
         })
-        setAnnouncement({
-            ...announcement,
+        setAnnouncement(an => ({
+            ...an,
             tags: value
-        })
+        }))
     }
 
     const uploadFiles = (e) => {
@@ -273,10 +273,10 @@ const AnnouncementForm = (props) => {
     }
 
     const removeOldAttachment = (file) => {
-        setAnnouncement({
-            ...announcement,
+        setAnnouncement(an => ({
+            ...an,
             attachments_old: announcement.attachments_old.filter(f => f.id !== file.id)
-        })
+        }))
     }
 
     const removeFile = (index) => {
