@@ -1,1 +1,6 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Σύστημα ανακοινώσεων του τμήματος Μηχανικών Πληροφορικής και Ηλεκτρονικών Συστημάτων"/><link rel="apple-touch-icon" href="/logo192.png"/><link rel="manifest" href="/manifest.json"/><title>Ανακοινώσεις - Τμήμα Μηχανικών Πληροφορικής και Ηλεκτρονικών Συστημάτων</title><script defer="defer" src="/static/js/main.989b8bde.js"></script><link href="/static/css/main.a600b011.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
+<?php
+// INITIALIZE REACT BASED ON public/index.html builded file
+$index_data = file_get_contents(base_path('public/index.html'));
+
+echo $index_data;
+?>
