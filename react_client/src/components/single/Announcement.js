@@ -74,7 +74,7 @@ const Announcement = (props) => {
             </div>
             
             <div className="announcement-header">
-                <Link to={`/announcement/${props.announcement.id}`}><h5>{i18n.get_locale_data(props.announcement, 'title')}</h5></Link>
+                <Link to={`/announcements/${props.announcement.id}`}><h5>{i18n.get_locale_data(props.announcement, 'title')}</h5></Link>
             </div>
             <div className="badges">
                 {
@@ -96,7 +96,7 @@ const Announcement = (props) => {
                 <div>
                 {
                     (props.announcement.attachments && props.announcement.attachments.length > 0) &&
-                    <Link to={`/announcement/${props.announcement.id}`} className="btn btn-secondary round"><FontAwesomeIcon icon={faFileCirclePlus} /></Link>
+                    <Link to={`/announcements/${props.announcement.id}`} className="btn btn-secondary round"><FontAwesomeIcon icon={faFileCirclePlus} /></Link>
                 }
                 </div>
                 <div className='show-more'>
@@ -107,7 +107,7 @@ const Announcement = (props) => {
                             <button className="btn btn-secondary" onClick={() => editAnnouncement()}><FontAwesomeIcon icon={faEdit} /></button>
                         </>
                     }
-                    <Link to={`/announcement/${props.announcement.id}`} className="btn btn-secondary round"><FontAwesomeIcon icon={faAngleRight} /></Link>
+                    <Link to={`/announcements/${props.announcement.id}`} className="btn btn-secondary round"><FontAwesomeIcon icon={faAngleRight} /></Link>
                 </div>
             </div>
             

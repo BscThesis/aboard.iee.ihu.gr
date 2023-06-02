@@ -165,12 +165,13 @@ function App() {
           <Route path="/about">
             <About />
           </Route>
+          <Route exact path="/announcements/:announcementId">
+            <FullAnnouncement />
+          </Route>
           <Route path="/announcements">
             <Announcements />
           </Route>
-          <Route path="/announcement/:announcementId">
-            <FullAnnouncement />
-          </Route>
+          
           <PrivateRoute path="/my_announcements">
             <MyAnnouncements />
           </PrivateRoute>
