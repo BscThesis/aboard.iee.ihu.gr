@@ -73,9 +73,9 @@ function App() {
    
     
     const rand = Math.random() * 10000
-    const login_url = `${config.api_url}auth/login_web?c=${rand}&redirect=${encodeURIComponent(config.basename)}`
+    const login_url = `${config.api_url}auth/login_web?c=${rand}&redirect=${encodeURIComponent(config.redirect)}`
 
-    window.location.href = `${config.api_url}auth/login_web?c=${rand}&redirect=${encodeURIComponent(config.basename)}`
+    window.location.href = `${config.api_url}auth/login_web?c=${rand}&redirect=${encodeURIComponent(config.redirect)}`
     return
     const new_window = window.open(login_url, "_blank", "width=500, height=600")
 
