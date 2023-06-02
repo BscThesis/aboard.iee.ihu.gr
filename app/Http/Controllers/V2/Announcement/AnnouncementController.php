@@ -131,6 +131,10 @@ class AnnouncementController extends AuthorController
         ->select('announcements.*')
         ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('announcements.deleted_at')
         ->skip($offset)->take($per_page);
+        // ->toSql();
+
+        // echo $announcements;
+        // exit;
 
         $count_total = Announcement::withFilters(
             $users,
