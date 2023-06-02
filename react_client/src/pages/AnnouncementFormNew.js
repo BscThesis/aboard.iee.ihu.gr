@@ -29,6 +29,7 @@ const AnnouncementForm = (props) => {
     const [mostUsedTags, setMostUsedTags] = useState([])
     const [isEdit, setIsEdit] = useState(false)
     const [files, setFiles] = useState([])
+    const [sending, setSending] = useState(false)
     const [announcement, setAnnouncement] = useState({
         body:               "",
         eng_body:           "",
@@ -170,7 +171,8 @@ const AnnouncementForm = (props) => {
     }
 
     const saveAnnouncement = () => {
-        if (validForm()) {
+        if (validForm() && !sending) {
+            setSending(true)
             if (isEdit) {
                 const formData = jsonToFormDataHelper.jsonToFormData({
                     ...announcement,
@@ -203,6 +205,7 @@ const AnnouncementForm = (props) => {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: i18n.t('Εντάξει!')
                     })
+                    setSending(false)
                 })
             }
             else {
@@ -243,6 +246,7 @@ const AnnouncementForm = (props) => {
                             confirmButtonText: i18n.t('Εντάξει!')
                         })
                     }
+                    setSending(false)
                     
                 })
             }
@@ -540,7 +544,7 @@ const AnnouncementForm = (props) => {
                 </div>
             </div>
             <div className="row">
-                <button className="btn btn-success" onClick={saveAnnouncement}>{i18n.t('Αποθήκευση')}</button>
+                <button className="btn btn-success" onClick={saveAnnouncement} disabled={sending}>{i18n.t('Αποθήκευση')}</button>
             </div>
         </div>
     )
