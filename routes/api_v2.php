@@ -31,9 +31,13 @@ Route::prefix('v2')->group(function () {
             Route::put('/{id}', 'Announcement\AnnouncementController@update');
             Route::delete('/{id}', 'Announcement\AnnouncementController@destroy');
         });
-    
-        Route::get('/{id}', 'Announcement\AnnouncementController@show');
         Route::get('/', 'Announcement\AnnouncementController@index');
+        // auth.can_show_announcement
+        Route::middleware(['auth.can_show_announcement'])->group(function () {
+            Route::get('/{id}', 'Announcement\AnnouncementController@show');
+        });
+        
+        
         /**
          * Attachments Routes
          */
