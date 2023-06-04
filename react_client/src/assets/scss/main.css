@@ -290,6 +290,7 @@ body {
 
 .announcement-wrapper {
   display: flex;
+  position: relative;
   width: 100%;
   text-align: center;
   align-items: flex-start;
@@ -299,6 +300,13 @@ body {
   padding: 10px;
   background: var(--light-background);
   border-radius: 7px;
+}
+.announcement-wrapper .pinned-icon {
+  transform: rotate(45deg);
+  position: absolute;
+  top: -5px;
+  right: -6px;
+  font-size: 20px;
 }
 .announcement-wrapper .post-date {
   font-size: 12px;

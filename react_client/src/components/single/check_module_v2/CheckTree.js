@@ -80,7 +80,7 @@ const CheckTree = (props) => {
                 onChange={(e) => onchange(e)}
                 className={`ct-${rand}-elem`}
                 id={`ct-${rand}-elem-${option.value}`}
-                key={option.value}
+                key={`check-item-${option.value}`}
                 show={(setShow || searchValue.length > 0) ? checkShow([option]) : true}
             >
                 {
@@ -174,7 +174,6 @@ const CheckTree = (props) => {
         return ids
     }
     const initChosen = (selected) => {
-        //console.log('selected elements init', selected)
         let sel = []
         selected.forEach(e => {
             
@@ -207,6 +206,7 @@ const CheckTree = (props) => {
                     const choice = findOption(e.value, props.options)
                     
                     if (choice.children) {
+                        // hierarcySearch(optionsTreeHelper)
                         const children = fetchChildren(choice.children)
                         sel = children.filter(c => sel.filter(s => s.value === c.value).length === 0).concat(sel)
                     }
@@ -247,6 +247,8 @@ const CheckTree = (props) => {
         var parentValues = []
         for (let i = to_search.length - 1; i >= 0; i--) {
             let is_checked = true
+            
+            if (to_search[i].length === 0) continue;
             to_search[i].forEach(s => {
                 let all_children_checked = true
                 const choice = findOption(s, props.options)
@@ -263,7 +265,9 @@ const CheckTree = (props) => {
                     })
                 }
                 if (all_children_checked) {
+                    parentValues = parentValues.filter(p1 => {return options_to_push.indexOf(p1) === -1})
                     parentValues.push(s)
+
                     if (sel.filter(s1 => s1.value === s).length === 0) {
                         sel.push({
                             label: choice.label,
@@ -278,9 +282,10 @@ const CheckTree = (props) => {
                     parentValues = holder.filter((item, pos) => holder.indexOf(item) === pos)
                     sel = sel.filter(s1 => s1.value !== s)
                 }
+                
             })
             if (is_checked && to_search[i].length > 0) {
-                parentValues = to_search[i]
+                parentValues = JSON.parse(JSON.stringify(to_search[i]))
             }
         }
         
@@ -296,7 +301,6 @@ const CheckTree = (props) => {
     useEffect(() => {
         
         stateRef.current = selectedElements;
-        //console.log(stateRef.current)
         const elems = document.querySelectorAll(`.ct-${rand}-elem`)
         elems.forEach(tr => {
             const refElem = document.getElementById(`ct-${rand}-elem-${tr.value}`)

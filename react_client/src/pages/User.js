@@ -25,9 +25,12 @@ const User = (props) => {
             //console.log(response)
             setTags(tagsHelper.transformTags(response.data, 'childrensub_recursive'))
             request.get('auth/subscriptions').then(response => {
-                const t = tagsHelper.transformTags(response.data)
+                if (response && response.data) {
+                    const t = tagsHelper.transformTags(response.data)
                 
-                setUserTags(t)
+                    setUserTags(t)
+                }
+                
                 // setTopLevelTags(t.map(t1 => parseInt(t1.value)))
             })
         })
@@ -128,7 +131,7 @@ const User = (props) => {
                                 topLevelTags.map(t => {
                                     //console.log(t)
                                     return (
-                                        <div className="chosen-tag">
+                                        <div className="chosen-tag" key={`show-chosen-tag-${t}`}>
                                             {tagsHelper.findOption(t, tags).label}
                                         </div>
                                     )

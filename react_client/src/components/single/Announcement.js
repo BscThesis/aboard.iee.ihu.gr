@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import i18n from '../../i18n';
 import user from '../../helpers/user';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleRight, faEdit, faFileCirclePlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAngleRight, faEdit, faFileCirclePlus, faTrash, faThumbTack } from '@fortawesome/free-solid-svg-icons';
 import history from '../../helpers/history';
 import { Link } from 'react-router-dom';
 import uriHelper from '../../helpers/uri_params';
@@ -66,6 +66,10 @@ const Announcement = (props) => {
 
     return (
         <div className={`announcement-wrapper`}>
+            {
+                props.announcement.is_pinned === 1 && new Date(props.announcement.pinned_until) >= new Date() &&
+                <FontAwesomeIcon icon={faThumbTack} className='pinned-icon'/>
+            }
             <div 
                 className={`announcement-meta`}
             >
