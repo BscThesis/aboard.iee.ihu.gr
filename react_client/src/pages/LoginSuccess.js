@@ -30,10 +30,6 @@ const LoginSuccess = (props) => {
                 setError(error)
             })
         }
-
-        setTimeout(() => {
-            window.close()           
-        }, 5000)
     }, [])
     return (
         <div className="container transparent justify-center">
