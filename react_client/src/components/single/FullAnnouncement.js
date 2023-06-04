@@ -8,6 +8,7 @@ import request from '../../helpers/request';
 import { useParams } from 'react-router-dom'
 import config from '../../config'
 import Swal from 'sweetalert2';
+import utils from '../../helpers/utils';
 
 const FullAnnouncement = (props) => {
 
@@ -18,6 +19,9 @@ const FullAnnouncement = (props) => {
         request.get(`announcements/${announcementId}`).then(response => {
             if (response.status === 200) {
                 setAnnouncement(response.data.data)
+            }
+            else if (response.status === 401) {
+                utils.redirectToApiSSO()
             }
         })
     }, [])

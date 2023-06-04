@@ -24,6 +24,7 @@ import User from './pages/User'
 import FullAnnouncement from './components/single/FullAnnouncement'
 import Test from './pages/Test'
 import i18n from './i18n'
+import Utils from './helpers/utils'
 
 
 function App() {
@@ -70,22 +71,8 @@ function App() {
   }
   
   const redirectToApiSSO = async () => {
-   
+    Utils.redirectToApiSSO()
     
-    const rand = Math.random() * 10000
-    const login_url = `${config.api_url}auth/login_web?c=${rand}&redirect=${encodeURIComponent(config.redirect)}`
-
-    window.location.href = `${config.api_url}auth/login_web?c=${rand}&redirect=${encodeURIComponent(config.redirect)}`
-    return
-    const new_window = window.open(login_url, "_blank", "width=500, height=600")
-
-    if (new_window) {
-      // new_window.onclose = checkLoginStatus
-      // new_window.onunload = checkLoginStatus
-      // new_window.onclose = reloadPage
-      new_window.onunload = reloadPage
-      //console.log(new_window)
-    }
   }
   const reloadPage = () => {
     window.location.reload()

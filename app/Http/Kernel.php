@@ -88,7 +88,7 @@ class Kernel extends HttpKernel
         'auth.master' => \App\Http\Middleware\V2\AuthenticateJWT::class,
         'auth.admin' => \App\Http\Middleware\V2\AuthenticateAdmin::class,
         'auth.author' => \App\Http\Middleware\V2\AuthenticateAuthor::class,
-        'auth.can_show_announcement' => \App\Http\Middleware\V2\AuthenticateAuthor::class,
+        'auth.can_show_announcement' => \App\Http\Middleware\V2\ApiCheckAnnouncement::class,
     ];
 
 

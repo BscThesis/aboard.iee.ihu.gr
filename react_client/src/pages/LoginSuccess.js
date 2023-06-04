@@ -6,9 +6,9 @@ import i18n from '../i18n';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner, faXmarkCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import history from '../helpers/history';
+import cookieHelper from '../helpers/cookie';
 
 const LoginSuccess = (props) => {
-    const [cookie, setCookie] = useCookies(['token'])
     const [loggedIn, setLoggedIn] = useState(false)
     const [error, setError] = useState(null)
 
@@ -16,11 +16,12 @@ const LoginSuccess = (props) => {
         const params = new URLSearchParams(window.location.search)
 
         if (params.has('token')) {
+            cookieHelper.set('token', null)
             request.post('auth/token', {
                 token: params.get('token')
             }).then(response => {
                 storage.set('token', response.data.access_token)
-                setCookie('token', response.data.access_token, {path: '/'})
+                cookieHelper.set('token', response.data.access_token)
                 setLoggedIn(true)
                 props.checkStatus()
                 history.push('/')
