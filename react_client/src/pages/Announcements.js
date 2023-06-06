@@ -5,6 +5,7 @@ import SearchParams from "../components/single/SearchParams";
 import request from "../helpers/request";
 import uriHelper from "../helpers/uri_params";
 import i18n from "../i18n";
+import cookieHelper from "../helpers/cookie";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faListDots, faMagnifyingGlassPlus } from "@fortawesome/free-solid-svg-icons";
@@ -13,7 +14,7 @@ import AnnouncementSkeleton from "../components/single/AnnouncementSkeleton";
 import history from "../helpers/history";
 
 const Announcements = (props) => {
-    const [boxView, setBoxView] = useState(true)
+    const [boxView, setBoxView] = useState(cookieHelper.get('list_view') == 0)
     const [announcements, setAnnouncements] = useState([])
     const [announcementsMeta, setAnnouncementsMeta] = useState(null)
     const [fetchedAnnouncements, setFetchedAnnouncements] = useState(false)
@@ -43,6 +44,10 @@ const Announcements = (props) => {
             unmountLocaleChange()
         };
     }, [])
+
+    useEffect(() => {
+        cookieHelper.set('list_view', boxView ? 0 : 1)
+    }, [boxView])
 
     const changePage = (page) => {
         uriHelper.set('page', page)

@@ -7,12 +7,13 @@ import uriHelper from "../helpers/uri_params";
 import i18n from "../i18n";
 import history from "../helpers/history";
 import AnnouncementSkeleton from "../components/single/AnnouncementSkeleton";
+import cookieHelper from "../helpers/cookie";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faListDots, faThLarge, faPlus, faMagnifyingGlassPlus } from "@fortawesome/free-solid-svg-icons";
 
 const MyAnnouncements = (props) => {
-    const [boxView, setBoxView] = useState(true)
+    const [boxView, setBoxView] = useState(cookieHelper.get('list_view') == 0)
     const [announcements, setAnnouncements] = useState([])
     const [announcementsMeta, setAnnouncementsMeta] = useState(null)
     const [fetchedAnnouncements, setFetchedAnnouncements] = useState(false)
@@ -44,6 +45,10 @@ const MyAnnouncements = (props) => {
         // getAnnouncements() will be called from within of search parameters
         
     }, [])
+
+    useEffect(() => {
+        cookieHelper.set('list_view', boxView ? 0 : 1)
+    }, [boxView])
 
     const changePage = (page) => {
         uriHelper.set('page', page)
