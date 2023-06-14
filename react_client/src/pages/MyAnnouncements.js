@@ -46,7 +46,7 @@ const MyAnnouncements = (props) => {
         
     }, [])
 
-    useEffect(() => {
+    useEffect(() => { 
         cookieHelper.set('list_view', boxView ? 0 : 1)
     }, [boxView])
 
