@@ -26,9 +26,8 @@ import Test from './pages/Test'
 import i18n from './i18n'
 import Utils from './helpers/utils'
 
-
 function App() {
-  const [cookie, setCookie] = useCookies(['token'])
+  
   const [user, setUser] = useState(null)
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
@@ -43,8 +42,9 @@ function App() {
     })
 
     setThemeColors(darkThemeEnabled)
-    if (cookie && cookie.token) {
-      storage.set('token', cookie.token)
+    const t = cookieHelper.get('token')
+    if (t) {
+      storage.set('token', t)
     }
 
     checkLoginStatus()
@@ -84,7 +84,7 @@ function App() {
       storage.set('token', null)
       storage.set('me', null)
       setUser(null)
-      setCookie('token', null, {path: '/'})
+      cookieHelper.delete('token')
       forceUpdate()
     })
   }
@@ -114,9 +114,9 @@ function App() {
   const PrivateRoute = ({ children, ...rest }) => {
     return (
       <Route
-        {...(cookie && cookie.token) ? rest : {}}
+        {...(cookieHelper.get('token')) ? rest : {}}
         render={({ location }) => {
-          return (cookie && cookie.token) ? (
+          return (cookieHelper.get('token')) ? (
             children
           ) : (
             <Redirect

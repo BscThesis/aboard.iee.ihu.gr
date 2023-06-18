@@ -47,15 +47,12 @@ const Header = (props) => {
                             <Nav.Link as={Link} to="/announcements">{i18n.t('Ανακοινώσεις')}</Nav.Link>
                             {
                                 (user.user.is_admin === 1 || user.user.is_author === 1) &&
-                                <Nav.Link as={Link} to="/my_announcements">{i18n.t('Διαχείριση ανακοινώσεων')}</Nav.Link>
+                                <NavDropdown title={i18n.t('Διαχείριση ανακοινώσεων')} id="collasible-nav-dropdown-locale">
+                                    <Nav.Link as={Link} to="/my_announcements">{i18n.t('Οι ανακοινώσεις μου')}</Nav.Link>
+                                    <Nav.Link as={Link} to="/add_announcement">{i18n.t('Νέα ανακοίνωση')}</Nav.Link>
+                                </NavDropdown>
                             }
-                            {
-                                (user.user.is_admin === 1) &&
-                                <>
-                                    {/* <Nav.Link as={Link} to="/tags">{i18n.t('Ετικέτες')}</Nav.Link>
-                                    <Nav.Link as={Link} to="/issues">{i18n.t('Issues')}</Nav.Link> */}
-                                </>
-                            }
+                            
                             <Nav.Link as={Link} to="/about">{i18n.t('About')}</Nav.Link>
                             <Nav.Link href="https://apps.iee.ihu.gr/">Apps</Nav.Link>
                             <NavDropdown title={<img src={i18n.language === 'el' ? elFlag : enFlag} />} id="collasible-nav-dropdown-locale">

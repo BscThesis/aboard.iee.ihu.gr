@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\V2\Announcement;
 use App\Models\V2\Attachment;
 use App\Models\V2\Tag;
-use App\Http\Resources\Announcement as AnnouncementResource;
+use App\Http\Resources\AnnouncementV2 as AnnouncementResource;
 use App\Events\V2\NewAnnouncementWasCreatedEvent;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
