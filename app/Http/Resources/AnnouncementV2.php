@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Tag as TagResource;
-use App\Http\Resources\Attachmentv2 as AttachmentResource;
+use App\Http\Resources\AttachmentV2 as AttachmentResource;
 use \Carbon\Carbon;
 
 class AnnouncementV2 extends JsonResource
