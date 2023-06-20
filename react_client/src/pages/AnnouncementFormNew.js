@@ -394,7 +394,7 @@ const AnnouncementForm = (props) => {
                                 placeholder={i18n.t('Επιλέξτε ετικέτες')}
                                 value={getAnnouncementValue('tags')}
                                 onChange={(e) => changeAnnouncementTags(e)}
-                                checkAllByParent={true}
+                                checkAllByParent={false}
                             />
                         }
                     </div>
