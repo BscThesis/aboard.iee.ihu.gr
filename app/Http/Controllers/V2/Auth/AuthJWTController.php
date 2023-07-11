@@ -74,8 +74,13 @@ class AuthJWTController extends Controller
             }
             
         }
-        // Get user from Login Iee Ihu with OAuth2.0 
-        $user = Socialite::driver('iee_api')->stateless()->user();
+        try {
+            // Get user from Login Iee Ihu with OAuth2.0 
+            $user = Socialite::driver('iee_api')->stateless()->user();
+        }
+        catch(\Exception $e) {
+            return response()->json(['message' => 'Invalid token'], 401);
+        }
     	// Try to log user in calling our login method below
 	    return $this->login($user, $web_redirect);
     }

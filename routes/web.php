@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/announcements/{an_id}/attachments/{at_id}', 'Attachment\AttachmentController@show')
+    ->middleware('android.app', 'announcement.attachment.check');
+    
 Route::any('{any}', function () {
     return view('init-react');
 })->where('any', '.*');
@@ -38,8 +41,7 @@ Route::get('/announcements/{id}/edit', function ($id) {
     return view('pages.edit-announcement')->with('id', $id);
 })->middleware('auth.fe', 'web.id.check', 'is.the.author', 'web.announcement.check')->name('announcement.edit');
 
-Route::get('/announcements/{an_id}/attachments/{at_id}', 'Attachment\AttachmentController@show')
-    ->middleware('android.app', 'announcement.attachment.check');
+
 
 Route::get('/documentation', function () {
     return view('pages.docs');

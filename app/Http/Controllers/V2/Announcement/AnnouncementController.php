@@ -13,6 +13,7 @@ use App\Models\V2\Announcement;
 use App\Models\V2\Attachment;
 use App\Models\V2\Tag;
 use App\Http\Resources\AnnouncementV2 as AnnouncementResource;
+use App\Http\Resources\DeletedAnnouncement;
 use App\Events\V2\NewAnnouncementWasCreatedEvent;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -40,6 +41,7 @@ class AnnouncementController extends AuthorController
         $per_page = request()->input('perPage',10);
         $sort_id = request()->input('sortId',0);
         $page = request()->input('page', 1);
+        $only_deleted = request()->input('only_deleted', 0);
 
         $content_type = request()->header('Content-Type', '');
         $is_ical = $content_type == 'text/calendar';
@@ -58,7 +60,8 @@ class AnnouncementController extends AuthorController
                     'updatedAfter' => request()->input('updatedAfter',''),
                     'updatedBefore' => request()->input('updatedBefore',''),
                     'is_ical' => $is_ical,
-                    'fetch_public' => false
+                    'fetch_public' => false,
+                    'only_deleted' => $only_deleted
                 ],
                 $page, $per_page, $sort_id
             );
@@ -74,14 +77,21 @@ class AnnouncementController extends AuthorController
                     'updatedAfter' => request()->input('updatedAfter',''),
                     'updatedBefore' => request()->input('updatedBefore',''),
                     'is_ical' => $is_ical,
-                    'fetch_public' => true
+                    'fetch_public' => true,
+                    'only_deleted' => $only_deleted
                 ],
                 $page, $per_page, $sort_id
             );
         }    
         
         $announcements = $announcements->get();
-        $announcements_collection = AnnouncementResource::collection($announcements);
+
+        if ($only_deleted == 1) {
+            return DeletedAnnouncement::collection($announcements);
+        }
+        else {
+            $announcements_collection = AnnouncementResource::collection($announcements);
+        }
         
         
         if ($is_ical) {
@@ -117,7 +127,53 @@ class AnnouncementController extends AuthorController
         extract($args);
 
         $offset = $per_page * ($page - 1);
+        
+        if (!isset($only_deleted)) {
+            $only_deleted = 0;
+        }
 
+        if ($only_deleted == 1) {
+            $announcements = Announcement::onlyTrashed()->withFilters(
+                $users,
+                $tags,
+                $title,
+                $body,
+                $updatedAfter,
+                $updatedBefore,
+                $is_ical,
+                $fetch_public
+            )
+            ->select('announcements.*')
+            ->orderByRaw(Announcement::SORT_VALUES[$sort_id])
+            ->skip($offset)->take($per_page);
+            // ->toSql();
+    
+            // echo $announcements;
+            // exit;
+    
+            $count_total = Announcement::onlyTrashed()->withFilters(
+                $users,
+                $tags,
+                $title,
+                $body,
+                $updatedAfter,
+                $updatedBefore,
+                $is_ical,
+                $fetch_public
+            )
+            ->select(DB::raw('distinct IFNULL(count(announcements.id) OVER(), 0) as total'))
+            ->get(0)
+            ->first();
+    
+            if ($count_total) {
+                $count_total = $count_total->total;
+            }
+            else {
+                $count_total = 0;
+            }
+    
+            return [$announcements, $count_total];
+        }
         $announcements = Announcement::withFilters(
             $users,
             $tags,
