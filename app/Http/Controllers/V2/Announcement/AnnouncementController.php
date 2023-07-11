@@ -144,35 +144,9 @@ class AnnouncementController extends AuthorController
                 $fetch_public
             )
             ->select('announcements.*')
-            ->orderByRaw(Announcement::SORT_VALUES[$sort_id])
-            ->skip($offset)->take($per_page);
-            // ->toSql();
+            ->orderByRaw(Announcement::SORT_VALUES[$sort_id]);
     
-            // echo $announcements;
-            // exit;
-    
-            $count_total = Announcement::onlyTrashed()->withFilters(
-                $users,
-                $tags,
-                $title,
-                $body,
-                $updatedAfter,
-                $updatedBefore,
-                $is_ical,
-                $fetch_public
-            )
-            ->select(DB::raw('distinct IFNULL(count(announcements.id) OVER(), 0) as total'))
-            ->get(0)
-            ->first();
-    
-            if ($count_total) {
-                $count_total = $count_total->total;
-            }
-            else {
-                $count_total = 0;
-            }
-    
-            return [$announcements, $count_total];
+            return [$announcements, 0];
         }
         $announcements = Announcement::withFilters(
             $users,
