@@ -18,7 +18,7 @@ Installing in a Windows environment is also possible. Suggested apps for Windows
 
 ## Documentation
 
-Documentation is available [here](http://aboard.iee.ihu.gr/documentation).
+Documentation is available [here](https://documenter.getpostman.com/view/10464469/2s93z6ejAD).
 
 ## Issues
 
