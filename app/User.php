@@ -81,4 +81,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\V1\Issue');
     }
+
+    /**
+     * Groups the user belongs to with role.
+     */
+    public function groups()
+    {
+        return $this->belongsToMany('App\Models\V2\Group', 'user_has_group')
+        ->withPivot('role')
+        ->withTimestamps();
+    }
 }
