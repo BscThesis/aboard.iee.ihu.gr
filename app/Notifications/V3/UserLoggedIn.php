@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Notifications\V2;
+namespace App\Notifications\V3;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class UserLoggedIn extends Notification

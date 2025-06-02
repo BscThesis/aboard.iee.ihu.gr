@@ -1,12 +1,8 @@
 <?php
 
-namespace App\Events\V2;
+namespace App\Events\V3;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -23,7 +19,6 @@ class NewAnnouncementWasCreatedEvent
      */
     public function __construct($announcement)
     {
-        // die("test1");
         $this->announcement = $announcement;
     }
 }

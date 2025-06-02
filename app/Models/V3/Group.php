@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\V2;
+namespace App\Models\V3;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,8 +14,8 @@ class Group extends Model
     public function users()
     {
         return $this->belongsToMany('App\User', 'user_has_group')
-                    ->withPivot('role')
-                    ->withTimestamps();
+            ->withPivot('role')
+            ->withTimestamps();
     }
 
     /**

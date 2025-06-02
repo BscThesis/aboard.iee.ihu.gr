@@ -16,14 +16,21 @@ class ApiUser extends Authenticatable implements JWTSubject
      * @var string
      */
     protected $table = 'users';
-    
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'last_login_at', 'is_author', 'is_admin', 'id', 'uid', 'name_eng'
+        'name',
+        'email',
+        'last_login_at',
+        'is_author',
+        'is_admin',
+        'id',
+        'uid',
+        'name_eng'
     ];
 
     /**
@@ -32,7 +39,8 @@ class ApiUser extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -52,14 +60,14 @@ class ApiUser extends Authenticatable implements JWTSubject
     protected $attributes = [
         'is_admin' => false,
         'is_author' => false
-    ]; 
+    ];
 
     /**
      * Get the user's subscribed tags.
      */
     public function subscriptions()
     {
-        return $this->belongsToMany('App\Models\V2\Tag', 'tag_user', 'user_id', 'tag_id');
+        return $this->belongsToMany('App\Models\V3\Tag', 'tag_user', 'user_id', 'tag_id');
     }
 
     /**
@@ -67,7 +75,7 @@ class ApiUser extends Authenticatable implements JWTSubject
      */
     public function announcements()
     {
-        return $this->hasMany('App\Models\V2\Announcement', 'user_id', 'id');
+        return $this->hasMany('App\Models\V3\Announcement', 'user_id', 'id');
     }
 
     /**
@@ -75,7 +83,7 @@ class ApiUser extends Authenticatable implements JWTSubject
      */
     public function activities()
     {
-        return $this->hasMany('App\Models\V2\Notification', 'notifiable_id', 'id');
+        return $this->hasMany('App\Models\V3\Notification', 'notifiable_id', 'id');
     }
 
     /**
@@ -83,7 +91,7 @@ class ApiUser extends Authenticatable implements JWTSubject
      */
     public function issues()
     {
-        return $this->hasMany('App\Models\V2\Issue');
+        return $this->hasMany('App\Models\V3\Issue');
     }
 
     /**

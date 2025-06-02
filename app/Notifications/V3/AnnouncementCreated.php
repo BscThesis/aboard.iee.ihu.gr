@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Notifications\V2;
+namespace App\Notifications\V3;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\V2\Announcement;
-use App\User;
+use App\Models\V3\Announcement;
 
 class AnnouncementCreated extends Notification
 {

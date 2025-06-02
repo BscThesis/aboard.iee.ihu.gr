@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Requests\V2;
+namespace App\Http\Requests\V3;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
 
 class StoreTag extends FormRequest
 {
@@ -37,7 +36,7 @@ class StoreTag extends FormRequest
             'maillist_name' => [
                 'nullable',
                 Rule::unique('tags')->ignore($this->id, 'id')
-	        ],
+            ],
         ];
     }
 
@@ -56,4 +55,3 @@ class StoreTag extends FormRequest
         ];
     }
 }
-

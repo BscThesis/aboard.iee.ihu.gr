@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Requests\V2;
+namespace App\Http\Requests\V3;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 class StoreAnnouncement extends FormRequest
 {

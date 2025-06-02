@@ -1,15 +1,11 @@
 <?php
 
-namespace App\Http\Middleware\V2;
+namespace App\Http\Middleware\V3;
 
 use Closure;
-use App\Models\V2\Announcement;
+use App\Models\V3\Announcement;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Session;
-use App\ApiUser;
-use Laravel\Socialite\Facades\Socialite;
 
 class ApiCheckAnnouncement
 {
@@ -37,9 +33,6 @@ class ApiCheckAnnouncement
         $announcement = Announcement::withCount(['tags' => function (Builder $query) {
             $query->where('is_public', '=', 1);
         }])->where('id', $id)->get();
-	
-        
-
 
         if (($announcement[0]->tags_count > 0) || auth('api_v2')->check()) {
             // if we have at least one public tag, continue

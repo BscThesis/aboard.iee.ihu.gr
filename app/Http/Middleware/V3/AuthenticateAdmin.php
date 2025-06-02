@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Http\Middleware\V2;
-
-use Illuminate\Support\Facades\Auth;
+namespace App\Http\Middleware\V3;
 
 use Closure;
 
@@ -19,7 +17,7 @@ class AuthenticateAdmin
     {
         // echo json_encode($request); exit;
         try {
-            $user = auth('api_v2')->userOrFail();
+            $user = auth('api_v3')->userOrFail();
             if (!$user->is_admin) {
                 return response()->json(['message' => 'You must have admin rights in order to continue'], 401);
             }

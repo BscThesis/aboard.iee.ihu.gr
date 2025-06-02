@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Listeners\V2;
+namespace App\Listeners\V3;
 
 use Laravel\Passport\Events\AccessTokenCreated;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use App\Activity;
-use Illuminate\Support\Facades\Auth;
 
 class LogSuccessfulLogin
 {

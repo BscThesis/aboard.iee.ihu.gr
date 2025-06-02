@@ -3,8 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Models\Announcement;
-use App\Observers\AnnouncementObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,7 +28,8 @@ class AppServiceProvider extends ServiceProvider
         $this->socialiteIeeApiServiceProvider();
     }
 
-    private function socialiteIeeServiceProvider() {
+    private function socialiteIeeServiceProvider()
+    {
         $socialite = $this->app->make('Laravel\Socialite\Contracts\Factory');
         $socialite->extend(
             'iee',
@@ -41,7 +40,8 @@ class AppServiceProvider extends ServiceProvider
         );
     }
 
-    private function socialiteIeeApiServiceProvider() {
+    private function socialiteIeeApiServiceProvider()
+    {
         $socialite = $this->app->make('Laravel\Socialite\Contracts\Factory');
         $socialite->extend(
             'iee_api',

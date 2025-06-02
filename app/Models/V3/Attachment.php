@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\V2;
+namespace App\Models\V3;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -9,7 +9,7 @@ class Attachment extends Model
 {
     use SoftDeletes;
 
-     /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -21,7 +21,6 @@ class Attachment extends Model
      */
     public function announcement()
     {
-        return $this->belongsTo('App\Models\V2\Announcement');
+        return $this->belongsTo('App\Models\V3\Announcement');
     }
 }
-

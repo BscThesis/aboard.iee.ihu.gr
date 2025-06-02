@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\V2;
+namespace App\Models\V3;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,17 +20,17 @@ class Tag extends Model
 
     public function announcements()
     {
-        return $this->belongsToMany('App\Models\V2\Announcement');
+        return $this->belongsToMany('App\Models\V3\Announcement');
     }
 
     public function children()
     {
-        return $this->hasMany('App\Models\V2\Tag', 'parent_id', 'id');
+        return $this->hasMany('App\Models\V3\Tag', 'parent_id', 'id');
     }
 
     public function parent()
     {
-        return $this->hasOne('App\Models\V2\Tag', 'id', 'parent_id');
+        return $this->hasOne('App\Models\V3\Tag', 'id', 'parent_id');
     }
 
     public function childrenRecursive()
