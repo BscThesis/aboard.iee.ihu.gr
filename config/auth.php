@@ -50,6 +50,10 @@ return [
             'driver' => 'jwt',
             'provider' => 'api_users'
         ],
+        'api_v3' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
+        ],
         'generate_token' => [
             'driver' => 'jwt',
             'provider' => 'api_users'

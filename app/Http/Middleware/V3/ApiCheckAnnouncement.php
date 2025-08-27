@@ -34,7 +34,7 @@ class ApiCheckAnnouncement
             $query->where('is_public', '=', 1);
         }])->where('id', $id)->get();
 
-        if (($announcement[0]->tags_count > 0) || auth('api_v2')->check()) {
+        if (($announcement[0]->tags_count > 0) || auth('api_v3')->check()) {
             // if we have at least one public tag, continue
             return $next($request);
         } else if ($local_ip == 0) {

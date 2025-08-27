@@ -5,7 +5,7 @@ namespace App\Http\Controllers\V3\Group;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\V3\Group;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class GroupController extends Controller
 {
@@ -40,17 +40,32 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:groups,name',
-            'description' => 'nullable|string|max:1000',
-        ]);
+        // normalize name
+        $request->merge(['name' => trim((string) $request->input('name'))]);
 
         try {
-            $group = Group::create($validated);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Group could not be created.'], 406);
+            $validated = $request->validate([
+                'name' => 'required|string|max:255|unique:groups,name',
+                'description' => 'nullable|string|max:1000',
+                'parent_group' => 'nullable|exists:groups,id',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors'  => $e->errors(),
+            ], 422);
         }
 
+        // Optional: extra case-insensitive existence guard
+        $existing = \App\Models\V3\Group::whereRaw('LOWER(name) = ?', [mb_strtolower($validated['name'])])->first();
+        if ($existing) {
+            return response()->json([
+                'message' => 'Group already exists.',
+                'group'   => $existing,
+            ], 409);
+        }
+
+        $group = \App\Models\V3\Group::create($validated);
         return response()->json($group, 201);
     }
 
@@ -68,6 +83,7 @@ class GroupController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:groups,name,' . $id,
             'description' => 'nullable|string|max:1000',
+            'parent_group' => 'nullable|exists:groups,id',
         ]);
 
         $group->update($validated);

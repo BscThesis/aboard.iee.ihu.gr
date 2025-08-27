@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
 {
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['name', 'description', 'parent_group'];
 
     /**
      * Users that belong to the group.
@@ -23,7 +23,7 @@ class Group extends Model
      */
     public function parentGroup()
     {
-        return $this->belongsTo('App\Models\Group', 'parent_group');
+        return $this->belongsTo(\App\Models\V3\Group::class, 'parent_group');
     }
 
     /**
@@ -31,6 +31,6 @@ class Group extends Model
      */
     public function subgroups()
     {
-        return $this->hasMany('App\Models\Group', 'parent_group');
+        return $this->hasMany(\App\Models\V3\Group::class, 'parent_group');
     }
 }

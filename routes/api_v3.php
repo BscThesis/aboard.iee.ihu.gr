@@ -97,7 +97,6 @@ Route::prefix('v3')->group(function () {
     //     Route::delete('/{id}', 'Group\GroupController@destroy');
     //     Route::post('/{id}/members', 'Group\GroupController@addMember');
     // });
-
     // @TODO: Uncomment the above route group when the authentication middleware is ready.
     Route::prefix('groups')->group(function () {
         Route::get('/', 'Group\GroupController@index');
@@ -106,6 +105,17 @@ Route::prefix('v3')->group(function () {
         Route::put('/{id}', 'Group\GroupController@update');
         Route::delete('/{id}', 'Group\GroupController@destroy');
         Route::post('/{id}/members', 'Group\GroupController@addMember');
+    });
+
+    /**
+     * UserHasGroup Routes
+     */
+    Route::prefix('user-group-roles')->group(function () {
+        Route::get('/', 'Group\UserHasGroupController@index');
+        Route::get('/{user_id}/{group_id}', 'Group\UserHasGroupController@show');
+        Route::post('/', 'Group\UserHasGroupController@store');
+        Route::match(['put', 'patch'], '/{user_id}/{group_id}', 'Group\UserHasGroupController@update');
+        Route::delete('/{user_id}/{group_id}', 'Group\UserHasGroupController@destroy');
     });
 });
 

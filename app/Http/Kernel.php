@@ -92,6 +92,12 @@ class Kernel extends HttpKernel
         'auth.admin' => \App\Http\Middleware\V2\AuthenticateAdmin::class,
         'auth.author' => \App\Http\Middleware\V2\AuthenticateAuthor::class,
         'auth.can_show_announcement' => \App\Http\Middleware\V2\ApiCheckAnnouncement::class,
+
+        // V3 aliases (NEW - use these in api_v3.php)
+        'auth.v3.master' => \App\Http\Middleware\V3\AuthenticateJWT::class,
+        'auth.v3.admin' => \App\Http\Middleware\V3\AuthenticateAdmin::class,
+        'auth.v3.author' => \App\Http\Middleware\V3\AuthenticateAuthor::class,
+        'auth.v3.can_show_announcement' => \App\Http\Middleware\V3\ApiCheckAnnouncement::class,
     ];
 
 
