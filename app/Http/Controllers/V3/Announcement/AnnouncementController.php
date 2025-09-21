@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\V3\Announcement;
 
-use App\Http\Controllers\V2\AuthorController;
+use App\Http\Controllers\V3\AuthorController;
 use Illuminate\Http\Request;
-use App\Http\Requests\V2\StoreAnnouncement;
-use App\Models\V2\Announcement;
-use App\Models\V2\Attachment;
-use App\Models\V2\Tag;
+use App\Http\Requests\V3\StoreAnnouncement;
+use App\Models\V3\Announcement;
+use App\Models\V3\Attachment;
+use App\Models\V3\Tag;
 use App\Http\Resources\AnnouncementV2 as AnnouncementResource;
 use App\Http\Resources\DeletedAnnouncement;
-use App\Events\V2\NewAnnouncementWasCreatedEvent;
+use App\Events\V3\NewAnnouncementWasCreatedEvent;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
@@ -45,7 +45,7 @@ class AnnouncementController extends AuthorController
         // If user is logged in or inside university's wifi return all filtered announcements
         $local_ip = $request->session()->get('local_ip', 0);
 
-        if ($local_ip == 1 or auth('api_v2')->check()) {
+        if ($local_ip == 1 or auth('api_v3')->check()) {
 
             list($announcements, $count_total) = $this->create_announcements_query_build(
                 [
@@ -109,7 +109,7 @@ class AnnouncementController extends AuthorController
                 "current_page" => $page,
                 "from" => 1,
                 "last_page" => $total_pages,
-                "path" => env("APP_URL") ."/api/v2/announcements",
+                "path" => env("APP_URL") ."/api/v3/announcements",
                 "per_page" => $per_page,
                 "to" => $count_total,
                 "total" => $count_total
@@ -247,7 +247,7 @@ class AnnouncementController extends AuthorController
     public function user_announcements(Request $request)
     {
         
-        if (! $user = auth('api_v2')->user()) {
+        if (! $user = auth('api_v3')->user()) {
             return response()->json(['message' => 'Not logged in'], 401);
         }
 
@@ -300,10 +300,10 @@ class AnnouncementController extends AuthorController
     public function store(StoreAnnouncement $request)
     {
         // var_dump($request); exit;
-        if (!auth('api_v2')->check()) {
+        if (!auth('api_v3')->check()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
-        if (!auth('api_v2')->check() || (!auth('api_v2')->user()->is_author && !auth('api_v2')->user()->is_admin)) {
+        if (!auth('api_v3')->check() || (!auth('api_v3')->user()->is_author && !auth('api_v3')->user()->is_admin)) {
             return response()->json(['message' => 'You are not an author'], 401);
         }
         if (!$request) {
@@ -325,7 +325,7 @@ class AnnouncementController extends AuthorController
 
         // If a user_id exists in request set it as the author only if the logged in user is an admin
         if (isset($request->user_id)) {
-            if (auth('api_v2')->user()->is_admin) {
+            if (auth('api_v3')->user()->is_admin) {
                 $announcement->user_id = $request->user_id;
             } else {
                 return response()->json(['message' => 'Not permitted to upload as other person'], 401);
@@ -333,7 +333,7 @@ class AnnouncementController extends AuthorController
         } 
         // Else just set the user as the author.
         else {
-            $announcement->user_id = auth('api_v2')->user()->id;
+            $announcement->user_id = auth('api_v3')->user()->id;
         }
 
         // If saving the Announcement Instance completes successfully
@@ -413,7 +413,7 @@ class AnnouncementController extends AuthorController
      */
     public function showForEdit($id)
     {
-        if (! $user = auth('api_v2')->user()) {
+        if (! $user = auth('api_v3')->user()) {
             return response()->json(['message' => 'Not logged in'], 401);
         }
 
@@ -464,7 +464,7 @@ class AnnouncementController extends AuthorController
 
         // If a user_id exists in request set it as the author only if the logged in user is an admin
         if (isset($request->user_id)) {
-            if (auth('api_v2')->user()->is_admin) {
+            if (auth('api_v3')->user()->is_admin) {
                 $announcement->user_id = $request->user_id;
             } else {
                 return response()->json(['message' => 'Not permitted to upload as other person'], 401);
@@ -538,10 +538,10 @@ class AnnouncementController extends AuthorController
     public function destroy($id)
     {
         // If user is logged in 
-        if (!auth('api_v2')->check()) {
+        if (!auth('api_v3')->check()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
-        if (!$user = auth('api_v2')->user()) {
+        if (!$user = auth('api_v3')->user()) {
             return response()->json(['message' => 'Something went wrong. Can\'t fetch user data. Please logout and login'], 401);
         }
         // Get single announcement

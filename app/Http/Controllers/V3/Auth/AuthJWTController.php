@@ -2,16 +2,11 @@
 
 namespace App\Http\Controllers\V3\Auth;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\Controller;
 use App\ApiUser;
 use Laravel\Socialite\Facades\Socialite;
 use \Carbon\Carbon;
 use Illuminate\Http\Request;
-
-use Tymon\JWTAuth\Facades\JWTFactory;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
@@ -23,10 +18,7 @@ class AuthJWTController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        
-    }
+    public function __construct() {}
 
     /**
      * Try to get user from OAuth2.0 and the call callback method below
@@ -35,7 +27,7 @@ class AuthJWTController extends Controller
      */
     public function signIn()
     {
-	    return Socialite::driver('iee_api')
+        return Socialite::driver('iee_api')
             ->redirect();
     }
 
@@ -49,7 +41,7 @@ class AuthJWTController extends Controller
         if (!isset($request->redirect) || empty($request->redirect)) {
             return $this->signIn();
         }
-	    return Socialite::driver('iee_api')
+        return Socialite::driver('iee_api')
             ->with(['state' => Crypt::encryptString($request->redirect)])
             ->redirect();
     }
@@ -63,26 +55,23 @@ class AuthJWTController extends Controller
     {
         $web_redirect = null;
         if (isset($request->state) && !empty($request->state)) {
-            try{
+            try {
                 $web_redirect = Crypt::decryptString(($request->state));
                 if (filter_var($web_redirect, FILTER_VALIDATE_URL) === FALSE) {
                     $web_redirect = null;
                 }
+            } catch (DecryptException $e) {
             }
-            catch(DecryptException $e) {
-
-            }
-            
         }
         try {
             // Get user from Login Iee Ihu with OAuth2.0 
             $user = Socialite::driver('iee_api')->stateless()->user();
-        }
-        catch(\Exception $e) {
+            // dd($user->user); //TODO: remove
+        } catch (\Exception $e) {
             return response()->json(['message' => 'Invalid token'], 401);
         }
-    	// Try to log user in calling our login method below
-	    return $this->login($user, $web_redirect);
+        // Try to log user in calling our login method below
+        return $this->login($user, $web_redirect);
     }
     /**
      * Get a JWT via given credentials.
@@ -115,25 +104,25 @@ class AuthJWTController extends Controller
                     // 'is_author' => $socialiteUser->uid === 'it134062' ? 1 : $socialiteUser->is_author
                 ]
             );
-	    }
-	
+        }
+
         try {
             // Get user and then try to log in and sent notification
-            $user = ApiUser::where('uid', $socialiteUser->uid)->first();	    
+            $user = ApiUser::where('uid', $socialiteUser->uid)->first();
             $attributes = ['id' => $user->id];
 
-            if (auth('api_v2')->check()) {
-                auth('api_v2')->logout();
+            if (auth('api_v3')->check()) {
+                auth('api_v3')->logout();
             }
-            
-	  
-	        // return new static($attributes); 
+
+
+            // return new static($attributes); 
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
             // If an error occurs log user out
-            if (auth('api_v2')->check()) {
-                auth('api_v2')->logout();
+            if (auth('api_v3')->check()) {
+                auth('api_v3')->logout();
             }
-            
+
             // Depending on the error code sent the appropriate message
             if ($e->getCode() === 400) {
                 return response()->json('Invalid request', $e->getCode());
@@ -150,11 +139,11 @@ class AuthJWTController extends Controller
             }
             return redirect()->away($web_redirect . '/login_success?token=' . $token);
         } else {
-            if (! $token = auth('api_v2')->login($user)) {
+            if (! $token = auth('api_v3')->login($user)) {
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
-        }   
-        auth('api_v2')->login($user);
+        }
+        auth('api_v3')->login($user);
         //Notification::send($user, new UserLoggedIn());
         $user->update([
             'last_login_at' => Carbon::now()->toDateTimeString(),
@@ -167,7 +156,8 @@ class AuthJWTController extends Controller
      * after a user logs in via iee SSO
      * @param (post) token required
      */
-    public function generateToken(Request $request) {
+    public function generateToken(Request $request)
+    {
         if (empty($request->token)) {
             return response()->json(['error' => 'Empty token'], 401);
         }
@@ -176,18 +166,18 @@ class AuthJWTController extends Controller
             return response()->json(['error' => 'Invalid token'], 401);
         }
 
-        $token_user = auth('generate_token')->user(); 
-        $main_user = ApiUser::where('uid', $token_user->uid)->first();	 
+        $token_user = auth('generate_token')->user();
+        $main_user = ApiUser::where('uid', $token_user->uid)->first();
 
         auth('generate_token')->logout();
         auth('generate_token')->invalidate(true);
-        
+
         $attributes = ['id' => $main_user->id];
 
-        if (! $token = auth('api_v2')->login($main_user)) {
+        if (! $token = auth('api_v3')->login($main_user)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        
+
 
         return $this->respondWithToken($token, $attributes);
     }
@@ -200,7 +190,7 @@ class AuthJWTController extends Controller
     public function me()
     {
         try {
-            $user = auth('api_v2')->userOrFail();
+            $user = auth('api_v3')->userOrFail();
         } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['message' => 'You are not logged in'], 401);
         }
@@ -215,7 +205,7 @@ class AuthJWTController extends Controller
      */
     public function logout()
     {
-        auth('api_v2')->logout();
+        auth('api_v3')->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }
@@ -227,7 +217,7 @@ class AuthJWTController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth('api_v2')->refresh());
+        return $this->respondWithToken(auth('api_v3')->refresh());
     }
 
     /**
@@ -238,7 +228,7 @@ class AuthJWTController extends Controller
     public function subscribe(Request $request)
     {
         // Get logged in user and tags from the request and updated user's subscriptions table
-        $user = auth('api_v2')->user();
+        $user = auth('api_v3')->user();
         $tags = ($request->input('tags'));
         $user->subscriptions()->sync($tags);
         // Return user's id and subscriptions
@@ -254,14 +244,14 @@ class AuthJWTController extends Controller
     {
 
         try {
-            $user = auth('api_v2')->userOrFail();
+            $user = auth('api_v3')->userOrFail();
         } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['message' => 'You are not logged in'], 401);
         }
 
         return $user->subscriptions()->get();
         // Check if user is logged in and return subscription otherwise return message
-        // $user = auth('api_v2')->userOrFail();
+        // $user = auth('api_v3')->userOrFail();
         // if($user === null){
         //     return response()->json(['message' => 'Unauthenticated'], 401);
         // }else{
@@ -282,7 +272,7 @@ class AuthJWTController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'user_data' => $attributes,
-            'expires_in' => auth('api_v2')->factory()->getTTL() * 60
+            'expires_in' => auth('api_v3')->factory()->getTTL() * 60
         ]);
     }
 }
