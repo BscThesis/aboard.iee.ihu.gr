@@ -6,12 +6,10 @@ import request from "../helpers/request";
 import uriHelper from "../helpers/uri_params";
 import i18n from "../i18n";
 import cookieHelper from "../helpers/cookie";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faListDots, faMagnifyingGlassPlus } from "@fortawesome/free-solid-svg-icons";
 import { faThLarge } from "@fortawesome/free-solid-svg-icons";
 import AnnouncementSkeleton from "../components/single/AnnouncementSkeleton";
-import history from "../helpers/history";
 
 const Announcements = (props) => {
     const [boxView, setBoxView] = useState(cookieHelper.get('list_view') == 0)

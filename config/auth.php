@@ -52,7 +52,7 @@ return [
         ],
         'api_v3' => [
             'driver' => 'jwt',
-            'provider' => 'users',
+            'provider' => 'api_users',
         ],
         'generate_token' => [
             'driver' => 'jwt',

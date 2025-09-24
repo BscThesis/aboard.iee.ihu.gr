@@ -16,6 +16,7 @@ class ApiUser extends Authenticatable implements JWTSubject
      * @var string
      */
     protected $table = 'users';
+    protected $appends = ['is_admin', 'is_author'];
 
     /**
      * The attributes that are mass assignable.
@@ -26,8 +27,6 @@ class ApiUser extends Authenticatable implements JWTSubject
         'name',
         'email',
         'last_login_at',
-        'is_author',
-        'is_admin',
         'id',
         'uid',
         'name_eng'
@@ -52,46 +51,64 @@ class ApiUser extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * The model's default values for attributes.
-     *
-     * @var array
-     */
-    protected $attributes = [
-        'is_admin' => false,
-        'is_author' => false
-    ];
-
-    /**
-     * Get the user's subscribed tags.
-     */
-    public function subscriptions()
+    public function groups()
     {
-        return $this->belongsToMany('App\Models\V3\Tag', 'tag_user', 'user_id', 'tag_id');
+        return $this->belongsToMany(\App\Models\V3\Group::class, 'user_has_group', 
+            'user_id',
+            'group_id'
+        )->withPivot(['role'])->withTimestamps();
     }
 
-    /**
-     * Get the user's announcements.
-     */
     public function announcements()
     {
-        return $this->hasMany('App\Models\V3\Announcement', 'user_id', 'id');
+        return $this->hasMany(\App\Models\V3\Announcement::class, 'user_id', 'id');
     }
 
-    /**
-     * Get the users notifications.
-     */
+    public function subscriptions()
+    {
+        return $this->belongsToMany(\App\Models\V3\Tag::class, 'tag_user', 'user_id', 'tag_id');
+    }
+
     public function activities()
     {
-        return $this->hasMany('App\Models\V3\Notification', 'notifiable_id', 'id');
+        return $this->hasMany(\App\Models\V3\Notification::class, 'notifiable_id', 'id');
     }
 
-    /**
-     * Get issues submitted by a user.
-     */
     public function issues()
     {
-        return $this->hasMany('App\Models\V3\Issue');
+        return $this->hasMany(\App\Models\V3\Issue::class);
+    }
+
+    public function scopeWithAnyRole($q, array $roles)
+    {
+        return $q->whereHas('groups', fn($g) =>
+            $g->whereIn('user_has_group.role', $roles)
+        );
+    }
+
+    public function scopeAuthors($q)
+    {
+        return $q->withAnyRole(['staff', 'admin']);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->groups()->wherePivot('role', 'admin')->exists();
+    }
+
+    public function isAuthor(): bool
+    {
+        return $this->groups()->whereIn('user_has_group.role', ['staff','admin'])->exists();
+    }
+
+    public function getIsAdminAttribute(): bool
+    {
+        return $this->isAdmin();
+    }
+
+    public function getIsAuthorAttribute(): bool
+    {
+        return $this->isAuthor();
     }
 
     /**

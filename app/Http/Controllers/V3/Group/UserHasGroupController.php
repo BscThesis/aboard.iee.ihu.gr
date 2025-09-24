@@ -12,36 +12,7 @@ class UserHasGroupController extends Controller
     /**
      * Canonical roles allowed by DB enum (must match exactly).
      */
-    private const ALLOWED_ROLES = ['user', 'teacher', 'admin', 'PhD candidate'];
-
-    /**
-     * Accept common input variants and map to canonical values.
-     */
-    private function normalizeRole(?string $role): ?string
-    {
-        if ($role === null) return null;
-        $r = trim($role);
-
-        // quick case-insensitive normalization for common variants
-        $lower = mb_strtolower($r);
-        if ($lower === 'phd candidate' || $lower === 'phd' || $lower === 'phd_candidate') {
-            return 'PhD candidate';
-        }
-
-        // For the rest, keep original if it’s exactly an allowed value,
-        // otherwise try case-insensitive match to one of the simple roles.
-        foreach (self::ALLOWED_ROLES as $allowed) {
-            if ($r === $allowed) {
-                return $allowed; // exact match
-            }
-            if (mb_strtolower($allowed) === $lower && $allowed !== 'PhD candidate') {
-                return $allowed; // case-insensitive match for simple roles
-            }
-        }
-
-        // return as-is; validator will reject it with a clear message
-        return $r;
-    }
+    private const ALLOWED_ROLES = ['student', 'staff', 'admin'];
 
     public function index(Request $request)
     {
@@ -91,9 +62,6 @@ class UserHasGroupController extends Controller
 
     public function store(Request $request)
     {
-        // normalize role before validating
-        $request->merge(['role' => $this->normalizeRole($request->input('role'))]);
-
         $validated = $request->validate(
             [
                 'user_id'  => 'required|exists:users,id',
@@ -131,11 +99,9 @@ class UserHasGroupController extends Controller
 
     public function update(Request $request, $user_id, $group_id)
     {
-        $request->merge(['role' => $this->normalizeRole($request->input('role'))]);
-
         $validated = $request->validate(
-            ['role' => 'required|in:user,teacher,admin,PhD candidate'],
-            ['role.in' => 'Invalid role. Allowed roles are: user, teacher, admin, PhD candidate.']
+            ['role' => ['required', Rule::in(self::ALLOWED_ROLES)]],
+            ['role.in' => 'Invalid role. Allowed roles are: ' . implode(', ', self::ALLOWED_ROLES) . '.']
         );
 
         $row = DB::table('user_has_group')

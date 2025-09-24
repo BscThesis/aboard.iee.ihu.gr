@@ -16,16 +16,19 @@ class User extends JsonResource
      */
     public function toArray($request)
     {
+        $isAdmin  = method_exists($this->resource, 'isAdmin')  ? $this->resource->isAdmin()  : false;
+        $isAuthor = method_exists($this->resource, 'isAuthor') ? $this->resource->isAuthor() : false;
+
         return [
             'id' => $this->id,
             'name' => $this->name,
             'name_eng' => $this->name_eng,
             'email' => $this->email,
             'uid' => $this->uid,
-            'is_admin' => $this->is_admin,
-            'is_author' => $this->is_author,
+            'is_admin' => $isAdmin,
+            'is_author' => $isAuthor,
             'subscriptions' => TagResource::collection($this->subscriptions),
-            'last_interaction_time' => Carbon::now()->toDateTimeString(),
+            'last_interaction_time' => \Carbon\Carbon::now()->toDateTimeString(),
             'last_login_at' => $this->last_login_at,
         ];
     }

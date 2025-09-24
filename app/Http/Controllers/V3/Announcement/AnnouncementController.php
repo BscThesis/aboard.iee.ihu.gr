@@ -251,7 +251,7 @@ class AnnouncementController extends AuthorController
             return response()->json(['message' => 'Not logged in'], 401);
         }
 
-        if (!$user->is_author && !$user->is_admin) {
+        if (!$user->isAuthor() && !$user->isAdmin()) {
             return response()->json(['message' => 'You are not an author'], 401);
         }
 
@@ -303,7 +303,7 @@ class AnnouncementController extends AuthorController
         if (!auth('api_v3')->check()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
-        if (!auth('api_v3')->check() || (!auth('api_v3')->user()->is_author && !auth('api_v3')->user()->is_admin)) {
+        if (!auth('api_v3')->check() || (!auth('api_v3')->user()->isAuthor() && !auth('api_v3')->user()->isAdmin())) {
             return response()->json(['message' => 'You are not an author'], 401);
         }
         if (!$request) {
@@ -424,7 +424,7 @@ class AnnouncementController extends AuthorController
         // Get single announcement
         try {
             $announcement = Announcement::findOrFail($id);
-            if ($announcement->user_id !== $user->id && !$user->is_admin) {
+            if ($announcement->user_id !== $user->id && !$user->is_admin()) {
                 return response()->json(['message' => 'You are not the author'], 401);
             }
             return new AnnouncementResource($announcement);

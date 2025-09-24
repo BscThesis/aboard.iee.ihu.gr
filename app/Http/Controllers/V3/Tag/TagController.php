@@ -33,7 +33,7 @@ class TagController extends Controller
 
         $extra_fields = json_decode(request()->input('extra_fields', ''));
 
-        if (auth('api_v2')->check() && auth('api_v2')->user()->is_author && $extra_fields == 'self_stats') {
+        if (auth('api_v3')->check() && auth('api_v3')->user()->isAuthor() && $extra_fields === 'self_stats') {
             $results = DB::select(DB::raw(
                 "SELECT announcementCounter, T.id, T.is_public, T.maillist_name, T.parent_id, T.title
                  FROM tags T
@@ -58,7 +58,8 @@ class TagController extends Controller
     {
         // Get every tag as a Json
 
-        if (auth('api_v2')->check() && auth('api_v2')->user()->is_author) {
+        if (auth('api_v3')->check() && auth('api_v3')->user()->isAuthor()) {
+            $userId = auth('api_v3')->user()->id;
             $results = DB::select(
                 "SELECT L.*, SUM((   L.is_leaf*10 +1) * 100000/(UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(A.created_at) )) AS weight
                 FROM      tags_leafs L
@@ -122,7 +123,7 @@ class TagController extends Controller
     {
         // If user is logged in return tags, filtering and then counting every announcement each one has with their children
         $tags = [];
-        if (auth('api_v2')->check()) {
+        if (auth('api_v3')->check() && auth('api_v3')->user()->isAuthor()) {
             $tags = Tag::with('childrensubRecursive')->where('parent_id', 1)->withCount(['announcements' => function ($query) use ($request) {
                 $query->tags(
                     request()->input('users', []),
@@ -226,7 +227,7 @@ class TagController extends Controller
     public function destroy($id)
     {
         // If user is admin find the Tag with an id of $id and try to delete it then return every Tag as Json
-        if (auth('api_v2')->user()->is_admin) {
+        if (auth('api_v3')->check() && auth('api_v3')->user()->isAdmin()) {
             $tag = Tag::find($id);
             if ($tag->delete()) {
                 $tags = Tag::orderBy('id', 'desc')->get();

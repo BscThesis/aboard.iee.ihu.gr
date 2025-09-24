@@ -78,78 +78,119 @@ class AuthJWTController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login($socialiteUser, $web_redirect = null)
-    {
-        // Create or update user based on our results
-        $user = ApiUser::where('uid', $socialiteUser->uid)->first();
-        if ($user === null) {
-            $user = ApiUser::create(
-                [
-                    'name' => $socialiteUser->name,
-                    'name_eng' => $socialiteUser->name_eng,
-                    'email' => $socialiteUser->email,
-                    'uid' => $socialiteUser->uid,
-                    'is_author' => $socialiteUser->is_author
-                    // 'is_author' => $socialiteUser->uid === 'it134062' ? 1 : $socialiteUser->is_author
-                ]
-            );
-        } else {
-            $user = ApiUser::where('uid', $socialiteUser->uid)->update(
-                [
-                    'name' => $socialiteUser->name,
-                    'name_eng' => $socialiteUser->name_eng,
-                    'email' => $socialiteUser->email,
-                    'uid' => $socialiteUser->uid,
-                    'is_author' => $socialiteUser->is_author
-                    // 'is_author' => $socialiteUser->uid === 'it134062' ? 1 : $socialiteUser->is_author
-                ]
-            );
-        }
+public function login($socialiteUser, $web_redirect = null)
+{
+    // Create or update user based on our results
+    $user = \App\ApiUser::where('uid', $socialiteUser->uid)->first();
 
-        try {
-            // Get user and then try to log in and sent notification
-            $user = ApiUser::where('uid', $socialiteUser->uid)->first();
-            $attributes = ['id' => $user->id];
+    $payload = [
+        'name'     => $socialiteUser->name,
+        'name_eng' => $socialiteUser->name_eng,
+        'email'    => $socialiteUser->email,
+        'uid'      => $socialiteUser->uid,
+    ];
 
-            if (auth('api_v3')->check()) {
-                auth('api_v3')->logout();
-            }
-
-
-            // return new static($attributes); 
-        } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-            // If an error occurs log user out
-            if (auth('api_v3')->check()) {
-                auth('api_v3')->logout();
-            }
-
-            // Depending on the error code sent the appropriate message
-            if ($e->getCode() === 400) {
-                return response()->json('Invalid request', $e->getCode());
-            } else if ($e->getCode() === 401) {
-                return response()->json('Invalid credentials', 401);
-            }
-
-            return response()->json('Something went wrong on the server.', $e->getCode());
-        }
-
-        if (!is_null($web_redirect)) {
-            if (! $token = auth('generate_token')->setTTL(120)->login($user)) {
-                return response()->json(['error' => 'Unauthorized'], 401);
-            }
-            return redirect()->away($web_redirect . '/login_success?token=' . $token);
-        } else {
-            if (! $token = auth('api_v3')->login($user)) {
-                return response()->json(['error' => 'Unauthorized'], 401);
-            }
-        }
-        auth('api_v3')->login($user);
-        //Notification::send($user, new UserLoggedIn());
-        $user->update([
-            'last_login_at' => Carbon::now()->toDateTimeString(),
-        ]);
-        return $this->respondWithToken($token, $attributes);
+    if (!$user) {
+        $user = \App\ApiUser::create($payload);
+    } else {
+        $user->update($payload);
+        // refresh the instance so relationships work right away
+        $user->refresh();
     }
+
+    /**
+     * --- Group resolve & attach as STUDENT ---
+     * Source: eduPersonPrimaryAffiliation
+     * 1) groups.internal_identifier = code (lowercased)
+     * 2) groups.affiliation_code   = code
+     * 3) config('group_map')[code] -> internal_identifier, then lookup
+     * If none match, return 422 (don’t auto-create).
+     */
+    $primaryAff = $socialiteUser->user['eduPersonPrimaryAffiliation'] ?? null;
+
+    if (!$primaryAff || !is_string($primaryAff)) {
+        \Log::warning('Missing eduPersonPrimaryAffiliation on login', ['uid' => $socialiteUser->uid]);
+        return response()->json([
+            'message' => 'Cannot determine your department (eduPersonPrimaryAffiliation missing). Please contact support.'
+        ], 422);
+    }
+
+    $code  = mb_strtolower(trim($primaryAff));
+    $group = \App\Models\V3\Group::where('internal_identifier', $code)->first();
+
+    if (!$group) {
+        $group = \App\Models\V3\Group::where('affiliation_code', $code)->first();
+    }
+
+    if (!$group) {
+        $map = config('group_map', []);
+        if (is_array($map) && isset($map[$code])) {
+            $mapped = $map[$code];
+            // allow either a simple string or ['internal_identifier' => '...']
+            if (is_string($mapped)) {
+                $group = \App\Models\V3\Group::where('internal_identifier', $mapped)->first();
+            } elseif (is_array($mapped) && !empty($mapped['internal_identifier'])) {
+                $group = \App\Models\V3\Group::where('internal_identifier', $mapped['internal_identifier'])->first();
+            }
+        }
+    }
+
+    if (!$group) {
+        \Log::warning('No group matched for affiliation code', ['uid' => $socialiteUser->uid, 'code' => $code]);
+        return response()->json([
+            'message' => "Your affiliation code '{$code}' is not configured to a group. Please contact support."
+        ], 422);
+    }
+
+    // Attach/update pivot as 'student' without removing other memberships
+    $user->groups()->syncWithoutDetaching([$group->id => ['role' => 'student']]);
+    $user->groups()->updateExistingPivot($group->id, ['role' => 'student']);
+    // --- end group-attach ---
+
+    try {
+        // Get user and then try to log in and sent notification
+        $user = ApiUser::where('uid', $socialiteUser->uid)->first();
+        $attributes = ['id' => $user->id];
+
+        if (auth('api_v3')->check()) {
+            auth('api_v3')->logout();
+        }
+        // return new static($attributes); 
+    } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+        // If an error occurs log user out
+        if (auth('api_v3')->check()) {
+            auth('api_v3')->logout();
+        }
+
+        // Depending on the error code sent the appropriate message
+        if ($e->getCode() === 400) {
+            return response()->json('Invalid request', $e->getCode());
+        } else if ($e->getCode() === 401) {
+            return response()->json('Invalid credentials', 401);
+        }
+
+        return response()->json('Something went wrong on the server.', $e->getCode());
+    }
+
+    if (!is_null($web_redirect)) {
+        if (!$token = auth('generate_token')->setTTL(120)->login($user)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        return redirect()->away($web_redirect . '/login_success?token=' . $token);
+    } else {
+        if (!$token = auth('api_v3')->login($user)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+    }
+    auth('api_v3')->login($user);
+
+    // Keeping this since you had it (even though you said it might not be needed)
+    $user->update([
+        'last_login_at' => \Carbon\Carbon::now()->toDateTimeString(),
+    ]);
+
+    return $this->respondWithToken($token, $attributes);
+}
 
     /**
      * generateToken generates a JWT by using a one time access token generated 

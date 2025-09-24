@@ -11,7 +11,7 @@ class CreateUserHasGroupTable extends Migration
         Schema::create('user_has_group', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('group_id');
-            $table->enum('role', ['user', 'teacher', 'admin', 'PhD candidate']);
+            $table->enum('role', ['student', 'staff', 'admin']);
             $table->primary(['user_id', 'group_id']);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
