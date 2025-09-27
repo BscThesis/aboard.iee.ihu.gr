@@ -106,7 +106,7 @@ const FullAnnouncement = (props) => {
             <div className='announcement-footer'>
                 <div className='show-more'>
                     {
-                        (user.user && ((user.user.is_author === true && user.user.id == announcement.author.id) || user.user.is_admin === true)) &&
+                        (user.user && ((user.user.is_author && user.user.id == announcement.author.id) || user.user.is_admin)) &&
                         <>
                         <button className="btn btn-danger" onClick={() => deleteAnnouncement()}><FontAwesomeIcon icon={faTrash} />
                             <span>{i18n.t('Διαγραφή')}</span>

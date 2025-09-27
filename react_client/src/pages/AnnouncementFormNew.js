@@ -63,7 +63,7 @@ const AnnouncementForm = (props) => {
         request.get('most_used_tags').then(response => {
             setMostUsedTags(response.data)
         })
-        if (user.user.is_admin === true) {
+        if (user.user && user.user.is_admin) {
             request.get('/all_authors').then(response => {
                 setAuthors(response.data)
             })
@@ -92,7 +92,7 @@ const AnnouncementForm = (props) => {
                     a.event_end_time = a.event_end_time ? new Date(a.event_end_time) : ''
                     setAnnouncement(a)
                     setIsEdit(true)
-                    if (user.user.is_admin) {
+                    if (user.user && user.user.is_admin) {
                         setAuthorId(a.author.id)
                         setShowAuthors(true)
                     }

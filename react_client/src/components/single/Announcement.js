@@ -105,7 +105,7 @@ const Announcement = (props) => {
                 </div>
                 <div className='show-more'>
                     {
-                        (user.user && ((user.user.is_author === true && user.user.id == props.announcement.author.id) || user.user.is_admin === true)) &&
+                        (user.user && ((user.user.is_author && user.user.id == props.announcement.author.id) || user.user.is_admin)) &&
                         <>
                             <button className="btn btn-danger" onClick={() => deleteAnnouncement()}><FontAwesomeIcon icon={faTrash} /></button>
                             <button className="btn btn-secondary" onClick={() => editAnnouncement()}><FontAwesomeIcon icon={faEdit} /></button>

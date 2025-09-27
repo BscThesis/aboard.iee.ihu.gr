@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faLightbulb, faMoon, faSun, faArrowRightFromBracket, faUser } from "@fortawesome/free-solid-svg-icons"
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import config from "../../config"
 import i18n from "../../i18n"
 import user from "../../helpers/user"
 import Container from 'react-bootstrap/Container'
@@ -18,6 +17,9 @@ const Header = (props) => {
     const [darkTheme, setDarkTheme] = useState(
         props.darkThemeEnabled
     )
+
+    const sessionUser = props.user ?? user.user ?? null;
+    const isAuthorOrAdmin = !!(sessionUser && (sessionUser.is_admin || sessionUser.is_author));
 
     useEffect(() => {
         props.setThemeColors(darkTheme)
@@ -46,7 +48,7 @@ const Header = (props) => {
                         <Nav className="me-auto">
                             <Nav.Link as={Link} to="/announcements">{i18n.t('Ανακοινώσεις')}</Nav.Link>
                             {
-                                (user.user.is_admin === true || user.user.is_author === true) &&
+                                isAuthorOrAdmin &&
                                 <NavDropdown title={i18n.t('Διαχείριση ανακοινώσεων')} id="collasible-nav-dropdown-locale">
                                     <Nav.Link as={Link} to="/my_announcements">{i18n.t('Οι ανακοινώσεις μου')}</Nav.Link>
                                     <Nav.Link as={Link} to="/add_announcement">{i18n.t('Νέα ανακοίνωση')}</Nav.Link>
@@ -63,9 +65,9 @@ const Header = (props) => {
                         <Nav>
                             <Nav.Link onClick={() => setDarkTheme(!darkTheme)}><FontAwesomeIcon icon={darkTheme ? faLightbulb : faMoon}/></Nav.Link>
                             {
-                                !props.user ?
+                                !sessionUser ?
                                 <Nav.Link onClick={props.loginProp}>{i18n.t('Σύνδεση')}</Nav.Link> :
-                                <NavDropdown title={props.user.name} id="collasible-nav-dropdown-account">
+                                <NavDropdown title={sessionUser.name} id="collasible-nav-dropdown-account">
                                     <Nav.Link as={Link} to="/account"> <FontAwesomeIcon icon={faUser} /> {i18n.t('Λογαριασμός')}</Nav.Link>
                                     <Nav.Link onClick={props.logoutProp}><FontAwesomeIcon icon={faArrowRightFromBracket} /> {i18n.t('Αποσύνδεση')}</Nav.Link>
                                 </NavDropdown>
