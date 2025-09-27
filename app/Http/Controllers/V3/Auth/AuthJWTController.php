@@ -78,119 +78,99 @@ class AuthJWTController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-public function login($socialiteUser, $web_redirect = null)
-{
-    // Create or update user based on our results
-    $user = \App\ApiUser::where('uid', $socialiteUser->uid)->first();
+    public function login($socialiteUser, $web_redirect = null)
+    {
+        // Create or update user based on our results
+        $user = \App\ApiUser::where('uid', $socialiteUser->uid)->first();
 
-    $payload = [
-        'name'     => $socialiteUser->name,
-        'name_eng' => $socialiteUser->name_eng,
-        'email'    => $socialiteUser->email,
-        'uid'      => $socialiteUser->uid,
-    ];
+        $payload = [
+            'name'     => $socialiteUser->name,
+            'name_eng' => $socialiteUser->name_eng,
+            'email'    => $socialiteUser->email,
+            'uid'      => $socialiteUser->uid,
+        ];
 
-    if (!$user) {
-        $user = \App\ApiUser::create($payload);
-    } else {
-        $user->update($payload);
-        // refresh the instance so relationships work right away
-        $user->refresh();
-    }
+        if (!$user) {
+            $user = \App\ApiUser::create($payload);
+        } else {
+            $user->update($payload);
+            $user->refresh();
+        }
 
-    /**
-     * --- Group resolve & attach as STUDENT ---
-     * Source: eduPersonPrimaryAffiliation
-     * 1) groups.internal_identifier = code (lowercased)
-     * 2) groups.affiliation_code   = code
-     * 3) config('group_map')[code] -> internal_identifier, then lookup
-     * If none match, return 422 (don’t auto-create).
-     */
-    $primaryAff = $socialiteUser->user['eduPersonPrimaryAffiliation'] ?? null;
+        $identity = $this->buildSsoUserObject($socialiteUser);
+        $groups = \App\Models\V3\Group::query()->get(['id', 'name', 'is_user', 'is_author']);
 
-    if (!$primaryAff || !is_string($primaryAff)) {
-        \Log::warning('Missing eduPersonPrimaryAffiliation on login', ['uid' => $socialiteUser->uid]);
-        return response()->json([
-            'message' => 'Cannot determine your department (eduPersonPrimaryAffiliation missing). Please contact support.'
-        ], 422);
-    }
+        $matchedAnyGroup = false;
 
-    $code  = mb_strtolower(trim($primaryAff));
-    $group = \App\Models\V3\Group::where('internal_identifier', $code)->first();
+        foreach ($groups as $group) {
+            if ($this->evaluateGroupRule($group->is_user, $identity)) {
+                $this->assignGroupRole($user, $group, 'student');
+                $matchedAnyGroup = true;
+                continue;
+            }
 
-    if (!$group) {
-        $group = \App\Models\V3\Group::where('affiliation_code', $code)->first();
-    }
+            if ($this->evaluateGroupRule($group->is_author, $identity)) {
+                $this->assignGroupRole($user, $group, 'staff');
 
-    if (!$group) {
-        $map = config('group_map', []);
-        if (is_array($map) && isset($map[$code])) {
-            $mapped = $map[$code];
-            // allow either a simple string or ['internal_identifier' => '...']
-            if (is_string($mapped)) {
-                $group = \App\Models\V3\Group::where('internal_identifier', $mapped)->first();
-            } elseif (is_array($mapped) && !empty($mapped['internal_identifier'])) {
-                $group = \App\Models\V3\Group::where('internal_identifier', $mapped['internal_identifier'])->first();
+                foreach ($this->collectDescendantGroups($group) as $descendantGroup) {
+                    $this->assignGroupRole($user, $descendantGroup, 'staff');
+                }
+
+                $matchedAnyGroup = true;
             }
         }
+
+        if (!$matchedAnyGroup) {
+            \Log::info('Login denied: no group matched by expressions', [
+                'uid' => $socialiteUser->uid,
+                'affiliation' => $identity->eduPersonAffiliation ?? null,
+                'primary_affiliation' => $identity->eduPersonPrimaryAffiliation ?? null,
+            ]);
+
+            return response()->json([
+                'message' => 'Your account does not have access to this application (no matching group rules).',
+            ], 403);
+        }
+
+        // ----- token flow unchanged -----
+        try {
+            $user = \App\ApiUser::where('uid', $socialiteUser->uid)->first();
+            $attributes = ['id' => $user->id];
+
+            if (auth('api_v3')->check()) {
+                auth('api_v3')->logout();
+            }
+        } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+            if (auth('api_v3')->check()) {
+                auth('api_v3')->logout();
+            }
+            if ($e->getCode() === 400) {
+                return response()->json('Invalid request', 400);
+            } elseif ($e->getCode() === 401) {
+                return response()->json('Invalid credentials', 401);
+            }
+            return response()->json('Something went wrong on the server.', $e->getCode());
+        }
+
+        if (!is_null($web_redirect)) {
+            if (!$token = auth('generate_token')->setTTL(120)->login($user)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+            return redirect()->away($web_redirect . '/login_success?token=' . $token);
+        } else {
+            if (!$token = auth('api_v3')->login($user)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+        }
+        auth('api_v3')->login($user);
+
+        // keep as-is if you still want it
+        $user->update([
+            'last_login_at' => \Carbon\Carbon::now()->toDateTimeString(),
+        ]);
+
+        return $this->respondWithToken($token, $attributes);
     }
-
-    if (!$group) {
-        \Log::warning('No group matched for affiliation code', ['uid' => $socialiteUser->uid, 'code' => $code]);
-        return response()->json([
-            'message' => "Your affiliation code '{$code}' is not configured to a group. Please contact support."
-        ], 422);
-    }
-
-    // Attach/update pivot as 'student' without removing other memberships
-    $user->groups()->syncWithoutDetaching([$group->id => ['role' => 'student']]);
-    $user->groups()->updateExistingPivot($group->id, ['role' => 'student']);
-    // --- end group-attach ---
-
-    try {
-        // Get user and then try to log in and sent notification
-        $user = ApiUser::where('uid', $socialiteUser->uid)->first();
-        $attributes = ['id' => $user->id];
-
-        if (auth('api_v3')->check()) {
-            auth('api_v3')->logout();
-        }
-        // return new static($attributes); 
-    } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-        // If an error occurs log user out
-        if (auth('api_v3')->check()) {
-            auth('api_v3')->logout();
-        }
-
-        // Depending on the error code sent the appropriate message
-        if ($e->getCode() === 400) {
-            return response()->json('Invalid request', $e->getCode());
-        } else if ($e->getCode() === 401) {
-            return response()->json('Invalid credentials', 401);
-        }
-
-        return response()->json('Something went wrong on the server.', $e->getCode());
-    }
-
-    if (!is_null($web_redirect)) {
-        if (!$token = auth('generate_token')->setTTL(120)->login($user)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-        return redirect()->away($web_redirect . '/login_success?token=' . $token);
-    } else {
-        if (!$token = auth('api_v3')->login($user)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-    }
-    auth('api_v3')->login($user);
-
-    // Keeping this since you had it (even though you said it might not be needed)
-    $user->update([
-        'last_login_at' => \Carbon\Carbon::now()->toDateTimeString(),
-    ]);
-
-    return $this->respondWithToken($token, $attributes);
-}
 
     /**
      * generateToken generates a JWT by using a one time access token generated 
@@ -298,6 +278,101 @@ public function login($socialiteUser, $web_redirect = null)
         // }else{
         //     return $user->subscriptions()->get();
         // }
+    }
+
+    private function buildSsoUserObject($socialiteUser): object
+    {
+        $raw = $socialiteUser->user ?? [];
+        if (!is_array($raw)) {
+            $raw = [];
+        }
+
+        $normalised = $raw;
+
+        foreach (['eduPersonAffiliation', 'eduPersonPrimaryAffiliation'] as $key) {
+            if (isset($normalised[$key])) {
+                $value = $normalised[$key];
+                if (is_array($value)) {
+                    $normalised[$key] = $value[0] ?? null;
+                } elseif ($value === '') {
+                    $normalised[$key] = null;
+                }
+            } else {
+                $normalised[$key] = null;
+            }
+        }
+
+        $normalised['uid'] = $socialiteUser->uid ?? ($normalised['uid'] ?? null);
+        $normalised['email'] = $socialiteUser->email ?? ($normalised['email'] ?? null);
+
+        return json_decode(json_encode($normalised));
+    }
+
+    private function evaluateGroupRule(?string $expression, object $user): bool
+    {
+        if ($expression === null) {
+            return false;
+        }
+
+        $code = trim($expression);
+
+        if ($code === '') {
+            return false;
+        }
+
+        $code = rtrim($code, ';');
+        if (stripos($code, 'return') === false) {
+            $code = 'return (' . $code . ');';
+        } else {
+            $code .= ';';
+        }
+
+        try {
+            return (bool) eval($code);
+        } catch (\Throwable $e) {
+            \Log::warning('Group expression eval failed', [
+                'expression' => $expression,
+                'error' => $e->getMessage(),
+            ]);
+
+            return false;
+        }
+    }
+
+    private function collectDescendantGroups(\App\Models\V3\Group $group): array
+    {
+        $descendants = [];
+
+        foreach ($group->subgroups as $child) {
+            $descendants[] = $child;
+            $descendants = array_merge($descendants, $this->collectDescendantGroups($child));
+        }
+
+        return $descendants;
+    }
+
+    private function assignGroupRole(ApiUser $user, \App\Models\V3\Group $group, string $role): void
+    {
+        $existing = $user->groups()->where('groups.id', $group->id)->first();
+
+        if (!$existing) {
+            $user->groups()->attach($group->id, ['role' => $role]);
+            return;
+        }
+
+        $currentRole = $existing->pivot->role ?? null;
+
+        if ($currentRole === $role) {
+            return;
+        }
+
+        $priority = ['student' => 0, 'staff' => 1, 'admin' => 2];
+        $currentScore = $priority[$currentRole] ?? -1;
+        $newScore = $priority[$role] ?? -1;
+
+        if ($newScore > $currentScore) {
+            $user->groups()->updateExistingPivot($group->id, ['role' => $role]);
+        }
     }
 
     /**

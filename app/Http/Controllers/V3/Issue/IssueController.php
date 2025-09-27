@@ -56,7 +56,7 @@ class IssueController extends Controller
     public function destroy($id)
     {
         // If user is admin find the Issue with an id of $id and try to delete it then return every Issue as Json
-        if (auth('api_v2')->user()->is_admin) {
+        if (auth('api_v3')->user()->is_admin) {
             $issue = Issue::findOrFail($id);
             if ($issue->delete()) {
                 $issues = Issue::orderBy('id', 'desc')->get();

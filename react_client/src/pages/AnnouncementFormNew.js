@@ -63,7 +63,7 @@ const AnnouncementForm = (props) => {
         request.get('most_used_tags').then(response => {
             setMostUsedTags(response.data)
         })
-        if (user.user.is_admin === 1) {
+        if (user.user.is_admin === true) {
             request.get('/all_authors').then(response => {
                 setAuthors(response.data)
             })

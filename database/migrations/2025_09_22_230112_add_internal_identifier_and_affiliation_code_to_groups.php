@@ -9,14 +9,17 @@ class AddInternalIdentifierAndAffiliationCodeToGroups extends Migration
     public function up()
     {
         Schema::table('groups', function (Blueprint $table) {
-            if (!Schema::hasColumn('groups', 'internal_identifier')) {
-                $table->string('internal_identifier')->nullable()->after('name');
-                $table->unique('internal_identifier', 'groups_internal_identifier_unique');
+            if (Schema::hasColumn('groups', 'internal_identifier')) {
+                $table->dropColumn('internal_identifier');
             }
-
-            if (!Schema::hasColumn('groups', 'affiliation_code')) {
-                $table->string('affiliation_code')->nullable()->after('internal_identifier');
-                $table->unique('affiliation_code', 'groups_affiliation_code_unique');
+            if (Schema::hasColumn('groups', 'affiliation_code')) {
+                $table->dropColumn('affiliation_code');
+            }
+            if (!Schema::hasColumn('groups', 'is_user')) {
+                $table->text('is_user')->nullable()->after('parent_group');
+            }
+            if (!Schema::hasColumn('groups', 'is_author')) {
+                $table->text('is_author')->nullable()->after('is_user');
             }
         });
     }
@@ -24,13 +27,9 @@ class AddInternalIdentifierAndAffiliationCodeToGroups extends Migration
     public function down()
     {
         Schema::table('groups', function (Blueprint $table) {
-            if (Schema::hasColumn('groups', 'internal_identifier')) {
-                $table->dropUnique('groups_internal_identifier_unique');
-            }
-            if (Schema::hasColumn('groups', 'affiliation_code')) {
-                $table->dropUnique('groups_affiliation_code_unique');
-            }
-            $table->dropColumn(['internal_identifier', 'affiliation_code']);
+            $table->dropColumn(['is_user', 'is_author']);
+            $table->string('internal_identifier')->nullable();
+            $table->string('affiliation_code')->nullable();
         });
     }
 }

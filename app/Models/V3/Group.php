@@ -10,8 +10,8 @@ class Group extends Model
         'name',
         'description',
         'parent_group',
-        'internal_identifier',
-        'affiliation_code',
+        'is_user',
+        'is_author',
     ];
 
     /**

@@ -9,45 +9,36 @@ use Illuminate\Validation\ValidationException;
 
 class GroupController extends Controller
 {
-    /**
-     * Display a listing of the groups.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function index()
     {
         $groups = Group::orderBy('name')->get();
         return response()->json($groups);
     }
 
-    /**
-     * Display a single group.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function show($id)
     {
         $group = Group::findOrFail($id);
         return response()->json($group);
     }
 
-    /**
-     * Store a newly created group.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function store(Request $request)
     {
-        // normalize name
-        $request->merge(['name' => trim((string) $request->input('name'))]);
+        // normalize
+        $request->merge([
+            'name'         => trim((string) $request->input('name')),
+            'parent_group' => $request->input('parent_group') ?: null,
+            // accept raw expressions as-is; just trim empty to null
+            'is_user'      => $this->normalizeExpr($request->input('is_user')),
+            'is_author'    => $this->normalizeExpr($request->input('is_author')),
+        ]);
 
         try {
             $validated = $request->validate([
-                'name' => 'required|string|max:255|unique:groups,name',
-                'description' => 'nullable|string|max:1000',
-                'parent_group' => 'nullable|exists:groups,id',
+                'name'          => 'required|string|max:255|unique:groups,name',
+                'description'   => 'nullable|string|max:1000',
+                'parent_group'  => 'nullable|exists:groups,id',
+                'is_user'       => 'nullable|string',   // PHP-like expression string
+                'is_author'     => 'nullable|string',   // PHP-like expression string
             ]);
         } catch (ValidationException $e) {
             return response()->json([
@@ -56,8 +47,8 @@ class GroupController extends Controller
             ], 422);
         }
 
-        // Optional: extra case-insensitive existence guard
-        $existing = \App\Models\V3\Group::whereRaw('LOWER(name) = ?', [mb_strtolower($validated['name'])])->first();
+        // extra case-insensitive guard on name
+        $existing = Group::whereRaw('LOWER(name) = ?', [mb_strtolower($validated['name'])])->first();
         if ($existing) {
             return response()->json([
                 'message' => 'Group already exists.',
@@ -65,25 +56,28 @@ class GroupController extends Controller
             ], 409);
         }
 
-        $group = \App\Models\V3\Group::create($validated);
+        $group = Group::create($validated);
         return response()->json($group, 201);
     }
 
-    /**
-     * Update the given group.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function update(Request $request, $id)
     {
         $group = Group::findOrFail($id);
 
+        // normalize (fallback to existing values if not sent)
+        $request->merge([
+            'name'         => $request->has('name') ? trim((string) $request->input('name')) : $group->name,
+            'parent_group' => $request->input('parent_group') ?: null,
+            'is_user'      => $request->has('is_user')   ? $this->normalizeExpr($request->input('is_user'))     : $group->is_user,
+            'is_author'    => $request->has('is_author') ? $this->normalizeExpr($request->input('is_author'))   : $group->is_author,
+        ]);
+
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:groups,name,' . $id,
-            'description' => 'nullable|string|max:1000',
-            'parent_group' => 'nullable|exists:groups,id',
+            'name'          => 'required|string|max:255|unique:groups,name,' . $id,
+            'description'   => 'nullable|string|max:1000',
+            'parent_group'  => 'nullable|exists:groups,id',
+            'is_user'       => 'nullable|string',
+            'is_author'     => 'nullable|string',
         ]);
 
         $group->update($validated);
@@ -91,17 +85,21 @@ class GroupController extends Controller
         return response()->json($group);
     }
 
-    /**
-     * Delete the given group.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function destroy($id)
     {
         $group = Group::findOrFail($id);
         $group->delete();
 
         return response()->json(['message' => 'Group deleted successfully.']);
+    }
+
+    /**
+     * Trim to null; keep case and content intact (expressions).
+     */
+    private function normalizeExpr($val): ?string
+    {
+        if ($val === null) return null;
+        $v = trim((string) $val);
+        return $v === '' ? null : $v;
     }
 }

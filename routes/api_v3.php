@@ -18,7 +18,7 @@ Route::prefix('v3')->group(function () {
      * Announcements routes
      */
     Route::prefix('announcements')->group(function () {
-        Route::middleware(['auth.author'])->group(function () {
+        Route::middleware(['auth.v3.author'])->group(function () {
             Route::get('/my_announcements', 'Announcement\AnnouncementController@user_announcements');
             Route::get('/edit_view/{id}', 'Announcement\AnnouncementController@showForEdit');
             Route::post('/', 'Announcement\AnnouncementController@store');
@@ -27,7 +27,7 @@ Route::prefix('v3')->group(function () {
         });
         Route::get('/', 'Announcement\AnnouncementController@index');
 
-        Route::middleware(['auth.can_show_announcement'])->group(function () {
+        Route::middleware(['auth.v3.can_show_announcement'])->group(function () {
             Route::get('/{id}', 'Announcement\AnnouncementController@show');
         });
 
@@ -38,7 +38,7 @@ Route::prefix('v3')->group(function () {
      * Tags Routes
      */
     Route::prefix('tags')->group(function () {
-        Route::middleware(['auth.admin'])->group(function () {
+        Route::middleware(['auth.v3.admin'])->group(function () {
             Route::post('/', 'Tag\TagController@store');
             Route::put('/{id}', 'Tag\TagController@update');
             Route::delete('/{id}', 'Tag\TagController@destroy');
@@ -80,7 +80,7 @@ Route::prefix('v3')->group(function () {
     /**
      * Issues Routes
      */
-    Route::middleware(['auth.admin'])->prefix('issues')->group(function () {
+    Route::middleware(['auth.v3.admin'])->prefix('issues')->group(function () {
         Route::post('/', 'Issue\IssueController@store');
         Route::get('/', 'Issue\IssueController@index');
         Route::delete('/{id}', 'Issue\IssueController@destroy');
@@ -89,28 +89,26 @@ Route::prefix('v3')->group(function () {
     /**
      * Group Routes
      */
-    // Route::prefix('groups')->middleware(['auth:api'])->group(function () {
-    //     Route::get('/', 'Group\GroupController@index');
-    //     Route::get('/{id}', 'Group\GroupController@show');
-    //     Route::post('/', 'Group\GroupController@store');
-    //     Route::put('/{id}', 'Group\GroupController@update');
-    //     Route::delete('/{id}', 'Group\GroupController@destroy');
-    //     Route::post('/{id}/members', 'Group\GroupController@addMember');
-    // });
-    // @TODO: Uncomment the above route group when the authentication middleware is ready.
-    Route::prefix('groups')->group(function () {
+    Route::prefix('groups')->middleware(['auth.v3.master'])->group(function () {
         Route::get('/', 'Group\GroupController@index');
         Route::get('/{id}', 'Group\GroupController@show');
         Route::post('/', 'Group\GroupController@store');
         Route::put('/{id}', 'Group\GroupController@update');
         Route::delete('/{id}', 'Group\GroupController@destroy');
-        Route::post('/{id}/members', 'Group\GroupController@addMember');
     });
+    // @TODO: Uncomment the above route group when the authentication middleware is ready.
+    // Route::prefix('groups')->group(function () {
+    //     Route::get('/', 'Group\GroupController@index');
+    //     Route::get('/{id}', 'Group\GroupController@show');
+    //     Route::post('/', 'Group\GroupController@store');
+    //     Route::put('/{id}', 'Group\GroupController@update');
+    //     Route::delete('/{id}', 'Group\GroupController@destroy');
+    // });
 
     /**
      * UserHasGroup Routes
      */
-    Route::prefix('user-group-roles')->group(function () {
+    Route::prefix('user-group-roles')->middleware(['auth.v3.master'])->group(function () {
         Route::get('/', 'Group\UserHasGroupController@index');
         Route::get('/{user_id}/{group_id}', 'Group\UserHasGroupController@show');
         Route::post('/', 'Group\UserHasGroupController@store');

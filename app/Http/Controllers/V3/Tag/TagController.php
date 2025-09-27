@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V3\Tag;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\V1\StoreTag;
+use App\Http\Requests\V3\StoreTag;
 use App\Models\V3\Tag;
 use App\Http\Resources\Tag as TagResource;
 use Illuminate\Support\Facades\DB;
@@ -69,7 +69,7 @@ class TagController extends Controller
                                  GROUP BY L.id
                                  ORDER BY weight DESC
                                 LIMIT 5",
-                [auth('api_v2')->user()->id]
+                [auth('api_v3')->user()->id]
             );
             return $results;
         }
@@ -86,7 +86,7 @@ class TagController extends Controller
     {
         // If user is logged in or inside university's wifi return tags, filtering and then counting every announcement each one has with their children
         $local_ip = $request->session()->get('local_ip', 0);
-        if ($local_ip == 1 or auth('api_v2')->check()) {
+        if ($local_ip == 1 or auth('api_v3')->check()) {
             $tags = Tag::with('childrenRecursive')->where('parent_id', 1)->withCount(['announcements' => function ($query) use ($request) {
                 $query->tags(
                     request()->input('users', []),

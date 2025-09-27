@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V3;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\V2\Announcement;
+use App\Models\V3\Announcement;
 
 class AuthorController extends Controller
 {
@@ -27,10 +27,10 @@ class AuthorController extends Controller
      */
     protected function get_user_announcement(int $announcement_id) {
         // If user is logged in 
-        if (!auth('api_v2')->check()) {
+        if (!auth('api_v3')->check()) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
-        if (!$user = auth('api_v2')->user()) {
+        if (!$user = auth('api_v3')->user()) {
             return response()->json(['message' => 'Something went wrong. Can\'t fetch user data. Please logout and login'], 401);
         }
         // Get single announcement

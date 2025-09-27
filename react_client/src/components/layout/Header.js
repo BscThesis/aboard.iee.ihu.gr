@@ -46,7 +46,7 @@ const Header = (props) => {
                         <Nav className="me-auto">
                             <Nav.Link as={Link} to="/announcements">{i18n.t('Ανακοινώσεις')}</Nav.Link>
                             {
-                                (user.user.is_admin === 1 || user.user.is_author === 1) &&
+                                (user.user.is_admin === true || user.user.is_author === true) &&
                                 <NavDropdown title={i18n.t('Διαχείριση ανακοινώσεων')} id="collasible-nav-dropdown-locale">
                                     <Nav.Link as={Link} to="/my_announcements">{i18n.t('Οι ανακοινώσεις μου')}</Nav.Link>
                                     <Nav.Link as={Link} to="/add_announcement">{i18n.t('Νέα ανακοίνωση')}</Nav.Link>
