@@ -4,11 +4,12 @@ import request from "./request";
 class User {
     
     constructor() {
-        this.user = storage.me ? storage.me : {};
+        this.user = storage.me ? storage.me : null;
 
         storage.onChange((key) => {
-            if (key === 'me')
-                this.user = storage.me ? storage.me : {};
+            if (key === 'me') {
+                this.user = storage.me ? storage.me : null;
+            }
         })
     }
 
@@ -16,8 +17,12 @@ class User {
         return new Promise( (resolve, reject) => {
             request.get('whoami').then(response => {
                 if (response.data) {
-                    this.user.is_admin = Boolean(response.data.is_admin)
-                    this.user.is_author = Boolean(response.data.is_author)
+                    this.user = {
+                        ...(this.user || {}),
+                        ...response.data,
+                        is_admin: Boolean(response.data.is_admin),
+                        is_author: Boolean(response.data.is_author)
+                    }
                     resolve({
                         is_admin: Boolean(response.data.is_admin),
                         is_author: Boolean(response.data.is_author)
