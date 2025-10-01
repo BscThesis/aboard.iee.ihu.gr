@@ -120,7 +120,7 @@ Route::prefix('v3')->group(function () {
         Route::get('/', 'Group\GroupTagController@index');
         Route::get('/{id}', 'Group\GroupTagController@show');
         Route::post('/', 'Group\GroupTagController@store');
-        Route::delete('/{group_id}/{tag_id}', 'Group\GroupTagController@destroy');
+        Route::delete('/{id}', 'Group\GroupTagController@destroy');
     });
 });
 

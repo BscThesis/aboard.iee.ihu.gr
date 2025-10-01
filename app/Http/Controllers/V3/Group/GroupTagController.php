@@ -85,16 +85,15 @@ class GroupTagController extends Controller
         return response()->json($record);
     }
 
-    public function destroy($group_id, $tag_id)
+    public function destroy($id)
     {
-        $deleted = DB::table('group_tag')
-            ->where('group_id', $group_id)
-            ->where('tag_id', $tag_id)
-            ->delete();
+        $record = GroupTag::find($id);
 
-        if (!$deleted) {
+        if (!$record) {
             return response()->json(['message' => 'Association not found.'], 404);
         }
+
+        $record->delete();
 
         return response()->json(['message' => 'Tag removed from group.']);
     }
