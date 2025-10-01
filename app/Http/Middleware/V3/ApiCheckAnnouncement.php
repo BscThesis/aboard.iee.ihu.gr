@@ -4,8 +4,7 @@ namespace App\Http\Middleware\V3;
 
 use Closure;
 use App\Models\V3\Announcement;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
+use App\Models\V3\GroupTag;
 
 class ApiCheckAnnouncement
 {
@@ -18,10 +17,14 @@ class ApiCheckAnnouncement
      */
     public function handle($request, Closure $next)
     {
-        // If requested resouces does not exist, abort with 404
         $id = $request->route('id');
 
-        if (DB::table('announcements')->where('id', $id)->whereNull('deleted_at')->doesntExist()) {
+        $announcement = Announcement::with(['tags:id,is_public'])
+            ->where('id', $id)
+            ->whereNull('deleted_at')
+            ->first();
+
+        if (!$announcement) {
             return response()->json([
                 'error' => 'Resource not found'
             ], 404);
@@ -29,21 +32,55 @@ class ApiCheckAnnouncement
 
         $local_ip = $request->session()->get('local_ip', 0);
 
-        // get the number of public tags in an announcement
-        $announcement = Announcement::withCount(['tags' => function (Builder $query) {
-            $query->where('is_public', '=', 1);
-        }])->where('id', $id)->get();
+        $hasPublicTag = $announcement->tags->contains(function ($tag) {
+            return (bool) $tag->is_public;
+        });
 
-        if (($announcement[0]->tags_count > 0) || auth('api_v3')->check()) {
-            // if we have at least one public tag, continue
+        if ($hasPublicTag || $local_ip == 1) {
             return $next($request);
-        } else if ($local_ip == 0) {
-            // if we don't, 401 unauthorized
+        }
+
+        if (!auth('api_v3')->check()) {
             return response()->json([
-                'error' => 'Unauthorized 2'
+                'error' => 'Unauthorized'
             ], 401);
         }
 
-        return $next($request);
+        $viewer = auth('api_v3')->user();
+
+        if (!$viewer) {
+            return response()->json([
+                'error' => 'Unauthorized'
+            ], 401);
+        }
+
+        if ($viewer->is_author || $viewer->is_admin) {
+            return $next($request);
+        }
+
+        $announcementTagIds = $announcement->tags->pluck('id')->filter()->unique();
+
+        if ($announcementTagIds->isEmpty()) {
+            return response()->json([
+                'error' => 'Unauthorized'
+            ], 401);
+        }
+
+        $groupIds = $viewer->groups()->pluck('groups.id');
+
+        $userGroupTagIds = GroupTag::whereIn('group_id', $groupIds)
+            ->pluck('tag_id')
+            ->filter()
+            ->unique();
+
+        $intersects = $announcementTagIds->intersect($userGroupTagIds);
+
+        if ($intersects->isNotEmpty()) {
+            return $next($request);
+        }
+
+        return response()->json([
+            'error' => 'Unauthorized'
+        ], 401);
     }
 }

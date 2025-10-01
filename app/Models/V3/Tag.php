@@ -53,6 +53,11 @@ class Tag extends Model
         return $this->children()->with('childrensubRecursive');
     }
 
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'group_tag', 'tag_id', 'group_id')->withTimestamps();
+    }
+
     /**
      * The users that belong to the role.
      */

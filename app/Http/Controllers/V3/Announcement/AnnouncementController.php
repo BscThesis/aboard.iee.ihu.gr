@@ -8,6 +8,7 @@ use App\Http\Requests\V3\StoreAnnouncement;
 use App\Models\V3\Announcement;
 use App\Models\V3\Attachment;
 use App\Models\V3\Tag;
+use App\Models\V3\GroupTag;
 use App\Http\Resources\AnnouncementV2 as AnnouncementResource;
 use App\Http\Resources\DeletedAnnouncement;
 use App\Events\V3\NewAnnouncementWasCreatedEvent;
@@ -128,6 +129,8 @@ class AnnouncementController extends AuthorController
             $only_deleted = 0;
         }
 
+        $allowedTagIds = $this->resolveAllowedTagIdsForViewer($fetch_public);
+
         if ($only_deleted == 1) {
             $announcements = Announcement::onlyTrashed()->withFilters(
                 $users,
@@ -137,11 +140,12 @@ class AnnouncementController extends AuthorController
                 $updatedAfter,
                 $updatedBefore,
                 $is_ical,
-                $fetch_public
+                $fetch_public,
+                $allowedTagIds
             )
             ->select('announcements.*')
             ->orderByRaw(Announcement::SORT_VALUES[$sort_id]);
-    
+
             return [$announcements, 0];
         }
         $announcements = Announcement::withFilters(
@@ -152,7 +156,8 @@ class AnnouncementController extends AuthorController
             $updatedAfter,
             $updatedBefore,
             $is_ical,
-            $fetch_public
+            $fetch_public,
+            $allowedTagIds
         )
         ->select('announcements.*')
         ->orderByRaw(Announcement::SORT_VALUES[$sort_id])->whereNull('announcements.deleted_at')
@@ -170,7 +175,8 @@ class AnnouncementController extends AuthorController
             $updatedAfter,
             $updatedBefore,
             $is_ical,
-            $fetch_public
+            $fetch_public,
+            $allowedTagIds
         )
         ->select(DB::raw('distinct IFNULL(count(announcements.id) OVER(), 0) as total'))
         ->whereNull('announcements.deleted_at')
@@ -185,6 +191,38 @@ class AnnouncementController extends AuthorController
         }
 
         return [$announcements, $count_total];
+    }
+
+    protected function resolveAllowedTagIdsForViewer(bool $fetch_public): ?array
+    {
+        if ($fetch_public) {
+            return null;
+        }
+
+        if (!auth('api_v3')->check()) {
+            return null;
+        }
+
+        $viewer = auth('api_v3')->user();
+
+        if (!$viewer || $viewer->isAuthor()) {
+            return null;
+        }
+
+        $groupIds = $viewer->groups()->pluck('groups.id');
+
+        $groupTagIds = GroupTag::whereIn('group_id', $groupIds)
+            ->pluck('tag_id')
+            ->filter()
+            ->unique();
+
+        $publicTagIds = Tag::where('is_public', true)->pluck('id');
+
+        return $publicTagIds
+            ->merge($groupTagIds)
+            ->unique()
+            ->values()
+            ->all();
     }
 
     /**
@@ -424,7 +462,7 @@ class AnnouncementController extends AuthorController
         // Get single announcement
         try {
             $announcement = Announcement::findOrFail($id);
-            if ($announcement->user_id !== $user->id && !$user->is_admin()) {
+            if ($announcement->user_id !== $user->id && !$user->is_admin) {
                 return response()->json(['message' => 'You are not the author'], 401);
             }
             return new AnnouncementResource($announcement);

@@ -17,6 +17,9 @@ fi
 rm -rf "$TARGET_DIR/static"
 mkdir -p "$TARGET_DIR"
 rsync -a --delete "$BUILD_DIR/static" "$TARGET_DIR/"
+if [ -d "$BUILD_DIR/images" ]; then
+  rsync -a --delete "$BUILD_DIR/images" "$TARGET_DIR/"
+fi
 for file in asset-manifest.json favicon.ico index.html logo192.png logo512.png manifest.json robots.txt; do
   if [ -f "$BUILD_DIR/$file" ]; then
     cp "$BUILD_DIR/$file" "$TARGET_DIR/$file"

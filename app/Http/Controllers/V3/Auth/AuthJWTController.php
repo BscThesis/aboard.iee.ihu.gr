@@ -66,7 +66,7 @@ class AuthJWTController extends Controller
         try {
             // Get user from Login Iee Ihu with OAuth2.0 
             $user = Socialite::driver('iee_api')->stateless()->user();
-            dd($user->user); //TODO: remove
+            // dd($user->user); //TODO: remove
         } catch (\Exception $e) {
             return response()->json(['message' => 'Invalid token'], 401);
         }
@@ -84,10 +84,10 @@ class AuthJWTController extends Controller
         $user = \App\ApiUser::where('uid', $socialiteUser->uid)->first();
 
         $payload = [
-            'name'     => $socialiteUser->name,
+            'name' => $socialiteUser->name,
             'name_eng' => $socialiteUser->name_eng,
-            'email'    => $socialiteUser->email,
-            'uid'      => $socialiteUser->uid,
+            'email' => $socialiteUser->email,
+            'uid' => $socialiteUser->uid,
         ];
 
         if (!$user) {

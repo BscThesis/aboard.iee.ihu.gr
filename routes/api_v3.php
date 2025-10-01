@@ -115,6 +115,13 @@ Route::prefix('v3')->group(function () {
         Route::match(['put', 'patch'], '/{user_id}/{group_id}', 'Group\UserHasGroupController@update');
         Route::delete('/{user_id}/{group_id}', 'Group\UserHasGroupController@destroy');
     });
+
+    Route::prefix('group-tags')->middleware(['auth.v3.admin'])->group(function () {
+        Route::get('/', 'Group\GroupTagController@index');
+        Route::get('/{id}', 'Group\GroupTagController@show');
+        Route::post('/', 'Group\GroupTagController@store');
+        Route::delete('/{group_id}/{tag_id}', 'Group\GroupTagController@destroy');
+    });
 });
 
 /**

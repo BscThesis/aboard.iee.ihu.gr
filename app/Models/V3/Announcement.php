@@ -39,7 +39,7 @@ class Announcement extends Model implements Feedable
         ]);
     }
 
-    public function scopeWithFilters($query, $users, $tags, $title, $body, $updated_after, $updated_before, $fetch_events = false, $fetch_public = false)
+    public function scopeWithFilters($query, $users, $tags, $title, $body, $updated_after, $updated_before, $fetch_events = false, $fetch_public = false, $allowedTagIds = null)
     {
         // Filter announcements based on users, tags, title, body. 
 
@@ -78,6 +78,14 @@ class Announcement extends Model implements Feedable
             ->join('tags', function ($join) {
                 $join->on('ann_tag.tag_id', '=', 'tags.id');
             })->groupBy('announcements.id');
+
+        if (is_array($allowedTagIds)) {
+            if (count($allowedTagIds) === 0) {
+                $query->whereRaw('1 = 0');
+            } else {
+                $query->whereIn('tags.id', $allowedTagIds);
+            }
+        }
 
         return $query->when($title !== '' && $title !== null, function ($query) use ($title) {
             $query->where(function ($query) use ($title) {

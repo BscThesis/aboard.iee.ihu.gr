@@ -40,4 +40,9 @@ class Group extends Model
     {
         return $this->hasMany(self::class, 'parent_group');
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'group_tag', 'group_id', 'tag_id')->withTimestamps();
+    }
 }
