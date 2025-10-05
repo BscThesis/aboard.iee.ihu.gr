@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\V3\StoreTag;
 use App\Models\V3\Tag;
+use App\Models\V3\GroupTag;
 use App\Http\Resources\Tag as TagResource;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 
 class TagController extends Controller
 {
@@ -45,7 +47,18 @@ class TagController extends Controller
             ));
             return $results;
         }
-        $tags = Tag::orderBy('title', 'asc')->get();
+        $allowedTagIds = $this->resolveAllowedTagIds();
+
+        if ($allowedTagIds === null) {
+            $tags = Tag::orderBy('title', 'asc')->get();
+        } else {
+            if ($allowedTagIds->isEmpty()) {
+                $tags = collect();
+            } else {
+                $tags = Tag::whereIn('id', $allowedTagIds)->orderBy('title', 'asc')->get();
+            }
+        }
+
         return TagResource::collection($tags);
     }
 
@@ -85,6 +98,7 @@ class TagController extends Controller
     public function indexForFiltering(Request $request)
     {
         // If user is logged in or inside university's wifi return tags, filtering and then counting every announcement each one has with their children
+        $allowedTagIds = $this->resolveAllowedTagIds();
         $local_ip = $request->session()->get('local_ip', 0);
         if ($local_ip == 1 or auth('api_v3')->check()) {
             $tags = Tag::with('childrenRecursive')->where('parent_id', 1)->withCount(['announcements' => function ($query) use ($request) {
@@ -111,7 +125,11 @@ class TagController extends Controller
                 );
             }])->having('announcements_count', '>', 0)->orderBy('title', 'asc')->get();
         }
-        return $tags;
+        if ($allowedTagIds !== null) {
+            $tags = $this->filterTagTree($tags, $allowedTagIds, 'childrenRecursive');
+        }
+
+        return $tags->values();
     }
 
     /**
@@ -122,7 +140,9 @@ class TagController extends Controller
     public function indexForAnnouncementCreation(Request $request)
     {
         // If user is logged in return tags, filtering and then counting every announcement each one has with their children
-        $tags = [];
+        $allowedTagIds = $this->resolveAllowedTagIds();
+
+        $tags = collect();
         if (auth('api_v3')->check() && auth('api_v3')->user()->isAuthor()) {
             $tags = Tag::with('childrensubRecursive')->where('parent_id', 1)->withCount(['announcements' => function ($query) use ($request) {
                 $query->tags(
@@ -136,7 +156,11 @@ class TagController extends Controller
             }])->orderBy('title', 'asc')->get();
         }
 
-        return $tags;
+        if ($allowedTagIds !== null) {
+            $tags = $this->filterTagTree($tags, $allowedTagIds, 'childrensubRecursive');
+        }
+
+        return $tags->values();
     }
 
     /*
@@ -146,8 +170,15 @@ class TagController extends Controller
      */
     public function basicIndexing(Request $request)
     {
+        $allowedTagIds = $this->resolveAllowedTagIds();
+
         $tags = Tag::with('childrensubRecursive')->where('parent_id', null)->orderBy('title', 'asc')->get();
-        return $tags;
+
+        if ($allowedTagIds !== null) {
+            $tags = $this->filterTagTree($tags, $allowedTagIds, 'childrensubRecursive');
+        }
+
+        return $tags->values();
     }
 
     /**
@@ -236,5 +267,48 @@ class TagController extends Controller
         } else {
             return response()->json(['message' => 'This action is unauthorized.'], 403);
         }
+    }
+
+    protected function resolveAllowedTagIds(): ?Collection
+    {
+        if (!auth('api_v3')->check()) {
+            return Tag::where('is_public', true)->pluck('id');
+        }
+
+        $user = auth('api_v3')->user();
+
+        if (!$user) {
+            return Tag::where('is_public', true)->pluck('id');
+        }
+
+        if ($user->isAuthor()) {
+            return null;
+        }
+
+        $groupIds = $user->groups()->pluck('groups.id');
+
+        $groupTagIds = GroupTag::whereIn('group_id', $groupIds)->pluck('tag_id');
+
+        $publicTagIds = Tag::where('is_public', true)->pluck('id');
+
+        return $publicTagIds->merge($groupTagIds)->filter()->unique()->values();
+    }
+
+    protected function filterTagTree(Collection $tags, Collection $allowedIds, string $childrenRelation): Collection
+    {
+        return $tags->filter(function ($tag) use ($allowedIds, $childrenRelation) {
+            $children = collect($tag->$childrenRelation ?? []);
+
+            if ($children->isNotEmpty()) {
+                $filteredChildren = $this->filterTagTree($children, $allowedIds, $childrenRelation);
+                $tag->setRelation($childrenRelation, $filteredChildren->values());
+            }
+
+            $hasChildren = $tag->$childrenRelation && $tag->$childrenRelation->isNotEmpty();
+            $isAllowed = $allowedIds->contains($tag->id);
+            $isPublic = (bool) $tag->is_public;
+
+            return $isAllowed || $isPublic || $hasChildren;
+        })->values();
     }
 }
