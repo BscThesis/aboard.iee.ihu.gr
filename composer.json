@@ -11,6 +11,7 @@
         "php": "^7.2",
         "doctrine/dbal": "^2.0",
         "fideloper/proxy": "^4.0",
+        "google/auth": "^1.24",
         "guzzlehttp/guzzle": "~6.0",
         "laravel/framework": "^6.2",
         "laravel/passport": "^8.2",
