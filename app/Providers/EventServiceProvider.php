@@ -23,6 +23,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         \App\Events\V2\NewAnnouncementWasCreatedEvent::class => [
             \App\Listeners\V2\SendNotificationsToSubscribedUsersListener::class,
+            \App\Listeners\V2\SendNotificationsToFirebaseTopicListener::class,
         ],
     ];
 
