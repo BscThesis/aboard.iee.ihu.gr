@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\FcmClient;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Announcement;
 use App\Observers\AnnouncementObserver;
@@ -15,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->registerFcmClient();
     }
 
     /**
@@ -50,5 +51,14 @@ class AppServiceProvider extends ServiceProvider
                 return $socialite->buildProvider(\App\Auth\Social\Two\IeeApiProvider::class, $config);
             }
         );
+    }
+
+    private function registerFcmClient()
+    {
+        $this->app->singleton(FcmClient::class, function ($app) {
+            return new FcmClient(
+                $app['config']['fcm']
+            );
+        });
     }
 }
