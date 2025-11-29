@@ -73,7 +73,7 @@ class FcmClient
 
     private function getAccessToken(): ?string
     {
-        return Cache::remember('fcm_token', 1, function () { //3300 = 55 minutes
+        return Cache::remember('fcm_token', 3300, function () {
             $serviceAccount = $this->config['service_account'] ?? '';
 
             if (!$serviceAccount) {
