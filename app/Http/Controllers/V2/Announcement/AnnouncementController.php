@@ -46,6 +46,11 @@ class AnnouncementController extends AuthorController
         $content_type = request()->header('Content-Type', '');
         $is_ical = $content_type == 'text/calendar';
 
+        // If user has a non valid token return a 401
+        if ($request->bearerToken() && !auth('api_v2')->check()) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
         // If user is logged in or inside university's wifi return all filtered announcements
         $local_ip = $request->session()->get('local_ip', 0);
 

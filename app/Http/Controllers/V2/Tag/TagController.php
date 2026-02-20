@@ -86,6 +86,12 @@ class TagController extends Controller
      */
     public function indexForFiltering(Request $request)
     {
+
+        // If user has a non valid token return a 401
+        if ($request->bearerToken() && !auth('api_v2')->check()) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
         // If user is logged in or inside university's wifi return tags, filtering and then counting every announcement each one has with their children
         $local_ip = $request->session()->get('local_ip', 0);
         if ($local_ip == 1 or auth('api_v2')->check()) {
