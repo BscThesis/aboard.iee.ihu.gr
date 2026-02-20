@@ -1,12 +1,13 @@
 import axios from 'axios';
 import config from '../config';
 import storage from './storage';
+import cookieHelper from "./cookie";
 
 const baseURL = config.api_url;
 
 class Request {
 
-  
+
   constructor() {
     this.axiosInstance = axios.create({
       baseURL: baseURL,
@@ -33,7 +34,7 @@ class Request {
       });
 
       this.axiosInstance.interceptors.request.use( (config) => {
-    
+
         if( this.bearer ) {
           config.headers["Authorization"] = `Bearer ${this.bearer}`;
         }
@@ -41,15 +42,22 @@ class Request {
         if (multipart) {
           config.headers["Content-Type"] = `multipart/form-data`;
         }
-        
+
         return config;
-      }, function (error) {
-        return (error);
+     }, (error) => error);
+      this.axiosInstance.interceptors.response.use(
+          (rsp) => rsp, (error) => {
+            if (error.response && error.response.status === 401 && !error.config.url.includes('whoami')) {
+              cookieHelper.set('token', '');
+              storage.set('token', '');
+              window.location.reload();
+            }
+        return Promise.reject(error);
       });
-      
-      this.axiosInstance.interceptors.response.use((rsp) => {
-        return rsp;
-      }, (rsp) => {
+
+     this.axiosInstance.interceptors.response.use((rsp) => {
+       return rsp;
+     }, (rsp) => {
         return rsp.response;
       })
       if(single){
@@ -65,18 +73,18 @@ class Request {
       }else{
         return this.axiosInstance.bind(window, { method, url, baseURL, data, })
       }
-      
-      
+
+
     } else {
       return () => { new Promise((resolve) => resolve({ data })); };
     }
-  } 
+  }
 
   cancelAllRequests() {
     Object.keys(this.request_instances).forEach(path => {
       this.request_instances[path].cancel.cancel({message: "aborted"})
     })
-    
+
   }
 
   get(url, single = true) {
@@ -164,7 +172,7 @@ class Request {
     const httpRequest = this.createHttpRequest('GET', url, null, false);
 
     return httpRequest().then(async (httpResponse) => {
-      
+
       return httpResponse.data.login == true;
     }).catch((error, response) => {
       return error;
