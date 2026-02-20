@@ -227,7 +227,8 @@ class AuthJWTController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth('api_v2')->refresh());
+        $token = auth('api_v2')->refresh();
+        return $this->respondWithToken($token, ['id' => auth('api_v2')->id()]);
     }
 
     /**

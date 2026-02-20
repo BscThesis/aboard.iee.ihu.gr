@@ -83,6 +83,7 @@ Route::prefix('v2')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::get('/login_web', 'Auth\AuthJWTController@signInWeb');
         Route::post('/token', 'Auth\AuthJWTController@generateToken');
+        Route::post('/refresh', 'Auth\AuthJWTController@refresh');
         Route::get('/login', 'Auth\AuthJWTController@signIn');
         Route::get('/logout', 'Auth\AuthJWTController@logout');
         Route::get('/user', 'Auth\AuthJWTController@user');
