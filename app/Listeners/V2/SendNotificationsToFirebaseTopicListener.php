@@ -22,17 +22,19 @@ class SendNotificationsToFirebaseTopicListener
             return;
         }
 
-        $tags = $event->announcement->tags->pluck('id');
-        $payload = [
-            'type' => 'announcement_created',
-            'title' => (string)$event->announcement->title,
-            'announcement_id' => (string)$event->announcement->id,
-        ];
-        foreach ($tags as $tagId) {
-            $fcm->sendToTopic(
-                $fcm->topicName($tagId),
-                $payload
-            );
+        try {
+            $tags = $event->announcement->tags->pluck('id');
+            $payload = [
+                'type' => 'announcement_created',
+                'title' => (string)$event->announcement->title,
+                'announcement_id' => (string)$event->announcement->id,
+            ];
+
+            foreach ($tags as $tagId) {
+                $fcm->sendToTopic($fcm->topicName($tagId), $payload);
+            }
+        } catch (\Exception $e) {
+            return;
         }
     }
 }
