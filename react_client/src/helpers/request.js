@@ -55,15 +55,15 @@ class Request {
         return Promise.reject(error);
       });
 
-     this.axiosInstance.interceptors.response.use((rsp) => {
-       return rsp;
-     }, (rsp) => {
+      this.axiosInstance.interceptors.response.use((rsp) => {
+        return rsp;
+      }, (rsp) => {
         return rsp.response;
       })
       if(single){
         const path = url.includes("?") ? url.substr(0, url.indexOf("?")) : url;
         if(typeof this.request_instances[path] != "undefined"){
-            this.request_instances[path].cancel.cancel({message: "cancelled"})
+          this.request_instances[path].cancel.cancel({message: "cancelled"})
         }
         this.request_instances[path] = {
           fn: this.axiosInstance.bind(window, { method, url, baseURL, data, }),
@@ -183,10 +183,10 @@ class Request {
     let hasCanceled = false;
     const wrappedPromise = new Promise((resolve, reject) => {
       promise
-        .then(val => (hasCanceled ? reject({ isCanceled: true }) : resolve(val)))
-        .catch(
-          error => (hasCanceled ? reject({ isCanceled: true }) : reject(error))
-        );
+          .then(val => (hasCanceled ? reject({ isCanceled: true }) : resolve(val)))
+          .catch(
+              error => (hasCanceled ? reject({ isCanceled: true }) : reject(error))
+          );
     });
 
     return {
