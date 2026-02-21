@@ -233,6 +233,8 @@ class AuthJWTController extends Controller
             return $this->respondWithToken($token, ['id' => $id]);
         }catch (\Tymon\JWTAuth\Exceptions\TokenBlacklistedException $e){
             return response()->json(['message' => 'The token has been blacklisted'],401);
+        }catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e){
+            return response()->json(['message' => 'Token has expired and can no longer be refreshed'],401);
         }
     }
 
