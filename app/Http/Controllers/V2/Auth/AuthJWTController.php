@@ -227,8 +227,12 @@ class AuthJWTController extends Controller
      */
     public function refresh()
     {
-        $token = auth('api_v2')->refresh();
-        return $this->respondWithToken($token, ['id' => auth('api_v2')->id()]);
+        try{
+            $token = auth('api_v2')->refresh();
+            return $this->respondWithToken($token, ['id' => auth('api_v2')->id()]);
+        }catch (\Tymon\JWTAuth\Exceptions\TokenBlacklistedException $e){
+            return response()->json(['message' => 'The token has been blacklisted'],401);
+        }
     }
 
     /**
