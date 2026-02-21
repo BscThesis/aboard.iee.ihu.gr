@@ -48,8 +48,8 @@ class Request {
       this.axiosInstance.interceptors.response.use(
           (rsp) => rsp, (error) => {
             if (error.response && error.response.status === 401 && !error.config.url.includes('whoami')) {
-              cookieHelper.set('token', '');
-              storage.set('token', '');
+              cookieHelper.delete('token');
+              storage.set('token', null);
               window.location.reload();
             }
         return Promise.reject(error);
