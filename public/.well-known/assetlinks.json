@@ -1,0 +1,14 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.kastik.apps",
+            "sha256_cert_fingerprints": [
+                "58:29:24:8F:52:4C:78:8A:8B:CC:BB:37:6D:39:79:FD:4B:24:B6:EC:E7:E9:BA:4B:DC:CB:DA:28:9E:D2:CE:40"
+            ]
+        }
+    }
+]
