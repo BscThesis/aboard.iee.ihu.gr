@@ -1,12 +1,13 @@
 import axios from 'axios';
 import config from '../config';
 import storage from './storage';
+import cookieHelper from "./cookie";
 
 const baseURL = config.api_url;
 
 class Request {
 
-  
+
   constructor() {
     this.axiosInstance = axios.create({
       baseURL: baseURL,
@@ -33,7 +34,7 @@ class Request {
       });
 
       this.axiosInstance.interceptors.request.use( (config) => {
-    
+
         if( this.bearer ) {
           config.headers["Authorization"] = `Bearer ${this.bearer}`;
         }
@@ -41,12 +42,19 @@ class Request {
         if (multipart) {
           config.headers["Content-Type"] = `multipart/form-data`;
         }
-        
+
         return config;
-      }, function (error) {
-        return (error);
+     }, (error) => error);
+      this.axiosInstance.interceptors.response.use(
+          (rsp) => rsp, (error) => {
+            if (error.response && error.response.status === 401 && !error.config.url.includes('whoami')) {
+              cookieHelper.delete('token');
+              storage.set('token', null);
+              window.location.reload();
+            }
+        return Promise.reject(error);
       });
-      
+
       this.axiosInstance.interceptors.response.use((rsp) => {
         return rsp;
       }, (rsp) => {
@@ -55,7 +63,7 @@ class Request {
       if(single){
         const path = url.includes("?") ? url.substr(0, url.indexOf("?")) : url;
         if(typeof this.request_instances[path] != "undefined"){
-            this.request_instances[path].cancel.cancel({message: "cancelled"})
+          this.request_instances[path].cancel.cancel({message: "cancelled"})
         }
         this.request_instances[path] = {
           fn: this.axiosInstance.bind(window, { method, url, baseURL, data, }),
@@ -65,18 +73,18 @@ class Request {
       }else{
         return this.axiosInstance.bind(window, { method, url, baseURL, data, })
       }
-      
-      
+
+
     } else {
       return () => { new Promise((resolve) => resolve({ data })); };
     }
-  } 
+  }
 
   cancelAllRequests() {
     Object.keys(this.request_instances).forEach(path => {
       this.request_instances[path].cancel.cancel({message: "aborted"})
     })
-    
+
   }
 
   get(url, single = true) {
@@ -164,7 +172,7 @@ class Request {
     const httpRequest = this.createHttpRequest('GET', url, null, false);
 
     return httpRequest().then(async (httpResponse) => {
-      
+
       return httpResponse.data.login == true;
     }).catch((error, response) => {
       return error;
@@ -175,10 +183,10 @@ class Request {
     let hasCanceled = false;
     const wrappedPromise = new Promise((resolve, reject) => {
       promise
-        .then(val => (hasCanceled ? reject({ isCanceled: true }) : resolve(val)))
-        .catch(
-          error => (hasCanceled ? reject({ isCanceled: true }) : reject(error))
-        );
+          .then(val => (hasCanceled ? reject({ isCanceled: true }) : resolve(val)))
+          .catch(
+              error => (hasCanceled ? reject({ isCanceled: true }) : reject(error))
+          );
     });
 
     return {
