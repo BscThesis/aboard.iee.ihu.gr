@@ -1,7 +1,6 @@
 import axios from 'axios';
 import config from '../config';
 import storage from './storage';
-import cookieHelper from "./cookie";
 
 const baseURL = config.api_url;
 
@@ -46,20 +45,9 @@ class Request {
         return config;
      }, (error) => error);
       this.axiosInstance.interceptors.response.use(
-          (rsp) => rsp, (error) => {
-            if (error.response && error.response.status === 401 && !error.config.url.includes('whoami')) {
-              cookieHelper.delete('token');
-              storage.set('token', null);
-              window.location.reload();
-            }
-        return Promise.reject(error);
-      });
-
-      this.axiosInstance.interceptors.response.use((rsp) => {
-        return rsp;
-      }, (rsp) => {
-        return rsp.response;
-      })
+          (rsp) => rsp,
+          (error) => Promise.reject(error)
+      )
       if(single){
         const path = url.includes("?") ? url.substr(0, url.indexOf("?")) : url;
         if(typeof this.request_instances[path] != "undefined"){
