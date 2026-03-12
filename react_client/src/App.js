@@ -53,7 +53,7 @@ function App() {
   const checkLoginStatus = function () { 
     const c = cookieHelper.get('token')
     //console.log(c)
-    if (c && c !== '') {
+    if (c && c !== '' && c !== 'null') {
       storage.set('token', c)
       request.get('auth/whoami').then(response => {
         if (response.data && response.status === 200) {
