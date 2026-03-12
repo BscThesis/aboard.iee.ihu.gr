@@ -153,6 +153,8 @@ class Request {
     if (error.response && error.response.status === 401) {
       document.cookie = 'token=; Max-Age=-99999999;';
       storage.set('token', null)
+      this.cancelAllRequests();
+      window.location.assign('/');
     }
   }
 
